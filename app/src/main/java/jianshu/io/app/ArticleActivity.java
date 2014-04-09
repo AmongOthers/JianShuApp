@@ -172,7 +172,7 @@ public class ArticleActivity extends SwipeBackActivity {
   }
 
   private String getSharedContent() {
-    return String.format("《%s》 by %s %s (%s)", mTitle, mAuthor, mUrl, "分享自社科院的简书");
+    return String.format("《%s》 by %s %s (%s)", mTitle, mAuthor, mUrl, "分享自简书");
   }
 
   private void setShareIntent(Intent shareIntent) {

@@ -2,9 +2,11 @@ package jianshu.io.app;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,7 +167,11 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
         if (data != null) {
           mAdapter.addAll(data);
         } else {
-          Toast.makeText(RecommendationFragment.this.getActivity(), ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
+          Context context = RecommendationFragment.this.getActivity();
+          if(context == null) {
+            Log.d("jianshu", "context is null");
+          }
+          Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
         }
       }
     }).execute();
