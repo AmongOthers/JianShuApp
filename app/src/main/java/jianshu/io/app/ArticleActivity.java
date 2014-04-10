@@ -1,9 +1,13 @@
 package jianshu.io.app;
 
 import android.app.ActionBar;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
 import net.tsz.afinal.FinalHttp;
 
@@ -37,8 +42,9 @@ public class ArticleActivity extends SwipeBackActivity {
   private Button mRetryButton;
   private SwipeBackLayout mSwipeBackLayout;
   private FinalHttp mFinalHttp;
-  private boolean hasError;
   private ShareActionProvider mShareActionProvider;
+  private DownloadManager mDownloadManager;
+  private String mImageUrl;
 
   protected static String Css;
 
@@ -73,6 +79,8 @@ public class ArticleActivity extends SwipeBackActivity {
       }
     });
 
+    mDownloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+
     mFinalHttp = new FinalHttp();
 
     loadArticle();
@@ -86,6 +94,7 @@ public class ArticleActivity extends SwipeBackActivity {
         Object httpResult = mFinalHttp.getSync(mUrl);
         if(httpResult instanceof String) {
           Document doc = Jsoup.parse((String) httpResult);
+          mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
           Element article = doc.select("div.preview").get(0);
           Element title = article.select("h1.title").get(0);
           Element content = article.select("div.show-content").get(0);
@@ -159,27 +168,28 @@ public class ArticleActivity extends SwipeBackActivity {
 
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.article, menu);
+    setShareIntent(menu);
+    return true;
+  }
+
+  private void setShareIntent(Menu menu) {
     MenuItem item = menu.findItem(R.id.menu_item_share);
-    mShareActionProvider = (ShareActionProvider) item.getActionProvider();
     Intent shareIntent = new Intent();
     shareIntent.setAction(Intent.ACTION_SEND);
     shareIntent.putExtra(Intent.EXTRA_TITLE, mTitle);
     shareIntent.putExtra(Intent.EXTRA_TEXT, getSharedContent());
     shareIntent.putExtra(Intent.EXTRA_ORIGINATING_URI, mUrl);
     shareIntent.setType("text/plain");
-    setShareIntent(shareIntent);
-    return true;
+    mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+    if (mShareActionProvider != null) {
+      mShareActionProvider.setShareIntent(shareIntent);
+    }
   }
 
   private String getSharedContent() {
     return String.format("《%s》 by %s %s (%s)", mTitle, mAuthor, mUrl, "分享自简书");
   }
 
-  private void setShareIntent(Intent shareIntent) {
-    if (mShareActionProvider != null) {
-      mShareActionProvider.setShareIntent(shareIntent);
-    }
-  }
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     // Handle action bar item clicks here. The action bar will
@@ -193,8 +203,26 @@ public class ArticleActivity extends SwipeBackActivity {
         startActivity(intent);
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
+      case R.id.menu_item_picture:
+        Toast.makeText(this, "开始下载长微博图片", Toast.LENGTH_LONG).show();
+        Uri uri = Uri.parse(mImageUrl);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setTitle(mTitle);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/jianshu", getImageFileName(mTitle));
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        mDownloadManager.enqueue(request);
+        return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  static final char[] RESERVED_CHARS = new char[]{'|', '\\', '?', '*', '<', '\"', ':', '>', '+', '[', ']', '/', '\''};
+  private String getImageFileName(String title) {
+    String imageFileName = mTitle;
+    for(char ch : RESERVED_CHARS) {
+      imageFileName = imageFileName.replace(ch, '%');
+    }
+    return imageFileName + ".jpeg";
   }
 
   @Override

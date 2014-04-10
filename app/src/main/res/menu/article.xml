@@ -3,6 +3,11 @@
     tools:context="jianshu.io.app.ArticleActivity" >
 
   <item
+      android:id="@+id/menu_item_picture"
+      android:showAsAction="ifRoom"
+      android:icon="@drawable/ic_action_picture"
+      android:title="Picture" />
+  <item
       android:id="@+id/menu_item_share"
       android:showAsAction="ifRoom"
       android:title="Share"

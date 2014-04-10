@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/JianShuApp.iml" filepath="$PROJECT_DIR$/JianShuApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraries/SwipeBackLayout/SwipeBackLayout.iml" filepath="$PROJECT_DIR$/libraries/SwipeBackLayout/SwipeBackLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraries/libraries.iml" filepath="$PROJECT_DIR$/libraries/libraries.iml" />
       <module fileurl="file://$PROJECT_DIR$/简书.iml" filepath="$PROJECT_DIR$/简书.iml" />
     </modules>
   </component>
