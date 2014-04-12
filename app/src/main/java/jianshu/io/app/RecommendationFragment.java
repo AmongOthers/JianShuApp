@@ -41,10 +41,6 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
   ActionBarPullToRefresh.SetupWizard mWizard;
   boolean mIsEmpty;
 
-  public RecommendationFragment() {
-    mPool = new HomePageDataPool();
-  }
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = getActivity().getLayoutInflater().inflate(R.layout.recommendation, null);
@@ -56,6 +52,8 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
     super.onActivityCreated(savedInstanceState);
 
     final Activity activity = getActivity();
+
+    mPool = new HomePageDataPool(((JianshuApplication)activity.getApplication()).getSession());
 
     mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
     mListView = (EndlessListView) (activity.findViewById(R.id.list));
@@ -131,12 +129,14 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
             mIsEmpty = false;
             mPtrLayout.removeView(mEmptyView);
             mPtrLayout.addView(mListView);
-            mWizard.allChildrenArePullable().setup(mPtrLayout);}
-
-          else {
+            mWizard.allChildrenArePullable().setup(mPtrLayout);
+          } else {
             mAdapter.clear();
           }
           mAdapter.addAll(data);
+          String userId = mPool.getUserId();
+          MainActivity mainActivity = (MainActivity) getActivity();
+          mainActivity.showUserInfo(userId);
         } else {
           Context context = RecommendationFragment.this.getActivity();
           if(context != null) {

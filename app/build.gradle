@@ -26,6 +26,7 @@ dependencies {
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
     compile 'uk.co.androidalliance:edgeeffectoverride:1.0.1'
     compile 'org.jsoup:jsoup:1.7.3'
+    compile 'com.google.code.gson:gson:2.2.4'
     compile project(':libraries:SwipeBackLayout')
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

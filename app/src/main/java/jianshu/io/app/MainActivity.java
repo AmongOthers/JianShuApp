@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -15,9 +16,15 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import net.tsz.afinal.FinalActivity;
+import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
+
+import jianshu.io.app.widget.AfinalRoundedImageView;
+import model.JianshuSession;
+import model.UserInfo;
 
 public class MainActivity extends FinalActivity {
 
@@ -25,15 +32,31 @@ public class MainActivity extends FinalActivity {
   ListView mDrawerList;
   @ViewInject(id = R.id.drawer_layout)
   DrawerLayout mDrawerLayout;
+  @ViewInject(id = R.id.drawer_container)
+  View mDrawerContianer;
+  @ViewInject(id = R.id.user)
+  View mUserView;
+  @ViewInject(id = R.id.userAvatar)
+  AfinalRoundedImageView userAvatar;
+  @ViewInject(id = R.id.userName)
+  TextView userName;
+  @ViewInject(id = R.id.userIntroduce)
+  TextView userIntroduce;
+
   private CharSequence mTitle;
   private CharSequence mDrawerTitle;
   private ActionBarDrawerToggle mDrawerToggle;
   private String[] mTitles;
+  private String usereId;
+  private JianshuSession session;
+  private FinalBitmap finalBitmap;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    this.finalBitmap = FinalBitmap.create(this);
 
     mTitles = getResources().getStringArray(R.array.drawer_titles);
     mTitle = mDrawerTitle = getTitle();
@@ -69,6 +92,52 @@ public class MainActivity extends FinalActivity {
     if (savedInstanceState == null) {
       selectItem(0);
     }
+
+    this.session = ((JianshuApplication) this.getApplication()).getSession();
+    if(this.session.isUserLogin()) {
+      final MainActivity that = this;
+      (new AsyncTask<Void, Void, UserInfo>(){
+        @Override
+        protected UserInfo doInBackground(Void... params) {
+          return UserInfo.load(that);
+        }
+
+        @Override
+        protected void onPostExecute(UserInfo userInfo) {
+          if(userInfo != null) {
+            that.finalBitmap.display(that.userAvatar, userInfo.getAvatarUrl());
+            that.userName.setText(userInfo.getName());
+            that.userIntroduce.setText(userInfo.getIntroduce());
+            mUserView.setVisibility(View.VISIBLE);
+          }
+        }
+      }).execute();
+    }
+  }
+
+  public void showUserInfo(String userId) {
+    this.usereId = userId;
+    final MainActivity that = MainActivity.this;
+    if(usereId != null) {
+      (new AsyncTask<Void, Void, UserInfo>(){
+
+        @Override
+        protected UserInfo doInBackground(Void... params) {
+          return UserInfo.load(that, that.session, that.usereId);
+        }
+
+        @Override
+        protected void onPostExecute(UserInfo userInfo) {
+          that.finalBitmap.display(that.userAvatar, userInfo.getAvatarUrl());
+          that.userName.setText(userInfo.getName());
+          that.userIntroduce.setText(userInfo.getIntroduce());
+          mUserView.setVisibility(View.VISIBLE);
+        }
+
+      }).execute();
+    } else {
+      mUserView.setVisibility(View.GONE);
+    }
   }
 
   private void selectItem(int position) {
@@ -82,7 +151,7 @@ public class MainActivity extends FinalActivity {
 
     mDrawerList.setItemChecked(position, true);
     setTitle(mTitles[position]);
-    mDrawerLayout.closeDrawer(mDrawerList);
+    mDrawerLayout.closeDrawer(mDrawerContianer);
   }
 
 
@@ -111,7 +180,7 @@ public class MainActivity extends FinalActivity {
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     // If the nav drawer is open, hide action items related to the content view
-    boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+    boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerContianer);
     return super.onPrepareOptionsMenu(menu);
   }
 

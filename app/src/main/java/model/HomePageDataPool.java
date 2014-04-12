@@ -1,7 +1,5 @@
 package model;
 
-import net.tsz.afinal.FinalHttp;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,13 +20,15 @@ public class HomePageDataPool {
   protected final static String LOAD_MORE_SELECTOR = "div.load-more button";
   protected final static String URL_SELECTOR = "a.content";
   protected final static String AUTHOR_SELECTOR = "a.author";
+  protected final static String CURRENT_USER_SLUG = "meta#current_user_slug";
 
   private boolean mIsAtTheEnd;
   private String mLoadMoreUrl;
-  private FinalHttp mFinalHttp;
+  private JianshuSession mSession;
+  private String mUserId;
 
-  public HomePageDataPool() {
-    mFinalHttp = new FinalHttp();
+  public HomePageDataPool(JianshuSession session) {
+    mSession = session;
   }
 
   public RecommendationItem[] refresh() throws IOException{
@@ -37,10 +37,26 @@ public class HomePageDataPool {
     return load(url);
   }
 
+  public String getUserId() {
+    return mUserId;
+  }
+
   private RecommendationItem[] load(String url) throws IOException {
-    Object httpResult = mFinalHttp.getSync(url);
+    Object httpResult = mSession.getSync(url, true);
     if (httpResult instanceof String) {
       Document doc = Jsoup.parse((String) httpResult);
+
+      //页面中如果包含用户信息，说明是已登录的
+      mUserId = null;
+      Elements userElements = doc.select(CURRENT_USER_SLUG);
+      if(userElements.size() > 0) {
+        Element userEl = userElements.get(0);
+        mUserId = userEl.attr("value");
+        mSession.notifyUserLogin();
+      } else {
+        mSession.notifyUserLogout();
+      }
+
       Elements loadMoreElements = doc.select(LOAD_MORE_SELECTOR);
       if (loadMoreElements.size() > 0) {
 //        mLoadMoreUrl = HOME_PAGE_URL + loadMoreElements.get(0).attr("data-url");
