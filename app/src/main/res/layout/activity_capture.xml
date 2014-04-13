@@ -1,16 +1,46 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="jianshu.io.app.CaptureActivity">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:paddingLeft="@dimen/activity_horizontal_margin"
+             android:paddingRight="@dimen/activity_horizontal_margin"
+             android:paddingTop="@dimen/activity_vertical_margin"
+             android:paddingBottom="@dimen/activity_vertical_margin"
+             tools:context="jianshu.io.app.ArticleActivity">
 
-    <TextView
-        android:text="@string/hello_world"
+  <RelativeLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent">
+
+    <jianshu.io.app.widget.LoadingTextView
+        android:id="@+id/loading_article"
+        android:textSize="30dp"
+        android:textColor="@color/jianshu"
+        android:gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
+    <Button
+        android:visibility="invisible"
+        android:id="@+id/retry"
+        android:text="@string/retry"
+        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+    <WebView
+        android:visibility="invisible"
+        android:id="@+id/web"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
+  </RelativeLayout>
+
+  <ImageView
+      android:visibility="gone"
+      android:id="@+id/scan_light"
+      android:background="@drawable/scan"
+      android:layout_width="fill_parent"
+      android:layout_height="20dp"/>
+
+</FrameLayout>

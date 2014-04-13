@@ -12,9 +12,10 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.ShareActionProvider;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,7 +34,8 @@ public class CaptureActivity extends Activity {
   private LoadingTextView mLoadingArticle;
   private WebView mWebView;
   private Button mRetryButton;
-  private ShareActionProvider mShareActionProvider;
+  private View scanLight;
+  private Animation scanAnim;
 
   protected static String Css;
   protected static String Content;
@@ -41,7 +43,7 @@ public class CaptureActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_article);
+    setContentView(R.layout.activity_capture);
 
     mTitle  = "<h1>测试长微博图片</h1>";
     mContent = getContent();
@@ -49,10 +51,29 @@ public class CaptureActivity extends Activity {
     mLoadingArticle = (LoadingTextView)findViewById(R.id.loading_article);
     mWebView = (WebView)findViewById(R.id.web);
     mRetryButton = (Button)findViewById(R.id.retry);
+    scanLight = findViewById(R.id.scan_light);
 
     mLoadingArticle.setVisibility(View.INVISIBLE);
     mRetryButton.setVisibility(View.INVISIBLE);
     mWebView.setVisibility(View.VISIBLE);
+
+    this.scanAnim = AnimationUtils.loadAnimation(this, R.anim.scan);
+    this.scanAnim.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {
+        CaptureActivity.this.scanLight.setVisibility(View.VISIBLE);
+      }
+
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        CaptureActivity.this.scanLight.setVisibility(View.GONE);
+      }
+
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
@@ -168,6 +189,7 @@ public class CaptureActivity extends Activity {
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
       case R.id.cap_item_picture:
+        this.scanLight.startAnimation(this.scanAnim);
         int[] size = getRealSize(mWebView);
         int width = size[0];
         int height = size[1];
