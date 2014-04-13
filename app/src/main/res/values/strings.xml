@@ -16,6 +16,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_another_login">AnotherLoginActivity</string>
     <string name="title_activity_like">LikeActivity</string>
-  <string name="like">喜欢</string>
+    <string name="like">喜欢</string>
+    <string name="title_activity_capture">CaptureActivity</string>
 
 </resources>

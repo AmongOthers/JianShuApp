@@ -218,7 +218,7 @@ public class ArticleActivity extends SwipeBackActivity {
 
   static final char[] RESERVED_CHARS = new char[]{'|', '\\', '?', '*', '<', '\"', ':', '>', '+', '[', ']', '/', '\''};
   private String getImageFileName(String title) {
-    String imageFileName = mTitle;
+    String imageFileName = title;
     for(char ch : RESERVED_CHARS) {
       imageFileName = imageFileName.replace(ch, '%');
     }

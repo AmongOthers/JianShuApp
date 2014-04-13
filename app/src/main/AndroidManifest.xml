@@ -6,20 +6,30 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".JianshuApplication"
+        android:name="jianshu.io.app.JianshuApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/JianShu" >
+      <activity
+          android:name="jianshu.io.app.CaptureActivity"
+          android:label="@string/title_activity_capture" >
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity>
         <activity
             android:name="jianshu.io.app.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop" >
-          <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-          </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="jianshu.io.app.ArticleActivity"
@@ -36,14 +46,15 @@
             android:name="jianshu.io.app.LikeActivity"
             android:label="@string/title_activity_like" >
         </activity>
-      <activity
-          android:name="jianshu.io.app.LoginActivity"
-          android:label="@string/title_activity_login" >
-        <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-          <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
+        <activity
+            android:name="jianshu.io.app.LoginActivity"
+            android:label="@string/title_activity_login" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
