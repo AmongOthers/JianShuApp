@@ -13,15 +13,6 @@
         android:label="@string/app_name"
         android:theme="@style/JianShu" >
       <activity
-          android:name="jianshu.io.app.CaptureActivity"
-          android:label="@string/title_activity_capture" >
-        <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-
-          <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
-        <activity
             android:name="jianshu.io.app.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop" >

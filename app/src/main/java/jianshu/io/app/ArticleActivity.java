@@ -2,8 +2,12 @@ package jianshu.io.app;
 
 import android.app.ActionBar;
 import android.app.DownloadManager;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +16,8 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ShareActionProvider;
@@ -23,28 +29,38 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
+import jianshu.io.app.dialog.ScanFinishedDialogFragment;
 import jianshu.io.app.widget.LoadingTextView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 
-public class ArticleActivity extends SwipeBackActivity {
+public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDialogFragment.OnFragmentInteractionListener {
 
   private LoadingTextView mLoadingArticle;
   private String mUrl;
   private String mTitle;
   private String mSummary;
   private String mAuthor;
+
   private WebView mWebView;
   private Button mRetryButton;
+  private View scanLight;
   private SwipeBackLayout mSwipeBackLayout;
+  private Animation scanAnim;
+
+  private String imagePath;
   private FinalHttp mFinalHttp;
   private ShareActionProvider mShareActionProvider;
   private DownloadManager mDownloadManager;
-  private String mImageUrl;
 
   protected static String Css;
 
@@ -61,6 +77,31 @@ public class ArticleActivity extends SwipeBackActivity {
     mLoadingArticle = (LoadingTextView)findViewById(R.id.loading_article);
     mWebView = (WebView)findViewById(R.id.web);
     mRetryButton = (Button)findViewById(R.id.retry);
+    this.scanLight = (View)findViewById(R.id.scan_light);
+
+    this.scanAnim = AnimationUtils.loadAnimation(this, R.anim.scan);
+    this.scanAnim.setAnimationListener(new Animation.AnimationListener() {
+
+      ScanFinishedDialogFragment scanFinishedDialogFragment = null;
+
+      @Override
+      public void onAnimationStart(Animation animation) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        scanFinishedDialogFragment = ScanFinishedDialogFragment.newInstance();
+        scanFinishedDialogFragment.show(ft, "scan");
+      }
+
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        ArticleActivity.this.scanLight.setVisibility(View.GONE);
+        scanFinishedDialogFragment.onScanFinished();
+      }
+
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
@@ -94,7 +135,7 @@ public class ArticleActivity extends SwipeBackActivity {
         Object httpResult = mFinalHttp.getSync(mUrl);
         if(httpResult instanceof String) {
           Document doc = Jsoup.parse((String) httpResult);
-          mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
+          //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
           Element article = doc.select("div.preview").get(0);
           Element title = article.select("h1.title").get(0);
           Element content = article.select("div.show-content").get(0);
@@ -204,16 +245,70 @@ public class ArticleActivity extends SwipeBackActivity {
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
       case R.id.menu_item_picture:
-        Toast.makeText(this, "开始下载长微博图片", Toast.LENGTH_LONG).show();
-        Uri uri = Uri.parse(mImageUrl);
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setTitle(mTitle);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/jianshu", getImageFileName(mTitle));
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        mDownloadManager.enqueue(request);
+        int[] size = getRealSize(mWebView);
+        int width = size[0];
+        int height = size[1];
+        final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        mWebView.draw(canvas);
+        final ArticleActivity that = ArticleActivity.this;
+        (new AsyncTask<Void, Void, Boolean>(){
+
+          @Override
+          protected Boolean doInBackground(Void... params) {
+            try {
+              File jianshuImageFile = new File(Environment.getExternalStoragePublicDirectory(
+                  Environment.DIRECTORY_PICTURES) + "/jianshu");
+              if(!jianshuImageFile.exists()) {
+                jianshuImageFile.mkdirs();
+              }
+              that.imagePath = Environment.getExternalStoragePublicDirectory(
+                  Environment.DIRECTORY_PICTURES) + "/jianshu/" + getImageFileName("测试长微博");
+              FileOutputStream fos = new FileOutputStream(that.imagePath);
+              bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+              fos.close();
+              return true;
+            } catch (FileNotFoundException e) {
+              e.printStackTrace();
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+            return false;
+          }
+
+          @Override
+          protected void onPostExecute(Boolean succeed) {
+            if(succeed) {
+              that.scanLight.setVisibility(View.VISIBLE);
+              that.scanLight.startAnimation(that.scanAnim);
+            } else {
+              Toast.makeText(that, "扫描时遇到错误", Toast.LENGTH_LONG).show();
+            }
+          }
+
+        }).execute();
         return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private int[] getRealSize(WebView webView) {
+    try {
+      Method widthMethod = webView.getClass().getDeclaredMethod("computeHorizontalScrollRange");
+      widthMethod.setAccessible(true);
+      int width = (Integer) widthMethod.invoke(webView);
+      Method heightMethod = webView.getClass().getDeclaredMethod("computeVerticalScrollRange");
+      heightMethod.setAccessible(true);
+      int height = (Integer) heightMethod.invoke(webView);
+      return new int[]{ width, height };
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   static final char[] RESERVED_CHARS = new char[]{'|', '\\', '?', '*', '<', '\"', ':', '>', '+', '[', ']', '/', '\''};
@@ -229,5 +324,18 @@ public class ArticleActivity extends SwipeBackActivity {
   public void onBackPressed() {
     finish();
     overridePendingTransition(0, R.anim.slide_out_right);
+  }
+    @Override
+  public void onViewButtonPressed() {
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+    Fragment f = getFragmentManager().findFragmentByTag("scan");
+    if(f != null) {
+      ft.remove(f);
+      ft.commit();
+    }
+    Intent intent = new Intent();
+    intent.setAction(Intent.ACTION_VIEW);
+    intent.setDataAndType(Uri.fromFile(new File(this.imagePath)), "image/jpeg");
+    startActivity(intent);
   }
 }
