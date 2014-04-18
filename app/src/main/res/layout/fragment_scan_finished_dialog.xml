@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:padding="5dp"
+              android:background="#000"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+  <ImageView
+      android:layout_gravity="center_vertical"
+      android:layout_width="58dp"
+      android:layout_height="70dp"
+      android:paddingRight="5dp"
+      android:src="@drawable/scanner" />
+
+  <TextView
+      android:id="@+id/scan_text"
+      android:text="扫描中..."
+      android:textSize="20dp"
+      android:textColor="#fff"
+      android:layout_gravity="center_vertical"
+      android:paddingRight="20dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+
+  <Button
+      android:id="@+id/scan_button"
+      android:text="查看"
+      android:visibility="gone"
+      android:layout_gravity="center_vertical"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+
+</LinearLayout>

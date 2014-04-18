@@ -3,6 +3,10 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <style name="Dialog" parent="android:Theme.Holo.Dialog">
+    <item name="android:buttonStyle">@style/ButtonJianShu</item>
+  </style>
+
   <style name="JianShu.Translucent">
     <item name="android:windowIsTranslucent">true</item>
   </style>

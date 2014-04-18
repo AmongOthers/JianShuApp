@@ -2,5 +2,6 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="jianshu">#e58c7c</color>
+    <color name="jianshu_trans">#ffe58c7c</color>
 
 </resources>

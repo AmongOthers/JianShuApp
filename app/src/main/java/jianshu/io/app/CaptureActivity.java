@@ -2,9 +2,12 @@ package jianshu.io.app;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,10 +28,11 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import jianshu.io.app.dialog.ScanFinishedDialogFragment;
 import jianshu.io.app.widget.LoadingTextView;
 
 
-public class CaptureActivity extends Activity {
+public class CaptureActivity extends Activity implements ScanFinishedDialogFragment.OnFragmentInteractionListener {
   private String mTitle;
   private String mContent;
 
@@ -36,6 +41,8 @@ public class CaptureActivity extends Activity {
   private Button mRetryButton;
   private View scanLight;
   private Animation scanAnim;
+
+  private String imagePath;
 
   protected static String Css;
   protected static String Content;
@@ -59,14 +66,20 @@ public class CaptureActivity extends Activity {
 
     this.scanAnim = AnimationUtils.loadAnimation(this, R.anim.scan);
     this.scanAnim.setAnimationListener(new Animation.AnimationListener() {
+
+      ScanFinishedDialogFragment scanFinishedDialogFragment = null;
+
       @Override
       public void onAnimationStart(Animation animation) {
-        CaptureActivity.this.scanLight.setVisibility(View.VISIBLE);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        scanFinishedDialogFragment = ScanFinishedDialogFragment.newInstance();
+        scanFinishedDialogFragment.show(ft, "scan");
       }
 
       @Override
       public void onAnimationEnd(Animation animation) {
         CaptureActivity.this.scanLight.setVisibility(View.GONE);
+        scanFinishedDialogFragment.onScanFinished();
       }
 
       @Override
@@ -189,7 +202,6 @@ public class CaptureActivity extends Activity {
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
       case R.id.cap_item_picture:
-        this.scanLight.startAnimation(this.scanAnim);
         int[] size = getRealSize(mWebView);
         int width = size[0];
         int height = size[1];
@@ -201,9 +213,9 @@ public class CaptureActivity extends Activity {
           @Override
           protected Void doInBackground(Void... params) {
             try {
-              FileOutputStream fos = new FileOutputStream(
-                  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
-                      "/jianshu/" + getImageFileName("测试长微博"));
+              CaptureActivity.this.imagePath = Environment.getExternalStoragePublicDirectory(
+                  Environment.DIRECTORY_PICTURES) + "/jianshu/" + getImageFileName("测试长微博");
+              FileOutputStream fos = new FileOutputStream(CaptureActivity.this.imagePath);
               bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
               fos.close();
             } catch (FileNotFoundException e) {
@@ -213,6 +225,13 @@ public class CaptureActivity extends Activity {
             }
             return null;
           }
+
+          @Override
+          protected void onPostExecute(Void aVoid) {
+            CaptureActivity.this.scanLight.setVisibility(View.VISIBLE);
+            CaptureActivity.this.scanLight.startAnimation(CaptureActivity.this.scanAnim);
+          }
+
         }).execute();
         return true;
     }
@@ -251,5 +270,19 @@ public class CaptureActivity extends Activity {
   public void onBackPressed() {
     finish();
     overridePendingTransition(0, R.anim.slide_out_right);
+  }
+
+  @Override
+  public void onViewButtonPressed() {
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+    Fragment f = getFragmentManager().findFragmentByTag("scan");
+    if(f != null) {
+      ft.remove(f);
+      ft.commit();
+    }
+    Intent intent = new Intent();
+    intent.setAction(Intent.ACTION_VIEW);
+    intent.setDataAndType(Uri.fromFile(new File(this.imagePath)), "image/jpeg");
+    startActivity(intent);
   }
 }
