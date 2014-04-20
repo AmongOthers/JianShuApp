@@ -50,6 +50,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private String mTitle;
   private String mSummary;
   private String mAuthor;
+  private String avatarUrl;
 
   private WebView mWebView;
   private Button mRetryButton;
@@ -138,6 +139,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
           Element article = doc.select("div.preview").get(0);
           Element title = article.select("h1.title").get(0);
+          Element authorInfo = article.select("div.meta-top").get(0);
           Element content = article.select("div.show-content").get(0);
           String extractedDocStr = String.format("<html lang=\"zh-CN\">" +
               "<head>" +
@@ -150,7 +152,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
               "<div class=\"container\">" +
               "<div class=\"article\">" +
               "<div class=\"preview\">" +
-              "%s" + "%s" +
+              "%s" + "%s" + "%s" +
               "</div>" +
               "</div>" +
               "</div>" +
@@ -158,7 +160,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
               "</body>" +
               "</html>",
               getCss(),
-              title.toString(), content.toString());
+              title.toString(), authorInfo.toString(), content.toString());
           return extractedDocStr;
         } else {
           return null;
