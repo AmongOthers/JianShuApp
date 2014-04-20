@@ -3,9 +3,10 @@ package jianshu.io.app;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,8 +27,15 @@ import net.tsz.afinal.annotation.view.ViewInject;
 import jianshu.io.app.widget.AfinalRoundedImageView;
 import model.JianshuSession;
 import model.UserInfo;
+import model.UserInfoManager;
 
-public class MainActivity extends FinalActivity {
+public class MainActivity extends FinalActivity
+  implements AdapterView.OnItemClickListener,
+  UserInfoManager.UserInfoManagerListener
+{
+
+  private static final int LOGIN_FROM_START = 0;
+  private static final int LOGIN_FROM_BUTTON = 1;
 
   @ViewInject(id = R.id.left_drawer)
   ListView mDrawerList;
@@ -42,33 +51,66 @@ public class MainActivity extends FinalActivity {
   TextView userName;
   @ViewInject(id = R.id.userIntroduce)
   TextView userIntroduce;
+  @ViewInject(id = R.id.user_login)
+  View userLoginView;
+  @ViewInject(id = R.id.login_btn)
+  Button loginBtn;
 
   private CharSequence mTitle;
   private CharSequence mDrawerTitle;
   private ActionBarDrawerToggle mDrawerToggle;
   private String[] mTitles;
-  private String usereId;
-  private JianshuSession session;
   private FinalBitmap finalBitmap;
+  private Handler handler;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    this.finalBitmap = FinalBitmap.create(this);
+    getActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setHomeButtonEnabled(true);
 
     mTitles = getResources().getStringArray(R.array.drawer_titles);
     mTitle = mDrawerTitle = getTitle();
+
+    initDrawer();
+
+    this.finalBitmap = FinalBitmap.create(this);
+
+    this.handler = new Handler();
+
+    this.loginBtn.setOnClickListener(new Button.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivityForResult(intent, LOGIN_FROM_BUTTON);
+      }
+    });
+
+    UserInfoManager.getsInstance().setListener(this);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    JianshuSession.getsInstance().validate();
+    if(JianshuSession.getsInstance().isUserLogin()) {
+      showUserInfo(UserInfoManager.getsInstance().getUserInfo());
+      selectItem(0);
+    } else {
+      Intent intent = new Intent(this, LoginActivity.class);
+      startActivityForResult(intent, LOGIN_FROM_START);
+    }
+  }
+
+  private void initDrawer() {
     mDrawerList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
     mDrawerList.setAdapter(new ArrayAdapter<String>(this,
         R.layout.drawer_item,
         mTitles));
-    mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-    getActionBar().setDisplayHomeAsUpEnabled(true);
-    getActionBar().setHomeButtonEnabled(true);
-
+    mDrawerList.setOnItemClickListener(this);
     mDrawerToggle = new ActionBarDrawerToggle(
         this,                  /* host Activity */
         mDrawerLayout,         /* DrawerLayout object */
@@ -86,58 +128,38 @@ public class MainActivity extends FinalActivity {
         invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
       }
     };
-
     mDrawerLayout.setDrawerListener(mDrawerToggle);
+  }
 
-    if (savedInstanceState == null) {
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if(requestCode == LOGIN_FROM_START) {
       selectItem(0);
-    }
-
-    this.session = ((JianshuApplication) this.getApplication()).getSession();
-    if(this.session.isUserLogin()) {
-      final MainActivity that = this;
-      (new AsyncTask<Void, Void, UserInfo>(){
-        @Override
-        protected UserInfo doInBackground(Void... params) {
-          return UserInfo.load(that);
-        }
-
-        @Override
-        protected void onPostExecute(UserInfo userInfo) {
-          if(userInfo != null) {
-            that.finalBitmap.display(that.userAvatar, userInfo.getAvatarUrl());
-            that.userName.setText(userInfo.getName());
-            that.userIntroduce.setText(userInfo.getIntroduce());
-            mUserView.setVisibility(View.VISIBLE);
-          }
-        }
-      }).execute();
+    } else {
+      if(resultCode == RESULT_OK) {
+        selectItem(0);
+      }
     }
   }
 
-  public void showUserInfo(String userId) {
-    this.usereId = userId;
+  private void showUserInfo(final UserInfo userInfo) {
     final MainActivity that = MainActivity.this;
-    if(usereId != null) {
-      (new AsyncTask<Void, Void, UserInfo>(){
-
-        @Override
-        protected UserInfo doInBackground(Void... params) {
-          return UserInfo.load(that, that.session, that.usereId);
-        }
-
-        @Override
-        protected void onPostExecute(UserInfo userInfo) {
+    this.handler.post(new Runnable() {
+      @Override
+      public void run() {
+        if (userInfo != null) {
+          that.userLoginView.setVisibility(View.GONE);
           that.finalBitmap.display(that.userAvatar, userInfo.getAvatarUrl());
           that.userName.setText(userInfo.getName());
           that.userIntroduce.setText(userInfo.getIntroduce());
-          mUserView.setVisibility(View.VISIBLE);
+          that.mUserView.setVisibility(View.VISIBLE);
+        } else {
+          that.userLoginView.setVisibility(View.VISIBLE);
+          that.mUserView.setVisibility(View.GONE);
         }
+      }
+    });
 
-      }).execute();
-    } else {
-      mUserView.setVisibility(View.GONE);
-    }
   }
 
   private void selectItem(int position) {
@@ -208,11 +230,14 @@ public class MainActivity extends FinalActivity {
     mDrawerToggle.onConfigurationChanged(newConfig);
   }
 
-  class DrawerItemClickListener implements AdapterView.OnItemClickListener {
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-      selectItem(i);
-    }
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    selectItem(position);
   }
+
+  @Override
+  public void onUserInfoChanged(UserInfo userInfo) {
+    showUserInfo(userInfo);
+  }
+
 }

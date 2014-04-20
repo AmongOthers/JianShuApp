@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import model.JianshuSession;
 
 
 public class LoginActivity extends Activity {
@@ -24,12 +27,19 @@ public class LoginActivity extends Activity {
     mWebView.setWebViewClient(new WebViewClient() {
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        String cookie = CookieManager.getInstance().getCookie(url);
+        if(cookie != null && cookie.contains(" remember_user_token") &&
+            cookie.contains("_session_id")) {
+          JianshuSession.getsInstance().validate();
+          setResult(RESULT_OK);
+          LoginActivity.this.finish();
+          return true;
+        }
         return false;
       }
     });
     mWebView.loadUrl("http://jianshu.io/sign_in");
   }
-
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {

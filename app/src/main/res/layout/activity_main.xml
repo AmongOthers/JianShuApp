@@ -19,6 +19,25 @@
       android:layout_height="match_parent">
 
     <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/user_login"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+      <Button
+          android:id="@+id/login_btn"
+          android:layout_gravity="center"
+          android:text="登录"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/user"
         android:visibility="gone"
         android:paddingTop="10dp"

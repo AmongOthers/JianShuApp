@@ -24,11 +24,8 @@ public class HomePageDataPool {
 
   private boolean mIsAtTheEnd;
   private String mLoadMoreUrl;
-  private JianshuSession mSession;
-  private String mUserId;
 
-  public HomePageDataPool(JianshuSession session) {
-    mSession = session;
+  public HomePageDataPool() {
   }
 
   public RecommendationItem[] refresh() throws IOException{
@@ -37,25 +34,19 @@ public class HomePageDataPool {
     return load(url);
   }
 
-  public String getUserId() {
-    return mUserId;
-  }
-
   private RecommendationItem[] load(String url) throws IOException {
-    Object httpResult = mSession.getSync(url, true);
+    Object httpResult = JianshuSession.getsInstance().getSync(url, true);
     if (httpResult instanceof String) {
       Document doc = Jsoup.parse((String) httpResult);
 
       //页面中如果包含用户信息，说明是已登录的
-      mUserId = null;
+      String userId = null;
       Elements userElements = doc.select(CURRENT_USER_SLUG);
       if(userElements.size() > 0) {
         Element userEl = userElements.get(0);
-        mUserId = userEl.attr("value");
-        mSession.notifyUserLogin();
-      } else {
-        mSession.notifyUserLogout();
+        userId = userEl.attr("value");
       }
+      UserInfoManager.getsInstance().setUserId(userId);
 
       Elements loadMoreElements = doc.select(LOAD_MORE_SELECTOR);
       if (loadMoreElements.size() > 0) {

@@ -15,7 +15,6 @@ import model.JianshuSession;
 public class LikeActivity extends Activity {
 
   private Button mLikeButton;
-  private JianshuSession mSession;
 
   static final String LIKE_URL = "http://jianshu.io/notes/130176/like";
 
@@ -33,7 +32,7 @@ public class LikeActivity extends Activity {
 
           @Override
           protected Object doInBackground(Void... params) {
-            return mSession.postSync(LIKE_URL, false);
+            return JianshuSession.getsInstance().postSync(LIKE_URL, false);
           }
 
           @Override
@@ -46,8 +45,7 @@ public class LikeActivity extends Activity {
       }
     });
 
-    mSession = ((JianshuApplication)getApplication()).getSession();
-    if(!mSession.isUserLogin()) {
+    if(!JianshuSession.getsInstance().isUserLogin()) {
       mLikeButton.setText("请先登录");
     }
   }
