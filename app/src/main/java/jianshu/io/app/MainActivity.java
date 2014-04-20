@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -86,6 +85,7 @@ public class MainActivity extends FinalActivity
       public void onClick(View v) {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, LOGIN_FROM_BUTTON);
+        MainActivity.this.overridePendingTransition(R.anim.slide_in_left, 0);
       }
     });
 
@@ -102,6 +102,7 @@ public class MainActivity extends FinalActivity
     } else {
       Intent intent = new Intent(this, LoginActivity.class);
       startActivityForResult(intent, LOGIN_FROM_START);
+      MainActivity.this.overridePendingTransition(R.anim.slide_in_left, 0);
     }
   }
 
@@ -133,12 +134,8 @@ public class MainActivity extends FinalActivity
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if(requestCode == LOGIN_FROM_START) {
-      selectItem(0);
-    } else {
-      if(resultCode == RESULT_OK) {
-        selectItem(0);
-      }
+    if (resultCode == RESULT_OK) {
+//      selectItem(0);
     }
   }
 
@@ -194,8 +191,8 @@ public class MainActivity extends FinalActivity
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.main, menu);
+//    MenuInflater inflater = getMenuInflater();
+//    inflater.inflate(R.menu.main, menu);
     return super.onCreateOptionsMenu(menu);
   }
 

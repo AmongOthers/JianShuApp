@@ -1,6 +1,5 @@
 package jianshu.io.app;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,10 +8,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import model.JianshuSession;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends SwipeBackActivity {
 
   private WebView mWebView;
 
@@ -33,6 +33,7 @@ public class LoginActivity extends Activity {
           JianshuSession.getsInstance().validate();
           setResult(RESULT_OK);
           LoginActivity.this.finish();
+          overridePendingTransition(0, R.anim.slide_out_right);
           return true;
         }
         return false;
@@ -45,8 +46,8 @@ public class LoginActivity extends Activity {
   public boolean onCreateOptionsMenu(Menu menu) {
 
     // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.login, menu);
-    return true;
+//    getMenuInflater().inflate(R.menu.login, menu);
+    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
@@ -59,6 +60,12 @@ public class LoginActivity extends Activity {
       return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onBackPressed() {
+    finish();
+    overridePendingTransition(0, R.anim.slide_out_right);
   }
 
 }

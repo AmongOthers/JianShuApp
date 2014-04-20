@@ -39,7 +39,8 @@
         </activity>
         <activity
             android:name="jianshu.io.app.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login"
+            android:theme="@style/JianShu.Translucent">
         </activity>
         <activity
             android:name=".SessionActivity"

@@ -10,9 +10,9 @@ public class UserInfoManager implements JianshuSession.JianshuSessionListener {
   private static UserInfoManager sInstance;
 
   private Context context;
-  private UserInfo userInfo;
   private UserInfo cachedUserInfo;
   private String userId;
+  private UserInfo userInfo;
   private UserInfoManagerListener listener;
 
   public static synchronized UserInfoManager init(Context context) {
@@ -89,6 +89,7 @@ public class UserInfoManager implements JianshuSession.JianshuSessionListener {
   @Override
   public void onLogout() {
     setUserInfo(null);
+    this.userId = null;
   }
 
   public interface UserInfoManagerListener {
