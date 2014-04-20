@@ -2,6 +2,7 @@ package jianshu.io.app;
 
 import android.app.Application;
 
+import jianshu.io.app.util.CrashHandler;
 import model.JianshuSession;
 import model.UserInfoManager;
 

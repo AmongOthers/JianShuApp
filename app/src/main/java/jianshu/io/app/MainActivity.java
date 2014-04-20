@@ -23,6 +23,7 @@ import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
 
+import jianshu.io.app.dialog.NotReadyFragment;
 import jianshu.io.app.widget.AfinalRoundedImageView;
 import model.JianshuSession;
 import model.UserInfo;

@@ -1,4 +1,4 @@
-package jianshu.io.app;
+package jianshu.io.app.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

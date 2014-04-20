@@ -1,4 +1,4 @@
-package jianshu.io.app;
+package jianshu.io.app.util;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
