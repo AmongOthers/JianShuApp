@@ -24,7 +24,7 @@ public class UserInfo {
   private String introduce;
   private String avatarUrl;
 
-  public static UserInfo load(Context context) {
+  public static UserInfo loadFromFileCache(Context context) {
     try {
       InputStreamReader reader = new InputStreamReader(context.openFileInput("userinfo"));
       BufferedReader bufferedReader = new BufferedReader(reader);
@@ -57,9 +57,9 @@ public class UserInfo {
     }
   }
 
-  public static UserInfo load(Context context, JianshuSession session, String userId) {
+  public static UserInfo load(Context context, String userId) {
     String userPageUrl = String.format("http://jianshu.io/users/%s/latest_articles", userId);
-    Object httpResult = session.getSync(userPageUrl, true);
+    Object httpResult = JianshuSession.getsInstance().getSync(userPageUrl, true);
     if(httpResult instanceof String) {
       UserInfo userInfo = new UserInfo();
       userInfo.userId = userId;

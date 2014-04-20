@@ -53,7 +53,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
 
     final Activity activity = getActivity();
 
-    mPool = new HomePageDataPool(((JianshuApplication)activity.getApplication()).getSession());
+    mPool = new HomePageDataPool();
 
     mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
     mListView = (EndlessListView) (activity.findViewById(R.id.list));
@@ -134,9 +134,6 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
             mAdapter.clear();
           }
           mAdapter.addAll(data);
-          String userId = mPool.getUserId();
-          MainActivity mainActivity = (MainActivity) getActivity();
-          mainActivity.showUserInfo(userId);
         } else {
           Context context = RecommendationFragment.this.getActivity();
           if(context != null) {
