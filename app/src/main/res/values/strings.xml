@@ -20,5 +20,7 @@
     <string name="title_activity_capture">CaptureActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_session">SessionActivity</string>
+    <string name="like_symbol">♥</string>
+    <string name="unlike_symbol">♡</string>
 
 </resources>

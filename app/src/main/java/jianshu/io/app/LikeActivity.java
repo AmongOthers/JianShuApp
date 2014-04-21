@@ -3,19 +3,29 @@ package jianshu.io.app;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
+import jianshu.io.app.widget.ObservableWebView;
 import model.JianshuSession;
 
 
-public class LikeActivity extends Activity {
+public class LikeActivity extends Activity implements ObservableWebView.OnScrollChangedCallback {
 
-  private Button mLikeButton;
+  private ObservableWebView mWebView;
+  private View mLikeView;
+  private TextView mLikeTextView;
+  private Animation fadeIn;
+  private Animation fadeOut;
+  private boolean isLiking;
+  private int likingCount = 12;
 
+  static final String LIKE_SYMBOL = "♥";
+  static final String UNLIKE_SYMBOL = "♡";
   static final String LIKE_URL = "http://jianshu.io/notes/130176/like";
 
   @Override
@@ -23,33 +33,68 @@ public class LikeActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_like);
 
-    mLikeButton = (Button) findViewById(R.id.like);
-    mLikeButton.setOnClickListener(new Button.OnClickListener(){
+    mWebView = (ObservableWebView)findViewById(R.id.like_webview);
+    mWebView.loadUrl("http://jianshu.io/p/4e6f1efdcb39");
+    mWebView.setOnScrollChangedCallback(this);
+    mLikeView = findViewById(R.id.like);
+    mLikeTextView = (TextView) findViewById(R.id.like_text);
+    mLikeView.setOnClickListener(new View.OnClickListener() {
 
       @Override
       public void onClick(View v) {
-        (new AsyncTask<Void, Void, Object>() {
+        (new AsyncTask<Void, Void, Boolean>() {
 
           @Override
-          protected Object doInBackground(Void... params) {
-            return JianshuSession.getsInstance().postSync(LIKE_URL, false);
+          protected Boolean doInBackground(Void... params) {
+            return true;
           }
 
           @Override
-          protected void onPostExecute(Object s) {
-            if(s instanceof String) {
-              Log.d("jianshu", "I like it");
+          protected void onPostExecute(Boolean succeed) {
+            if (succeed) {
+              isLiking = !isLiking;
+              updateLike();
             }
           }
         }).execute();
       }
     });
 
+    updateLike();
+    initAnimation();
+
     if(!JianshuSession.getsInstance().isUserLogin()) {
-      mLikeButton.setText("请先登录");
+      mLikeTextView.setText("请先登录");
     }
   }
 
+  private void initAnimation() {
+    this.fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+    this.fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+    this.fadeOut.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        mLikeView.setVisibility(View.GONE);
+      }
+
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
+  }
+
+  private void updateLike() {
+    String text = (isLiking ? LIKE_SYMBOL : UNLIKE_SYMBOL) + " " + this.likingCount;
+    mLikeTextView.setText(text);
+    mLikeTextView.setTextColor(getResources().getColor(isLiking ? android.R.color.white : R.color.jianshu));
+    mLikeView.setBackgroundResource(isLiking ? R.drawable.border_fill : R.drawable.border);
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,4 +116,13 @@ public class LikeActivity extends Activity {
     return super.onOptionsItemSelected(item);
   }
 
+  @Override
+  public void onScrollChanged(boolean isAtTheEnd) {
+    if(isAtTheEnd) {
+      mLikeView.setVisibility(View.VISIBLE);
+      mLikeView.startAnimation(this.fadeIn);
+    } else {
+      mLikeView.startAnimation(this.fadeOut);
+    }
+  }
 }
