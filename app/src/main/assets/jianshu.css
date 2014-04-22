@@ -23,9 +23,10 @@ padding-left: 45px;
 }
 .post .post-bg {
 background-color: #fff;
--webkit-box-shadow: 0 2px 4px #222;
+/*KindleFile HD上的阴影问题*/
+/*-webkit-box-shadow: 0 2px 4px #222;
 -moz-box-shadow: 0 2px 4px #222;
-box-shadow: 0 2px 4px #222;
+box-shadow: 0 2px 4px #222;*/
 position: relative;
 z-index: 9;
 }

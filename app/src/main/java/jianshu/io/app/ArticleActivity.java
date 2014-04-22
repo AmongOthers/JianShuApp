@@ -62,6 +62,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private FinalHttp mFinalHttp;
   private ShareActionProvider mShareActionProvider;
   private DownloadManager mDownloadManager;
+  private Bitmap scanBitmap;
 
   protected static String Css;
 
@@ -250,9 +251,15 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         int[] size = getRealSize(mWebView);
         int width = size[0];
         int height = size[1];
-        final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        mWebView.draw(canvas);
+        try {
+          this.scanBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+          Canvas canvas = new Canvas(this.scanBitmap);
+          mWebView.draw(canvas);
+        } catch (OutOfMemoryError e) {
+          this.scanBitmap = null;
+          Toast.makeText(this, "扫描图像失败，请重试", Toast.LENGTH_LONG).show();
+          return true;
+        }
         final ArticleActivity that = ArticleActivity.this;
         (new AsyncTask<Void, Void, Boolean>(){
 
@@ -265,9 +272,11 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
                 jianshuImageFile.mkdirs();
               }
               that.imagePath = Environment.getExternalStoragePublicDirectory(
-                  Environment.DIRECTORY_PICTURES) + "/jianshu/" + getImageFileName("测试长微博");
+                  Environment.DIRECTORY_PICTURES) + "/jianshu/" + getImageFileName(mTitle);
               FileOutputStream fos = new FileOutputStream(that.imagePath);
-              bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+              that.scanBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+              that.scanBitmap.recycle();
+              that.scanBitmap = null;
               fos.close();
               return true;
             } catch (FileNotFoundException e) {

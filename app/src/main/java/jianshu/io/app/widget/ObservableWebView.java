@@ -2,6 +2,7 @@ package jianshu.io.app.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.WebView;
 
 public class ObservableWebView extends WebView
@@ -28,7 +29,10 @@ public class ObservableWebView extends WebView
   {
     super.onScrollChanged(l, t, oldl, oldt);
     boolean isAtTheEnd = false;
-    isAtTheEnd = t + getHeight() >= computeVerticalScrollRange();
+    int height = getHeight();
+    int range = computeHorizontalScrollRange();
+    isAtTheEnd = t + height >= range;
+    Log.d("onscroll", String.format("t: %d, h:%d, r: %d", t, height, range));
     if(mOnScrollChangedCallback != null){
         mOnScrollChangedCallback.onScrollChanged(isAtTheEnd);
     }

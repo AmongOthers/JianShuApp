@@ -62,6 +62,7 @@ public class MainActivity extends FinalActivity
   private String[] mTitles;
   private FinalBitmap finalBitmap;
   private Handler handler;
+  private boolean backFromLogin;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +92,21 @@ public class MainActivity extends FinalActivity
     });
 
     UserInfoManager.getsInstance().setListener(this);
+
+    setUiAccordingIfLogin();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    JianshuSession.getsInstance().validate();
+    if(this.backFromLogin) {
+      this.backFromLogin = false;
+      JianshuSession.getsInstance().validate();
+      setUiAccordingIfLogin();
+    }
+  }
+
+  private void setUiAccordingIfLogin() {
     if(JianshuSession.getsInstance().isUserLogin()) {
       showUserInfo(UserInfoManager.getsInstance().getUserInfo());
       selectItem(0);
@@ -135,9 +145,7 @@ public class MainActivity extends FinalActivity
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (resultCode == RESULT_OK) {
-//      selectItem(0);
-    }
+    backFromLogin = true;
   }
 
   private void showUserInfo(final UserInfo userInfo) {

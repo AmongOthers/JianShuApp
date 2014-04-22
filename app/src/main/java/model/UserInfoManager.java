@@ -75,8 +75,10 @@ public class UserInfoManager implements JianshuSession.JianshuSessionListener {
     this.userId = userId;
     JianshuSession.getsInstance().validate();
     if(oldUserId == null || !oldUserId.equals(userId)) {
-      if(this.cachedUserInfo.getUserId().equals(userId)) {
-        setUserInfo(this.cachedUserInfo);
+      if(this.cachedUserInfo != null) {
+        if(this.cachedUserInfo.getUserId().equals(userId)) {
+          setUserInfo(this.cachedUserInfo);
+        }
       }
       refresh();
     }

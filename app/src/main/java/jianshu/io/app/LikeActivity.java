@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import jianshu.io.app.widget.ObservableWebView;
@@ -61,38 +60,38 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
     });
 
     updateLike();
-    initAnimation();
+//    initAnimation();
 
     if(!JianshuSession.getsInstance().isUserLogin()) {
       mLikeTextView.setText("请先登录");
     }
   }
 
-  private void initAnimation() {
-    this.fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-    this.fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-    this.fadeOut.setAnimationListener(new Animation.AnimationListener() {
-      @Override
-      public void onAnimationStart(Animation animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animation animation) {
-        mLikeView.setVisibility(View.GONE);
-      }
-
-      @Override
-      public void onAnimationRepeat(Animation animation) {
-
-      }
-    });
-  }
+//  private void initAnimation() {
+//    this.fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+//    this.fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+//    this.fadeOut.setAnimationListener(new Animation.AnimationListener() {
+//      @Override
+//      public void onAnimationStart(Animation animation) {
+//
+//      }
+//
+//      @Override
+//      public void onAnimationEnd(Animation animation) {
+//        mLikeView.setVisibility(View.GONE);
+//      }
+//
+//      @Override
+//      public void onAnimationRepeat(Animation animation) {
+//
+//      }
+//    });
+//  }
 
   private void updateLike() {
     String text = (isLiking ? LIKE_SYMBOL : UNLIKE_SYMBOL) + " " + this.likingCount;
     mLikeTextView.setText(text);
-    mLikeTextView.setTextColor(getResources().getColor(isLiking ? android.R.color.white : R.color.jianshu));
+    mLikeTextView.setTextColor(getResources().getColor(isLiking ? R.color.white_trans : R.color.jianshu_trans));
     mLikeView.setBackgroundResource(isLiking ? R.drawable.border_fill : R.drawable.border);
   }
 
@@ -118,11 +117,11 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
 
   @Override
   public void onScrollChanged(boolean isAtTheEnd) {
-    if(isAtTheEnd) {
-      mLikeView.setVisibility(View.VISIBLE);
-      mLikeView.startAnimation(this.fadeIn);
-    } else {
-      mLikeView.startAnimation(this.fadeOut);
-    }
+//    if(isAtTheEnd) {
+//      mLikeView.setVisibility(View.VISIBLE);
+//      mLikeView.startAnimation(this.fadeIn);
+//    } else {
+//      mLikeView.startAnimation(this.fadeOut);
+//    }
   }
 }
