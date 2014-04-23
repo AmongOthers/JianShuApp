@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import jianshu.io.app.widget.ObservableWebView;
 import model.JianshuSession;
 
@@ -18,14 +21,16 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
   private ObservableWebView mWebView;
   private View mLikeView;
   private TextView mLikeTextView;
-  private Animation fadeIn;
-  private Animation fadeOut;
   private boolean isLiking;
   private int likingCount = 12;
+  private Animation fadeIn;
+  private Animation fadeOut;
 
   static final String LIKE_SYMBOL = "♥";
   static final String UNLIKE_SYMBOL = "♡";
-  static final String LIKE_URL = "http://jianshu.io/notes/130176/like";
+  static final String LIKE_URL = "http://jianshu.io/notes/137026/like";
+  //static final Pattern LIKE_COUNT_PATTERN = Pattern.compile("text\\(\"([0-9].*)个喜欢\"\\)", Pattern.DOTALL);
+  static final Pattern LIKE_COUNT_PATTERN = Pattern.compile("\"([0-9]+)个喜欢\"", Pattern.DOTALL);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +50,28 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
 
           @Override
           protected Boolean doInBackground(Void... params) {
-            return true;
+            Object httpResult = JianshuSession.getsInstance().postSync(LIKE_URL, false);
+            if(httpResult instanceof String) {
+              String str = (String)httpResult;
+              if (str.startsWith("$")) {
+                if (str.contains("addClass('note-liked')")) {
+                  LikeActivity.this.isLiking = true;
+                } else if (str.contains("removeClass('note-liked')")) {
+                  LikeActivity.this.isLiking = false;
+                }
+                Matcher matcher = LIKE_COUNT_PATTERN.matcher(str);
+                if (matcher.find()) {
+                  LikeActivity.this.likingCount = Integer.parseInt(matcher.group(1));
+                }
+                return true;
+              }
+            }
+            return false;
           }
 
           @Override
           protected void onPostExecute(Boolean succeed) {
             if (succeed) {
-              isLiking = !isLiking;
               updateLike();
             }
           }

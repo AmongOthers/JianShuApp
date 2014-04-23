@@ -21,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ShareActionProvider;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.tsz.afinal.FinalHttp;
@@ -28,6 +29,7 @@ import net.tsz.afinal.FinalHttp;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,14 +38,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jianshu.io.app.dialog.ScanFinishedDialogFragment;
 import jianshu.io.app.widget.LoadingTextView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+import model.JianshuSession;
 
 
 public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDialogFragment.OnFragmentInteractionListener {
+
+  static final String LIKE_SYMBOL = "♥";
+  static final String UNLIKE_SYMBOL = "♡";
+  static final Pattern LIKE_COUNT_PATTERN = Pattern.compile("\"([0-9]+)个喜欢\"", Pattern.DOTALL);
 
   private LoadingTextView mLoadingArticle;
   private String mUrl;
@@ -51,6 +60,11 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private String mSummary;
   private String mAuthor;
   private String avatarUrl;
+  private View mLikeView;
+  private TextView mLikeTextView;
+  private boolean isLiking;
+  private int likingCount = 0;
+  private String likeUrl;
 
   private WebView mWebView;
   private Button mRetryButton;
@@ -105,6 +119,46 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       }
     });
 
+    mLikeView = findViewById(R.id.like);
+    mLikeTextView = (TextView) findViewById(R.id.like_text);
+    final ArticleActivity that = this;
+    mLikeView.setOnClickListener(new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        (new AsyncTask<Void, Void, Boolean>() {
+
+          @Override
+          protected Boolean doInBackground(Void... params) {
+            Object httpResult = JianshuSession.getsInstance().postSync(that.likeUrl, false);
+            if(httpResult instanceof String) {
+              String str = (String)httpResult;
+              if (str.startsWith("$")) {
+                if (str.contains("addClass('note-liked')")) {
+                  that.isLiking = true;
+                } else if (str.contains("removeClass('note-liked')")) {
+                  that.isLiking = false;
+                }
+                Matcher matcher = LIKE_COUNT_PATTERN.matcher(str);
+                if (matcher.find()) {
+                  that.likingCount = Integer.parseInt(matcher.group(1));
+                }
+                return true;
+              }
+            }
+            return false;
+          }
+
+          @Override
+          protected void onPostExecute(Boolean succeed) {
+            if (succeed) {
+              updateLike();
+            }
+          }
+        }).execute();
+      }
+    });
+
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -129,15 +183,43 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     loadArticle();
   }
 
+  private void updateLike() {
+    String text = (isLiking ? LIKE_SYMBOL : UNLIKE_SYMBOL) + " " + this.likingCount;
+    mLikeTextView.setText(text);
+    mLikeTextView.setTextColor(getResources().getColor(isLiking ? R.color.white_trans : R.color.jianshu_trans));
+    mLikeView.setBackgroundResource(isLiking ? R.drawable.border_fill : R.drawable.border);
+    if(mLikeView.getVisibility() == View.GONE) {
+      mLikeView.setVisibility(View.VISIBLE);
+    }
+  }
+
   private void loadArticle() {
+    final ArticleActivity that = this;
     mLoadingArticle.startAnimation();
     (new AsyncTask<Void, Void, String>() {
       @Override
       protected String doInBackground(Void... params) {
-        Object httpResult = mFinalHttp.getSync(mUrl);
+        Object httpResult = JianshuSession.getsInstance().getSync(mUrl, true);
         if(httpResult instanceof String) {
           Document doc = Jsoup.parse((String) httpResult);
           //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
+          Element likeBtnEl = doc.select(".like > .btn").get(0);
+          String likeUrlAttr = likeBtnEl.attr("href");
+          //判断登录状态
+          if(!likeUrlAttr.equals("#login-model")) {
+            that.likeUrl = "http://jianshu.io" + likeBtnEl.attr("href");
+            that.isLiking = likeBtnEl.hasClass("note-liked");
+            Elements functionEls = doc.select("div.comment li a");
+            Element likeCountEl = null;
+            for(Element el : functionEls) {
+              if(el.attr("href").equals("#like")) {
+                likeCountEl = el;
+                break;
+              }
+            }
+            String countStr = likeCountEl.text().replace("个喜欢", "").trim();
+            that.likingCount = Integer.parseInt(countStr);
+          }
           Element article = doc.select("div.preview").get(0);
           Element title = article.select("h1.title").get(0);
           Element authorInfo = article.select("div.meta-top").get(0);
@@ -179,6 +261,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           mWebView.setVisibility(View.INVISIBLE);
           mRetryButton.setVisibility(View.VISIBLE);
         }
+        updateLike();
       }
     }).execute();
   }
@@ -257,7 +340,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           mWebView.draw(canvas);
         } catch (OutOfMemoryError e) {
           this.scanBitmap = null;
-          Toast.makeText(this, "扫描图像失败，请重试", Toast.LENGTH_LONG).show();
+          Toast.makeText(this, "文章篇幅过长，扫描生成图片失败", Toast.LENGTH_LONG).show();
           return true;
         }
         final ArticleActivity that = ArticleActivity.this;

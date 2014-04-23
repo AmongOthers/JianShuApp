@@ -43,4 +43,24 @@
       android:layout_width="fill_parent"
       android:layout_height="20dp"/>
 
+  <LinearLayout
+      android:visibility="gone"
+      android:id="@+id/like"
+      android:clickable="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
+      android:background="@drawable/border_fill"
+      android:layout_width="103dp"
+      android:layout_height="38dp">
+
+  <TextView
+      android:id="@+id/like_text"
+      android:gravity="center"
+      android:textSize="20dp"
+      android:textColor="#fff"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"/>
+
+  </LinearLayout>
+
 </RelativeLayout>
