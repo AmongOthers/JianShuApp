@@ -1,5 +1,6 @@
 package jianshu.io.app;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +24,11 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
   private ObservableWebView mWebView;
   private View mLikeView;
   private TextView mLikeTextView;
+  private ProgressBar mLikeProgress;
+  private boolean isLikingProgressing;
+  private ObjectAnimator likingAnim;
+  private ObjectAnimator unlikingAnim;
+  private ObjectAnimator currentAnim;
   private boolean isLiking;
   private int likingCount = 12;
   private Animation fadeIn;
@@ -40,12 +48,28 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
     mWebView = (ObservableWebView)findViewById(R.id.like_webview);
     mWebView.loadUrl("http://jianshu.io/p/4e6f1efdcb39");
     mWebView.setOnScrollChangedCallback(this);
+    mLikeProgress = (ProgressBar)findViewById(R.id.like_progress);
+    this.likingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", 0, mLikeProgress.getMax());
+    this.likingAnim.setDuration(5000);
+    this.unlikingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", mLikeProgress.getMax(), 0);
+    this.unlikingAnim.setDuration(5000);
+
     mLikeView = findViewById(R.id.like);
     mLikeTextView = (TextView) findViewById(R.id.like_text);
     mLikeView.setOnClickListener(new View.OnClickListener() {
 
       @Override
       public void onClick(View v) {
+        final LikeActivity that = LikeActivity.this;
+        final int max = mLikeProgress.getMax();
+        if(that.isLikingProgressing) {
+          return;
+        }
+        that.isLikingProgressing = true;
+
+        that.currentAnim = that.isLiking ? that.unlikingAnim : that.likingAnim;
+        that.currentAnim.start();
+
         (new AsyncTask<Void, Void, Boolean>() {
 
           @Override
@@ -71,8 +95,12 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
 
           @Override
           protected void onPostExecute(Boolean succeed) {
+            LikeActivity.this.isLikingProgressing = false;
+            //that.currentAnim.end();
             if (succeed) {
               updateLike();
+            } else {
+              Toast.makeText(that, "网络问题，请重试", Toast.LENGTH_LONG).show();
             }
           }
         }).execute();
@@ -80,39 +108,19 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
     });
 
     updateLike();
-//    initAnimation();
+//    initAnimation()
 
     if(!JianshuSession.getsInstance().isUserLogin()) {
       mLikeTextView.setText("请先登录");
     }
   }
 
-//  private void initAnimation() {
-//    this.fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-//    this.fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-//    this.fadeOut.setAnimationListener(new Animation.AnimationListener() {
-//      @Override
-//      public void onAnimationStart(Animation animation) {
-//
-//      }
-//
-//      @Override
-//      public void onAnimationEnd(Animation animation) {
-//        mLikeView.setVisibility(View.GONE);
-//      }
-//
-//      @Override
-//      public void onAnimationRepeat(Animation animation) {
-//
-//      }
-//    });
-//  }
-
   private void updateLike() {
+    //mLikeProgress.setProgress(isLiking ? mLikeProgress.getMax() : 0);
     String text = (isLiking ? LIKE_SYMBOL : UNLIKE_SYMBOL) + " " + this.likingCount;
     mLikeTextView.setText(text);
     mLikeTextView.setTextColor(getResources().getColor(isLiking ? R.color.white_trans : R.color.jianshu_trans));
-    mLikeView.setBackgroundResource(isLiking ? R.drawable.border_fill : R.drawable.border);
+    //mLikeView.setBackgroundResource(isLiking ? R.drawable.border_fill : R.drawable.border);
   }
 
   @Override

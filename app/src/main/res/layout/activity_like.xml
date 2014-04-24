@@ -18,18 +18,32 @@
       android:clickable="true"
       android:layout_alignParentRight="true"
       android:layout_alignParentBottom="true"
-      android:background="@drawable/border_fill"
+      android:background="@drawable/border"
       android:layout_width="103dp"
       android:layout_height="38dp">
 
-    <TextView
-        android:id="@+id/like_text"
-        android:text="♥ 12"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:textColor="#fff"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+      <ProgressBar
+          android:id="@+id/like_progress"
+          style="@android:style/Widget.ProgressBar.Horizontal"
+          android:max="10"
+          android:progress="0"
+          android:progressDrawable="@drawable/like_progressbar"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+      <TextView
+          android:id="@+id/like_text"
+          android:text="♥ 12"
+          android:gravity="center"
+          android:textSize="20dp"
+          android:textColor="#fff"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent"/>
+
+    </RelativeLayout>
 
   </LinearLayout>
 
