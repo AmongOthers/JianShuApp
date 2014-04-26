@@ -49,10 +49,10 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
     mWebView.loadUrl("http://jianshu.io/p/4e6f1efdcb39");
     mWebView.setOnScrollChangedCallback(this);
     mLikeProgress = (ProgressBar)findViewById(R.id.like_progress);
-    this.likingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", 0, mLikeProgress.getMax());
-    this.likingAnim.setDuration(5000);
-    this.unlikingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", mLikeProgress.getMax(), 0);
-    this.unlikingAnim.setDuration(5000);
+    this.likingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", 2, mLikeProgress.getMax() - 1);
+    this.likingAnim.setDuration(2000);
+    this.unlikingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", mLikeProgress.getMax() - 1, 2);
+    this.unlikingAnim.setDuration(2000);
 
     mLikeView = findViewById(R.id.like);
     mLikeTextView = (TextView) findViewById(R.id.like_text);
@@ -116,7 +116,10 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
   }
 
   private void updateLike() {
-    //mLikeProgress.setProgress(isLiking ? mLikeProgress.getMax() : 0);
+    if(this.currentAnim != null) {
+      this.currentAnim.end();
+    }
+    mLikeProgress.setProgress(isLiking ? mLikeProgress.getMax() : 0);
     String text = (isLiking ? LIKE_SYMBOL : UNLIKE_SYMBOL) + " " + this.likingCount;
     mLikeTextView.setText(text);
     mLikeTextView.setTextColor(getResources().getColor(isLiking ? R.color.white_trans : R.color.jianshu_trans));

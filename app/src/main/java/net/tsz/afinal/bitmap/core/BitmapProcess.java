@@ -59,7 +59,7 @@ public class BitmapProcess {
 			}
 		}
 
-    if(mDecorator != null) {
+    if(bitmap != null && mDecorator != null) {
       bitmap = mDecorator.decorate(bitmap);
     }
 		return bitmap;

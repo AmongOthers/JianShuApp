@@ -16,21 +16,22 @@
   <LinearLayout
       android:id="@+id/like"
       android:clickable="true"
+      android:alpha="0.5"
       android:layout_alignParentRight="true"
       android:layout_alignParentBottom="true"
-      android:background="@drawable/border"
-      android:layout_width="103dp"
-      android:layout_height="38dp">
+      android:background="@drawable/jianshu_border"
+      android:layout_width="113dp"
+      android:layout_height="42dp">
 
     <RelativeLayout
+        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="40dp">
 
       <ProgressBar
           android:id="@+id/like_progress"
           style="@android:style/Widget.ProgressBar.Horizontal"
-          android:max="10"
-          android:progress="0"
+          android:max="6"
           android:progressDrawable="@drawable/like_progressbar"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>

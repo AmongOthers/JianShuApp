@@ -1,5 +1,6 @@
 package jianshu.io.app;
 
+import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.DownloadManager;
 import android.app.Fragment;
@@ -20,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +67,11 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private boolean isLiking;
   private int likingCount = 0;
   private String likeUrl;
+  private ProgressBar mLikeProgress;
+  private boolean isLikingProgressing;
+  private ObjectAnimator likingAnim;
+  private ObjectAnimator unlikingAnim;
+  private ObjectAnimator currentAnim;
 
   private WebView mWebView;
   private Button mRetryButton;
@@ -119,13 +126,28 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       }
     });
 
+    mLikeProgress = (ProgressBar)findViewById(R.id.like_progress);
+    this.likingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", 2, mLikeProgress.getMax() - 1);
+    this.likingAnim.setDuration(2000);
+    this.unlikingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", mLikeProgress.getMax() - 1, 2);
+    this.unlikingAnim.setDuration(2000);
+
     mLikeView = findViewById(R.id.like);
     mLikeTextView = (TextView) findViewById(R.id.like_text);
-    final ArticleActivity that = this;
     mLikeView.setOnClickListener(new View.OnClickListener() {
 
       @Override
       public void onClick(View v) {
+        final ArticleActivity that = ArticleActivity.this;
+        final int max = mLikeProgress.getMax();
+        if(that.isLikingProgressing) {
+          return;
+        }
+        that.isLikingProgressing = true;
+
+        that.currentAnim = that.isLiking ? that.unlikingAnim : that.likingAnim;
+        that.currentAnim.start();
+
         (new AsyncTask<Void, Void, Boolean>() {
 
           @Override
@@ -151,8 +173,12 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
           @Override
           protected void onPostExecute(Boolean succeed) {
+            that.isLikingProgressing = false;
+            //that.currentAnim.end();
             if (succeed) {
               updateLike();
+            } else {
+              Toast.makeText(that, "网络似乎不给力", Toast.LENGTH_LONG).show();
             }
           }
         }).execute();
@@ -184,13 +210,16 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   }
 
   private void updateLike() {
+    if(this.currentAnim != null) {
+      this.currentAnim.end();
+    }
+    if(this.mLikeView.getVisibility() == View.GONE) {
+      this.mLikeView.setVisibility(View.VISIBLE);
+    }
+    mLikeProgress.setProgress(isLiking ? mLikeProgress.getMax() : 0);
     String text = (isLiking ? LIKE_SYMBOL : UNLIKE_SYMBOL) + " " + this.likingCount;
     mLikeTextView.setText(text);
     mLikeTextView.setTextColor(getResources().getColor(isLiking ? R.color.white_trans : R.color.jianshu_trans));
-    mLikeView.setBackgroundResource(isLiking ? R.drawable.border_fill : R.drawable.border);
-    if(mLikeView.getVisibility() == View.GONE) {
-      mLikeView.setVisibility(View.VISIBLE);
-    }
   }
 
   private void loadArticle() {
