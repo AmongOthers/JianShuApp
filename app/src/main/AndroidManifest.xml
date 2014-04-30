@@ -11,7 +11,7 @@
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/JianShu" >
+        android:theme="@style/JianShuTheme" >
       <activity
           android:name="jianshu.io.app.LikeActivity"
           android:label="@string/title_activity_like" >
@@ -35,7 +35,7 @@
             android:name="jianshu.io.app.ArticleActivity"
             android:label="@string/title_activity_article"
             android:parentActivityName="jianshu.io.app.MainActivity"
-            android:theme="@style/JianShu.Translucent" >
+            android:theme="@style/JianShuTheme.Translucent" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -45,7 +45,7 @@
         <activity
             android:name="jianshu.io.app.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/JianShu.Translucent">
+            android:theme="@style/JianShuTheme.Translucent">
         </activity>
         <activity
             android:name=".SessionActivity"

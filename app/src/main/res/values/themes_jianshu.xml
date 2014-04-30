@@ -7,25 +7,20 @@
     <item name="android:buttonStyle">@style/ButtonJianShu</item>
   </style>
 
-  <style name="JianShu.Translucent">
+  <style name="JianShuTheme.Translucent">
     <item name="android:windowIsTranslucent">true</item>
   </style>
 
-  <style name="JianShu" parent="@style/_JianShu">
-    <item name="android:actionBarItemBackground">@drawable/selectable_background_jianshuactionbar
-    </item>
+  <style name="JianShuTheme" parent="@style/_JianShu">
+    <item name="android:actionBarItemBackground">@drawable/selectable_background_jianshuactionbar</item>
     <item name="android:popupMenuStyle">@style/PopupMenu.Jianshuactionbar</item>
     <item name="android:dropDownListViewStyle">@style/DropDownListView.Jianshuactionbar</item>
     <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Jianshuactionbar</item>
     <item name="android:actionDropDownStyle">@style/DropDownNav.Jianshuactionbar</item>
     <item name="android:actionBarStyle">@style/ActionBar.Solid.Jianshuactionbar</item>
     <item name="android:actionModeBackground">@drawable/cab_background_top_jianshuactionbar</item>
-    <item name="android:actionModeSplitBackground">
-      @drawable/cab_background_bottom_jianshuactionbar
-    </item>
-    <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Jianshuactionbar
-    </item>
-    <item name="ptrProgressBarColor">#e58c7c</item>
+    <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_jianshuactionbar</item>
+    <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Jianshuactionbar</item>
 
     <!-- Light.DarkActionBar specific -->
     <item name="android:actionBarWidgetTheme">@style/Theme.Jianshuactionbar.Widget</item>

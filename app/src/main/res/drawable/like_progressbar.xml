@@ -1,10 +1,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:id="@android:id/background">
     <scale android:scaleWidth="100%"
-           android:drawable="@drawable/jianshu_bg" />
+           android:drawable="@drawable/like_bg" />
   </item>
   <item android:id="@android:id/progress">
     <scale android:scaleWidth="100%"
-           android:drawable="@drawable/jianshu" />
+           android:drawable="@drawable/like_progress_primary" />
   </item>
 </layer-list>

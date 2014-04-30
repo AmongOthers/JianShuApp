@@ -41,7 +41,7 @@
         android:alpha="0.5"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/jianshu_border"
+        android:background="@drawable/like_border"
         android:layout_width="113dp"
         android:layout_height="42dp">
 
