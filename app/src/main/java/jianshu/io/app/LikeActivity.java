@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -144,14 +143,6 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
     mLikeTextView.setText(text);
     mLikeTextView.setTextColor(getResources().getColor(isLiking ? R.color.white_trans : R.color.jianshu_trans));
     //mLikeView.setBackgroundResource(isLiking ? R.drawable.border_fill : R.drawable.border);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.like, menu);
-    return true;
   }
 
   @Override
