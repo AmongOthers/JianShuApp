@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,25 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_like);
+
+    this.fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+    this.fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+    this.fadeOut.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        LikeActivity.this.mLikeView.setVisibility(View.GONE);
+      }
+
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
 
     mWebView = (ObservableWebView)findViewById(R.id.like_webview);
     mWebView.loadUrl("http://jianshu.io/p/4e6f1efdcb39");
@@ -148,11 +168,15 @@ public class LikeActivity extends Activity implements ObservableWebView.OnScroll
 
   @Override
   public void onScrollChanged(boolean isAtTheEnd) {
-//    if(isAtTheEnd) {
-//      mLikeView.setVisibility(View.VISIBLE);
-//      mLikeView.startAnimation(this.fadeIn);
-//    } else {
-//      mLikeView.startAnimation(this.fadeOut);
-//    }
+    if(isAtTheEnd) {
+      if(mLikeView.getVisibility() == View.GONE) {
+        mLikeView.setVisibility(View.VISIBLE);
+        mLikeView.startAnimation(this.fadeIn);
+      }
+    } else {
+      if(mLikeView.getVisibility() == View.VISIBLE) {
+        mLikeView.startAnimation(this.fadeOut);
+      }
+    }
   }
 }

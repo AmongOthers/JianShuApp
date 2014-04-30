@@ -45,12 +45,13 @@ import java.util.regex.Pattern;
 
 import jianshu.io.app.dialog.ScanFinishedDialogFragment;
 import jianshu.io.app.widget.LoadingTextView;
+import jianshu.io.app.widget.ObservableWebView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import model.JianshuSession;
 
 
-public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDialogFragment.OnFragmentInteractionListener {
+public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDialogFragment.OnFragmentInteractionListener, ObservableWebView.OnScrollChangedCallback {
 
   static final String LIKE_SYMBOL = "♥";
   static final String UNLIKE_SYMBOL = "♡";
@@ -73,11 +74,13 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private ObjectAnimator unlikingAnim;
   private ObjectAnimator currentAnim;
 
-  private WebView mWebView;
+  private ObservableWebView mWebView;
   private Button mRetryButton;
   private View scanLight;
   private SwipeBackLayout mSwipeBackLayout;
   private Animation scanAnim;
+  private Animation fadeIn;
+  private Animation fadeOut;
 
   private String imagePath;
   private FinalHttp mFinalHttp;
@@ -97,10 +100,30 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     mTitle = intent.getStringExtra("title");
     mSummary = intent.getStringExtra("summary");
     mAuthor = intent.getStringExtra("author");
-    mLoadingArticle = (LoadingTextView)findViewById(R.id.loading_article);
-    mWebView = (WebView)findViewById(R.id.web);
-    mRetryButton = (Button)findViewById(R.id.retry);
-    this.scanLight = (View)findViewById(R.id.scan_light);
+    mLoadingArticle = (LoadingTextView) findViewById(R.id.loading_article);
+    mWebView = (ObservableWebView) findViewById(R.id.web);
+    mWebView.setOnScrollChangedCallback(this);
+    mRetryButton = (Button) findViewById(R.id.retry);
+    this.scanLight = (View) findViewById(R.id.scan_light);
+
+    this.fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+    this.fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+    this.fadeOut.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        ArticleActivity.this.mLikeView.setVisibility(View.GONE);
+      }
+
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
 
     this.scanAnim = AnimationUtils.loadAnimation(this, R.anim.scan);
     this.scanAnim.setAnimationListener(new Animation.AnimationListener() {
@@ -126,7 +149,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       }
     });
 
-    mLikeProgress = (ProgressBar)findViewById(R.id.like_progress);
+    mLikeProgress = (ProgressBar) findViewById(R.id.like_progress);
     this.likingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", 2, mLikeProgress.getMax() - 1);
     this.likingAnim.setDuration(2000);
     this.unlikingAnim = ObjectAnimator.ofInt(this.mLikeProgress, "progress", mLikeProgress.getMax() - 1, 2);
@@ -140,7 +163,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       public void onClick(View v) {
         final ArticleActivity that = ArticleActivity.this;
         final int max = mLikeProgress.getMax();
-        if(that.isLikingProgressing) {
+        if (that.isLikingProgressing) {
           return;
         }
         that.isLikingProgressing = true;
@@ -153,8 +176,8 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           @Override
           protected Boolean doInBackground(Void... params) {
             Object httpResult = JianshuSession.getsInstance().postSync(that.likeUrl, false);
-            if(httpResult instanceof String) {
-              String str = (String)httpResult;
+            if (httpResult instanceof String) {
+              String str = (String) httpResult;
               if (str.startsWith("$")) {
                 if (str.contains("addClass('note-liked')")) {
                   that.isLiking = true;
@@ -174,10 +197,9 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           @Override
           protected void onPostExecute(Boolean succeed) {
             that.isLikingProgressing = false;
-            //that.currentAnim.end();
-            if (succeed) {
-              updateLike();
-            } else {
+            //即使是网络问题失败了，也要重置进度条状态
+            updateLike();
+            if (!succeed) {
               Toast.makeText(that, "网络似乎不给力", Toast.LENGTH_LONG).show();
             }
           }
@@ -210,12 +232,12 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   }
 
   private void updateLike() {
-    if(this.currentAnim != null) {
+    if (this.currentAnim != null) {
       this.currentAnim.end();
     }
-    if(this.mLikeView.getVisibility() == View.GONE) {
-      this.mLikeView.setVisibility(View.VISIBLE);
-    }
+//    if (this.mLikeView.getVisibility() == View.GONE) {
+//      this.mLikeView.setVisibility(View.VISIBLE);
+//    }
     mLikeProgress.setProgress(isLiking ? mLikeProgress.getMax() : 0);
     String text = (isLiking ? LIKE_SYMBOL : UNLIKE_SYMBOL) + " " + this.likingCount;
     mLikeTextView.setText(text);
@@ -229,19 +251,19 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       @Override
       protected String doInBackground(Void... params) {
         Object httpResult = JianshuSession.getsInstance().getSync(mUrl, true);
-        if(httpResult instanceof String) {
+        if (httpResult instanceof String) {
           Document doc = Jsoup.parse((String) httpResult);
           //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
           Element likeBtnEl = doc.select(".like > .btn").get(0);
           String likeUrlAttr = likeBtnEl.attr("href");
           //判断登录状态
-          if(!likeUrlAttr.equals("#login-model")) {
+          if (!likeUrlAttr.equals("#login-model")) {
             that.likeUrl = "http://jianshu.io" + likeBtnEl.attr("href");
             that.isLiking = likeBtnEl.hasClass("note-liked");
             Elements functionEls = doc.select("div.comment li a");
             Element likeCountEl = null;
-            for(Element el : functionEls) {
-              if(el.attr("href").equals("#like")) {
+            for (Element el : functionEls) {
+              if (el.attr("href").equals("#like")) {
                 likeCountEl = el;
                 break;
               }
@@ -254,25 +276,26 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           Element authorInfo = article.select("div.meta-top").get(0);
           Element content = article.select("div.show-content").get(0);
           String extractedDocStr = String.format("<html lang=\"zh-CN\">" +
-              "<head>" +
-              "<meta charset=\"utf-8\">" +
-              "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
-              "<style type=\"text/css\">%s</style>" +
-              "</head>" +
-              "<body class=\"post output zh cn reader-day-mode reader-font1  win\">" +
-              "<div class=\"post-bg\">" +
-              "<div class=\"container\">" +
-              "<div class=\"article\">" +
-              "<div class=\"preview\">" +
-              "%s" + "%s" + "%s" +
-              "</div>" +
-              "</div>" +
-              "</div>" +
-              "</div>" +
-              "</body>" +
-              "</html>",
+                  "<head>" +
+                  "<meta charset=\"utf-8\">" +
+                  "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                  "<style type=\"text/css\">%s</style>" +
+                  "</head>" +
+                  "<body class=\"post output zh cn reader-day-mode reader-font1  win\">" +
+                  "<div class=\"post-bg\">" +
+                  "<div class=\"container\">" +
+                  "<div class=\"article\">" +
+                  "<div class=\"preview\">" +
+                  "%s" + "%s" + "%s" +
+                  "</div>" +
+                  "</div>" +
+                  "</div>" +
+                  "</div>" +
+                  "</body>" +
+                  "</html>",
               getCss(),
-              title.toString(), authorInfo.toString(), content.toString());
+              title.toString(), authorInfo.toString(), content.toString()
+          );
           return extractedDocStr;
         } else {
           return null;
@@ -283,7 +306,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       protected void onPostExecute(String s) {
         mLoadingArticle.endAnimation();
         mLoadingArticle.setVisibility(View.INVISIBLE);
-        if(s != null) {
+        if (s != null) {
           mWebView.setVisibility(View.VISIBLE);
           mWebView.loadData(s, "text/html; charset=UTF-8", null);
         } else {
@@ -314,7 +337,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   @Override
   protected void onPause() {
     super.onPause();
-    if(mLoadingArticle.getVisibility() == View.VISIBLE) {
+    if (mLoadingArticle.getVisibility() == View.VISIBLE) {
       mLoadingArticle.endAnimation();
     }
   }
@@ -373,14 +396,14 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           return true;
         }
         final ArticleActivity that = ArticleActivity.this;
-        (new AsyncTask<Void, Void, Boolean>(){
+        (new AsyncTask<Void, Void, Boolean>() {
 
           @Override
           protected Boolean doInBackground(Void... params) {
             try {
               File jianshuImageFile = new File(Environment.getExternalStoragePublicDirectory(
                   Environment.DIRECTORY_PICTURES) + "/jianshu");
-              if(!jianshuImageFile.exists()) {
+              if (!jianshuImageFile.exists()) {
                 jianshuImageFile.mkdirs();
               }
               that.imagePath = Environment.getExternalStoragePublicDirectory(
@@ -401,7 +424,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
           @Override
           protected void onPostExecute(Boolean succeed) {
-            if(succeed) {
+            if (succeed) {
               that.scanLight.setVisibility(View.VISIBLE);
               that.scanLight.startAnimation(that.scanAnim);
             } else {
@@ -423,7 +446,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       Method heightMethod = webView.getClass().getDeclaredMethod("computeVerticalScrollRange");
       heightMethod.setAccessible(true);
       int height = (Integer) heightMethod.invoke(webView);
-      return new int[]{ width, height };
+      return new int[]{width, height};
     } catch (NoSuchMethodException e) {
       e.printStackTrace();
     } catch (InvocationTargetException e) {
@@ -435,9 +458,10 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   }
 
   static final char[] RESERVED_CHARS = new char[]{'|', '\\', '?', '*', '<', '\"', ':', '>', '+', '[', ']', '/', '\''};
+
   private String getImageFileName(String title) {
     String imageFileName = title;
-    for(char ch : RESERVED_CHARS) {
+    for (char ch : RESERVED_CHARS) {
       imageFileName = imageFileName.replace(ch, '%');
     }
     return imageFileName + ".jpeg";
@@ -448,11 +472,12 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     finish();
     overridePendingTransition(0, R.anim.slide_out_right);
   }
-    @Override
+
+  @Override
   public void onViewButtonPressed() {
     FragmentTransaction ft = getFragmentManager().beginTransaction();
     Fragment f = getFragmentManager().findFragmentByTag("scan");
-    if(f != null) {
+    if (f != null) {
       ft.remove(f);
       ft.commit();
     }
@@ -460,5 +485,19 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     intent.setAction(Intent.ACTION_VIEW);
     intent.setDataAndType(Uri.fromFile(new File(this.imagePath)), "image/jpeg");
     startActivity(intent);
+  }
+
+  @Override
+  public void onScrollChanged(boolean isAtTheEnd) {
+    if (isAtTheEnd) {
+      if (mLikeView.getVisibility() == View.GONE) {
+        mLikeView.setVisibility(View.VISIBLE);
+        mLikeView.startAnimation(this.fadeIn);
+      }
+    } else {
+      if (mLikeView.getVisibility() == View.VISIBLE) {
+        mLikeView.startAnimation(this.fadeOut);
+      }
+    }
   }
 }

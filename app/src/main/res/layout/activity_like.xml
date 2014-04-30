@@ -14,6 +14,7 @@
       android:layout_height="fill_parent"/>
 
   <LinearLayout
+      android:visibility="gone"
       android:id="@+id/like"
       android:clickable="true"
       android:alpha="0.5"
