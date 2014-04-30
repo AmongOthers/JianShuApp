@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
@@ -38,8 +37,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -383,7 +380,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
       case R.id.menu_item_picture:
-        int[] size = getRealSize(mWebView);
+        int[] size = mWebView.getRealSize();
         int width = size[0];
         int height = size[1];
         try {
@@ -436,25 +433,6 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         return true;
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  private int[] getRealSize(WebView webView) {
-    try {
-      Method widthMethod = webView.getClass().getDeclaredMethod("computeHorizontalScrollRange");
-      widthMethod.setAccessible(true);
-      int width = (Integer) widthMethod.invoke(webView);
-      Method heightMethod = webView.getClass().getDeclaredMethod("computeVerticalScrollRange");
-      heightMethod.setAccessible(true);
-      int height = (Integer) heightMethod.invoke(webView);
-      return new int[]{width, height};
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 
   static final char[] RESERVED_CHARS = new char[]{'|', '\\', '?', '*', '<', '\"', ':', '>', '+', '[', ']', '/', '\''};

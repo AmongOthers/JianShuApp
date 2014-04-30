@@ -2,13 +2,13 @@ package jianshu.io.app.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.webkit.WebView;
 
 public class ObservableWebView extends WebView
 {
   private OnScrollChangedCallback mOnScrollChangedCallback;
   private int threshold;
+  private int[] realSize;
 
   public ObservableWebView(final Context context)
   {
@@ -30,15 +30,23 @@ public class ObservableWebView extends WebView
   {
     super.onScrollChanged(l, t, oldl, oldt);
     int height = getHeight();
-    int range = computeVerticalScrollRange();
+    int range = getRealSize()[1];
     if(threshold == 0) {
       threshold = (int) (range - height * 1.2);
     }
     boolean isAtTheEnd = t >= threshold;
-    Log.d("onscroll", String.format("t: %d, h:%d, r: %d", t, height, range));
     if(mOnScrollChangedCallback != null){
         mOnScrollChangedCallback.onScrollChanged(isAtTheEnd);
     }
+  }
+
+  public int[] getRealSize() {
+    if(this.realSize == null) {
+      realSize = new int[2];
+      realSize[0] = computeHorizontalScrollRange();
+      realSize[1] = computeVerticalScrollRange();
+    }
+    return this.realSize;
   }
 
   public OnScrollChangedCallback getOnScrollChangedCallback()
