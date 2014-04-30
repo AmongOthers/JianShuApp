@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ptr_layout"
@@ -17,4 +17,4 @@
       android:layout_height="match_parent">
   </jianshu.io.app.widget.EndlessListView>
 
-</uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

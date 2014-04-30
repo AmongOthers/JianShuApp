@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,26 +20,22 @@ import jianshu.io.app.widget.EndlessListener;
 import jianshu.io.app.widget.LoadingTextView;
 import model.HomePageDataPool;
 import model.RecommendationItem;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 /**
  * Created by Administrator on 14-3-8.
  */
-public class RecommendationFragment extends Fragment implements OnRefreshListener, EndlessListener {
+public class RecommendationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
 
   public static RecommendationFragment newInstance() {
     return new RecommendationFragment();
   }
 
   EndlessListView mListView;
-  PullToRefreshLayout mPtrLayout;
+  SwipeRefreshLayout mRefreshLayout;
   RecommendationAdapter mAdapter;
   LoadingTextView mFooter;
   HomePageDataPool mPool;
   View mEmptyView;
-  ActionBarPullToRefresh.SetupWizard mWizard;
   boolean mIsEmpty;
 
   @Override
@@ -77,12 +74,41 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
         R.layout.article_list_item);
     mListView.setAdapter(mAdapter);
 
-    mPtrLayout = (PullToRefreshLayout) (activity.findViewById(R.id.ptr_layout));
-    mWizard = ActionBarPullToRefresh.from(activity).listener(this);
-    mWizard.allChildrenArePullable().setup(mPtrLayout);
+    mRefreshLayout = (SwipeRefreshLayout) (activity.findViewById(R.id.ptr_layout));
+    mRefreshLayout.setColorScheme(R.color.jianshu, R.color.white, R.color.jianshu, R.color.white);
+    mRefreshLayout.setOnRefreshListener(this);
+    mRefreshLayout.setRefreshing(true);
+    onRefresh();
+  }
 
-    mPtrLayout.setRefreshing(true);
-    onRefreshStarted(null);
+  @Override
+  public void onRefresh() {
+    new RecommendationAsyncTask(true, new OnPostExecuteTask() {
+      @Override
+      public void run(RecommendationItem[] data) {
+        mRefreshLayout.setRefreshing(false);
+        if(data != null) {
+          if(mIsEmpty) {
+            mIsEmpty = false;
+            mRefreshLayout.removeView(mEmptyView);
+            mRefreshLayout.addView(mListView);
+          } else {
+            mAdapter.clear();
+          }
+          mAdapter.addAll(data);
+        } else {
+          Context context = RecommendationFragment.this.getActivity();
+          if(context != null) {
+            Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
+          }
+          if(mAdapter.getCount() == 0 && !mIsEmpty) {
+            mIsEmpty = true;
+            mRefreshLayout.removeView(mListView);
+            mRefreshLayout.addView(mEmptyView);
+          }
+        }
+      }
+    }).execute();
   }
 
   class RecommendationAsyncTask extends AsyncTask<Void, Void, RecommendationItem[]> {
@@ -116,38 +142,6 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
 
   interface OnPostExecuteTask {
     void run(RecommendationItem[] data);
-  }
-
-  @Override
-  public void onRefreshStarted(View view) {
-    new RecommendationAsyncTask(true, new OnPostExecuteTask() {
-      @Override
-      public void run(RecommendationItem[] data) {
-        mPtrLayout.setRefreshComplete();
-        if(data != null) {
-          if(mIsEmpty) {
-            mIsEmpty = false;
-            mPtrLayout.removeView(mEmptyView);
-            mPtrLayout.addView(mListView);
-            mWizard.allChildrenArePullable().setup(mPtrLayout);
-          } else {
-            mAdapter.clear();
-          }
-          mAdapter.addAll(data);
-        } else {
-          Context context = RecommendationFragment.this.getActivity();
-          if(context != null) {
-            Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
-          }
-          if(mAdapter.getCount() == 0 && !mIsEmpty) {
-            mIsEmpty = true;
-            mPtrLayout.removeView(mListView);
-            mPtrLayout.addView(mEmptyView);
-            mWizard.allChildrenArePullable().setup(mPtrLayout);
-          }
-        }
-      }
-    }).execute();
   }
 
   @Override
