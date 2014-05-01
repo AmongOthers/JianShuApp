@@ -83,6 +83,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private ScanFinishedDialogFragment scanFinishedDialogFragment;
 
   private String imagePath;
+  private Uri imageUri;
   private FinalHttp mFinalHttp;
   private ShareActionProvider mShareActionProvider;
   private DownloadManager mDownloadManager;
@@ -453,6 +454,9 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       protected void onPostExecute(Boolean succeed) {
         mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
         if (succeed) {
+          that.imageUri = Uri.fromFile(new File(that.imagePath));
+          Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, that.imageUri);
+          sendBroadcast(localIntent);
           that.scanFinishedDialogFragment.onScanFinished();
         } else {
           that.scanFinishedDialogFragment.onScanError("保存图片时遇到错误");
@@ -488,7 +492,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     }
     Intent intent = new Intent();
     intent.setAction(Intent.ACTION_VIEW);
-    intent.setDataAndType(Uri.fromFile(new File(this.imagePath)), "image/jpeg");
+    intent.setDataAndType(this.imageUri, "image/jpeg");
     startActivity(intent);
   }
 
