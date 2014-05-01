@@ -69,6 +69,10 @@ public class ScanFinishedDialogFragment extends DialogFragment {
     this.scanButton.setVisibility(View.VISIBLE);
   }
 
+  public void onScanError(String err) {
+    this.scanText.setText(err);
+  }
+
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);

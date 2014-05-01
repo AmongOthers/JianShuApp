@@ -376,6 +376,7 @@ border: 1px solid #fff;
 }
 /*底部栏*/
 div.jianshu_bar {
+display: none;
 background: #434343;
 color: #a4a4a4;
 text-align: center;

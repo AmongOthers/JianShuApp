@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,6 +72,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private ObjectAnimator unlikingAnim;
   private ObjectAnimator currentAnim;
 
+  private Handler handler;
   private ObservableWebView mWebView;
   private Button mRetryButton;
   private View scanLight;
@@ -78,6 +80,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private Animation scanAnim;
   private Animation fadeIn;
   private Animation fadeOut;
+  private ScanFinishedDialogFragment scanFinishedDialogFragment;
 
   private String imagePath;
   private FinalHttp mFinalHttp;
@@ -86,12 +89,15 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private Bitmap scanBitmap;
   private String content;
 
+
   protected static String Css;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_article);
+
+    this.handler = new Handler();
 
     Intent intent = getIntent();
     mUrl = intent.getStringExtra("url");
@@ -105,6 +111,8 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     mWebView.addJavascriptInterface(this, "article");
     mRetryButton = (Button) findViewById(R.id.retry);
     this.scanLight = (View) findViewById(R.id.scan_light);
+
+    final ArticleActivity that = this;
 
     this.fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
     this.fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
@@ -128,19 +136,16 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     this.scanAnim = AnimationUtils.loadAnimation(this, R.anim.scan);
     this.scanAnim.setAnimationListener(new Animation.AnimationListener() {
 
-      ScanFinishedDialogFragment scanFinishedDialogFragment = null;
-
       @Override
       public void onAnimationStart(Animation animation) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        scanFinishedDialogFragment = ScanFinishedDialogFragment.newInstance();
-        scanFinishedDialogFragment.show(ft, "scan");
+        that.scanFinishedDialogFragment = ScanFinishedDialogFragment.newInstance();
+        that.scanFinishedDialogFragment.show(ft, "scan");
       }
 
       @Override
       public void onAnimationEnd(Animation animation) {
         ArticleActivity.this.scanLight.setVisibility(View.GONE);
-        scanFinishedDialogFragment.onScanFinished();
       }
 
       @Override
@@ -389,13 +394,21 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
       case R.id.menu_item_picture:
-        scanContent();
+        mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'block'");
+        this.handler.postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            scanContent();
+          }
+        }, 1000);
+        this.scanLight.setVisibility(View.VISIBLE);
+        this.scanLight.startAnimation(this.scanAnim);
         return true;
     }
     return super.onOptionsItemSelected(item);
   }
 
-  public boolean scanContent() {
+  public void scanContent() {
     int[] size = this.mWebView.getRealSize();
     int width = size[0];
     int height = size[1];
@@ -405,8 +418,9 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       this.mWebView.draw(canvas);
     } catch (OutOfMemoryError e) {
       this.scanBitmap = null;
-      Toast.makeText(this, "文章篇幅过长，扫描生成图片失败", Toast.LENGTH_LONG).show();
-      return true;
+      mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
+      this.scanFinishedDialogFragment.onScanError("篇幅过长，不能扫描");
+      return;
     }
     final ArticleActivity that = ArticleActivity.this;
     (new AsyncTask<Void, Void, Boolean>() {
@@ -437,18 +451,15 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
       @Override
       protected void onPostExecute(Boolean succeed) {
-        //mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
-        //mWebView.getRealSize(true);
+        mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
         if (succeed) {
-          that.scanLight.setVisibility(View.VISIBLE);
-          that.scanLight.startAnimation(that.scanAnim);
+          that.scanFinishedDialogFragment.onScanFinished();
         } else {
-          Toast.makeText(that, "扫描时遇到错误", Toast.LENGTH_LONG).show();
+          that.scanFinishedDialogFragment.onScanError("保存图片时遇到错误");
         }
       }
 
     }).execute();
-    return false;
   }
 
   static final char[] RESERVED_CHARS = new char[]{'|', '\\', '?', '*', '<', '\"', ':', '>', '+', '[', ']', '/', '\''};
