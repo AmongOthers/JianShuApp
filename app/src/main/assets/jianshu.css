@@ -374,3 +374,21 @@ font-size: 26px;
 border: 1px solid #fff;
 }
 }
+/*底部栏*/
+div.jianshu_bar {
+background: #434343;
+color: #a4a4a4;
+text-align: center;
+padding-top: 1em;
+padding-bottom: 1em;
+}
+
+div.jianshu_bar h1 {
+color: #fff;
+}
+
+div.jianshu_bar a {
+color: #4183C4;
+}
+
+

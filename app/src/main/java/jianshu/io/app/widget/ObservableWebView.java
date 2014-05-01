@@ -7,8 +7,7 @@ import android.webkit.WebView;
 public class ObservableWebView extends WebView
 {
   private OnScrollChangedCallback mOnScrollChangedCallback;
-  private int threshold;
-  private int[] realSize;
+  private int[] realSize = new int[2];
 
   public ObservableWebView(final Context context)
   {
@@ -31,9 +30,7 @@ public class ObservableWebView extends WebView
     super.onScrollChanged(l, t, oldl, oldt);
     int height = getHeight();
     int range = getRealSize()[1];
-    if(threshold == 0) {
-      threshold = (int) (range - height * 1.2);
-    }
+    int threshold = (int) (range - height * 1.2);
     boolean isAtTheEnd = t >= threshold;
     if(mOnScrollChangedCallback != null){
         mOnScrollChangedCallback.onScrollChanged(isAtTheEnd);
@@ -41,11 +38,8 @@ public class ObservableWebView extends WebView
   }
 
   public int[] getRealSize() {
-    if(this.realSize == null) {
-      realSize = new int[2];
-      realSize[0] = computeHorizontalScrollRange();
-      realSize[1] = computeVerticalScrollRange();
-    }
+    this.realSize[0] = computeHorizontalScrollRange();
+    this.realSize[1] = computeVerticalScrollRange();
     return this.realSize;
   }
 

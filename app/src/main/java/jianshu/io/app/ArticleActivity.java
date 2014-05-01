@@ -84,6 +84,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private ShareActionProvider mShareActionProvider;
   private DownloadManager mDownloadManager;
   private Bitmap scanBitmap;
+  private String content;
 
   protected static String Css;
 
@@ -100,6 +101,8 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     mLoadingArticle = (LoadingTextView) findViewById(R.id.loading_article);
     mWebView = (ObservableWebView) findViewById(R.id.web);
     mWebView.setOnScrollChangedCallback(this);
+    mWebView.getSettings().setJavaScriptEnabled(true);
+    mWebView.addJavascriptInterface(this, "article");
     mRetryButton = (Button) findViewById(R.id.retry);
     this.scanLight = (View) findViewById(R.id.scan_light);
 
@@ -288,6 +291,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
                   "</div>" +
                   "</div>" +
                   "</div>" +
+                  getJianshuBar() +
                   "</body>" +
                   "</html>",
               getCss(),
@@ -304,6 +308,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         mLoadingArticle.endAnimation();
         mLoadingArticle.setVisibility(View.INVISIBLE);
         if (s != null) {
+          that.content = s;
           mWebView.setVisibility(View.VISIBLE);
           mWebView.loadData(s, "text/html; charset=UTF-8", null);
         } else {
@@ -366,6 +371,10 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     return String.format("《%s》 by %s %s (%s)", mTitle, mAuthor, mUrl, "分享自简书");
   }
 
+  private String getJianshuBar() {
+    return "<div class='jianshu_bar'><h1>简书</h1><h3>最好的写作和阅读平台</h3><p><a href='http://jianshu.io'>http://jianshu.io</a></p></div> ";
+  }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     // Handle action bar item clicks here. The action bar will
@@ -380,59 +389,66 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
       case R.id.menu_item_picture:
-        int[] size = mWebView.getRealSize();
-        int width = size[0];
-        int height = size[1];
-        try {
-          this.scanBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-          Canvas canvas = new Canvas(this.scanBitmap);
-          mWebView.draw(canvas);
-        } catch (OutOfMemoryError e) {
-          this.scanBitmap = null;
-          Toast.makeText(this, "文章篇幅过长，扫描生成图片失败", Toast.LENGTH_LONG).show();
-          return true;
-        }
-        final ArticleActivity that = ArticleActivity.this;
-        (new AsyncTask<Void, Void, Boolean>() {
-
-          @Override
-          protected Boolean doInBackground(Void... params) {
-            try {
-              File jianshuImageFile = new File(Environment.getExternalStoragePublicDirectory(
-                  Environment.DIRECTORY_PICTURES) + "/jianshu");
-              if (!jianshuImageFile.exists()) {
-                jianshuImageFile.mkdirs();
-              }
-              that.imagePath = Environment.getExternalStoragePublicDirectory(
-                  Environment.DIRECTORY_PICTURES) + "/jianshu/" + getImageFileName(mTitle);
-              FileOutputStream fos = new FileOutputStream(that.imagePath);
-              that.scanBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-              that.scanBitmap.recycle();
-              that.scanBitmap = null;
-              fos.close();
-              return true;
-            } catch (FileNotFoundException e) {
-              e.printStackTrace();
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-            return false;
-          }
-
-          @Override
-          protected void onPostExecute(Boolean succeed) {
-            if (succeed) {
-              that.scanLight.setVisibility(View.VISIBLE);
-              that.scanLight.startAnimation(that.scanAnim);
-            } else {
-              Toast.makeText(that, "扫描时遇到错误", Toast.LENGTH_LONG).show();
-            }
-          }
-
-        }).execute();
+        scanContent();
         return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  public boolean scanContent() {
+    int[] size = this.mWebView.getRealSize();
+    int width = size[0];
+    int height = size[1];
+    try {
+      this.scanBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+      Canvas canvas = new Canvas(this.scanBitmap);
+      this.mWebView.draw(canvas);
+    } catch (OutOfMemoryError e) {
+      this.scanBitmap = null;
+      Toast.makeText(this, "文章篇幅过长，扫描生成图片失败", Toast.LENGTH_LONG).show();
+      return true;
+    }
+    final ArticleActivity that = ArticleActivity.this;
+    (new AsyncTask<Void, Void, Boolean>() {
+
+      @Override
+      protected Boolean doInBackground(Void... params) {
+        try {
+          File jianshuImageFile = new File(Environment.getExternalStoragePublicDirectory(
+              Environment.DIRECTORY_PICTURES) + "/jianshu");
+          if (!jianshuImageFile.exists()) {
+            jianshuImageFile.mkdirs();
+          }
+          that.imagePath = Environment.getExternalStoragePublicDirectory(
+              Environment.DIRECTORY_PICTURES) + "/jianshu/" + getImageFileName(mTitle);
+          FileOutputStream fos = new FileOutputStream(that.imagePath);
+          that.scanBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+          that.scanBitmap.recycle();
+          that.scanBitmap = null;
+          fos.close();
+          return true;
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        return false;
+      }
+
+      @Override
+      protected void onPostExecute(Boolean succeed) {
+        //mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
+        //mWebView.getRealSize(true);
+        if (succeed) {
+          that.scanLight.setVisibility(View.VISIBLE);
+          that.scanLight.startAnimation(that.scanAnim);
+        } else {
+          Toast.makeText(that, "扫描时遇到错误", Toast.LENGTH_LONG).show();
+        }
+      }
+
+    }).execute();
+    return false;
   }
 
   static final char[] RESERVED_CHARS = new char[]{'|', '\\', '?', '*', '<', '\"', ':', '>', '+', '[', ']', '/', '\''};
