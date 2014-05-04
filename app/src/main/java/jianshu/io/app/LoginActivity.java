@@ -9,7 +9,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
-import model.JianshuSession;
+import jianshu.io.app.model.JianshuSession;
 
 
 public class LoginActivity extends SwipeBackActivity {

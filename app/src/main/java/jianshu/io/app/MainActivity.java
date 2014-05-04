@@ -12,11 +12,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.tsz.afinal.FinalActivity;
@@ -24,10 +22,10 @@ import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
 
 import jianshu.io.app.dialog.NotReadyFragment;
+import jianshu.io.app.model.JianshuSession;
+import jianshu.io.app.model.UserInfo;
+import jianshu.io.app.model.UserInfoManager;
 import jianshu.io.app.widget.AfinalRoundedImageView;
-import model.JianshuSession;
-import model.UserInfo;
-import model.UserInfoManager;
 
 public class MainActivity extends FinalActivity
   implements AdapterView.OnItemClickListener,
@@ -38,7 +36,7 @@ public class MainActivity extends FinalActivity
   private static final int LOGIN_FROM_BUTTON = 1;
 
   @ViewInject(id = R.id.left_drawer)
-  ListView mDrawerList;
+  LinearLayout mMenus;
   @ViewInject(id = R.id.drawer_layout)
   DrawerLayout mDrawerLayout;
   @ViewInject(id = R.id.drawer_container)
@@ -63,6 +61,7 @@ public class MainActivity extends FinalActivity
   private FinalBitmap finalBitmap;
   private Handler handler;
   private boolean backFromLogin;
+  private View selectedView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -118,11 +117,32 @@ public class MainActivity extends FinalActivity
   }
 
   private void initDrawer() {
-    mDrawerList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-    mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-        R.layout.drawer_item,
-        mTitles));
-    mDrawerList.setOnItemClickListener(this);
+    int count = mMenus.getChildCount();
+    for(int i = 0; i < count; i++) {
+      View view = mMenus.getChildAt(i);
+      view.setOnClickListener(new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+          int position = 0;
+          switch (v.getId()) {
+            case R.id.home:
+              position = 0;
+              break;
+            case R.id.hot:
+              position = 1;
+              break;
+            case R.id.th:
+              position = 2;
+              break;
+            default:
+              break;
+          }
+          selectItem(position);
+        }
+      });
+    }
+
     mDrawerToggle = new ActionBarDrawerToggle(
         this,                  /* host Activity */
         mDrawerLayout,         /* DrawerLayout object */
@@ -169,6 +189,15 @@ public class MainActivity extends FinalActivity
   }
 
   private void selectItem(int position) {
+    View v = mMenus.getChildAt(position);
+    if(this.selectedView == v) {
+      return;
+    }
+    if(this.selectedView != null) {
+      this.selectedView.setSelected(false);
+    }
+    v.setSelected(true);
+    this.selectedView = v;
     Fragment fragment = getRelatedFragment(position);
     FragmentManager fragmentManager = getFragmentManager();
     if (fragment instanceof DialogFragment) {
@@ -177,7 +206,6 @@ public class MainActivity extends FinalActivity
       fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
-    mDrawerList.setItemChecked(position, true);
     setTitle(mTitles[position]);
     mDrawerLayout.closeDrawer(mDrawerContianer);
   }

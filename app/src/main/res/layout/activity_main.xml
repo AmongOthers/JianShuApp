@@ -15,7 +15,7 @@
       android:id="@+id/drawer_container"
       android:orientation="vertical"
       android:layout_width="240dp"
-      android:background="#111"
+      android:background="@color/drawer"
       android:layout_height="match_parent">
 
     <LinearLayout
@@ -70,13 +70,14 @@
           android:layout_gravity="center"
           android:gravity="center"
           android:textSize="18dp"
-          android:textColor="#5a5a5a"
+          android:textColor="@color/jianshu_gray"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-    <ListView
+    <LinearLayout
+        android:orientation="vertical"
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
@@ -84,7 +85,47 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="#111"/>
+        android:background="#111">
+
+      <com.shamanland.fonticon.FontIconTextView
+          android:id="@+id/home"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/middle_padding"
+          android:text="首页"
+          android:textSize="@dimen/menu_text_size"
+          android:textColor="@color/pressed_menu"
+          android:background="@drawable/pressed_menu_background"
+          android:drawablePadding="@dimen/middle_padding"
+          app:iconLeft="@xml/fa_home"
+          />
+
+      <com.shamanland.fonticon.FontIconTextView
+          android:id="@+id/hot"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/middle_padding"
+          android:text="热门"
+          android:textSize="@dimen/menu_text_size"
+          android:textColor="@color/pressed_menu"
+          android:background="@drawable/pressed_menu_background"
+          android:drawablePadding="@dimen/middle_padding"
+          app:iconLeft="@xml/fa_hot"
+          />
+
+      <com.shamanland.fonticon.FontIconTextView
+          android:id="@+id/th"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/middle_padding"
+          android:text="专题"
+          android:textSize="@dimen/menu_text_size"
+          android:textColor="@color/pressed_menu"
+          android:background="@drawable/pressed_menu_background"
+          android:drawablePadding="@dimen/middle_padding"
+          app:iconLeft="@xml/fa_th"
+          />
+    </LinearLayout>
 
   </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

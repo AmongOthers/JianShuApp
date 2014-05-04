@@ -1,4 +1,4 @@
-package model;
+package jianshu.io.app.model;
 
 import android.content.Context;
 import android.webkit.CookieManager;

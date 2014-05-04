@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jianshu.io.app.widget.ObservableWebView;
-import model.JianshuSession;
+import jianshu.io.app.model.JianshuSession;
 
 
 public class LikeActivity extends Activity implements ObservableWebView.OnScrollChangedCallback {

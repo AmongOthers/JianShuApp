@@ -1,4 +1,4 @@
-package model;
+package jianshu.io.app.model;
 
 /**
  * Created by Administrator on 14-3-21.

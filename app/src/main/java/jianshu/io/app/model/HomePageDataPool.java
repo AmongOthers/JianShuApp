@@ -1,4 +1,4 @@
-package model;
+package jianshu.io.app.model;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

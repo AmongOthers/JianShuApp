@@ -18,8 +18,8 @@ import java.io.IOException;
 import jianshu.io.app.widget.EndlessListView;
 import jianshu.io.app.widget.EndlessListener;
 import jianshu.io.app.widget.LoadingTextView;
-import model.HomePageDataPool;
-import model.RecommendationItem;
+import jianshu.io.app.model.HomePageDataPool;
+import jianshu.io.app.model.RecommendationItem;
 
 /**
  * Created by Administrator on 14-3-8.

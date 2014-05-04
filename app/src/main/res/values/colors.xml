@@ -5,5 +5,19 @@
     <color name="jianshu_trans">#80e58c7c</color>
     <color name="white">#ffffff</color>
     <color name="white_trans">#80ffffff</color>
+    <color name="jianshu_gray">#999</color>
 
+    <color name="googleplus">#dc4937</color>
+    <color name="facebook">#04f</color>
+    <color name="twitter">#5ea9dd</color>
+    <color name="green_170">#0a0</color>
+    <color name="red_221">#d00</color>
+    <color name="ab_icon">#dfff</color>
+    <color name="holo_blue_bright">#ff33b5e5</color>
+    <color name="very_light_gray">#eee</color>
+    <color name="yellow">#fe0</color>
+    <color name="dark_yellow">#fd0</color>
+    <color name="darker_yellow">#fc0</color>
+    <color name="light_orange">#fb0</color>
+  <color name="drawer">#111</color>
 </resources>

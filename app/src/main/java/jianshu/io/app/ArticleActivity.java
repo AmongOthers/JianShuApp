@@ -44,9 +44,9 @@ import java.util.regex.Pattern;
 import jianshu.io.app.dialog.ScanFinishedDialogFragment;
 import jianshu.io.app.widget.LoadingTextView;
 import jianshu.io.app.widget.ObservableWebView;
+import jianshu.io.app.model.JianshuSession;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
-import model.JianshuSession;
 
 
 public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDialogFragment.OnFragmentInteractionListener, ObservableWebView.OnScrollChangedCallback {

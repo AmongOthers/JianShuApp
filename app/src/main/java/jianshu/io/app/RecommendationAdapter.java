@@ -12,7 +12,7 @@ import android.widget.TextView;
 import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.bitmap.core.BitmapDecorator;
 
-import model.RecommendationItem;
+import jianshu.io.app.model.RecommendationItem;
 
 /**
  * Created by Administrator on 14-3-21.
