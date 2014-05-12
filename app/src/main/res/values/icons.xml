@@ -3,4 +3,7 @@
   <string name="fa_th">&#xf00a;</string>
   <string name="fa_list_ol">&#xf0cb;</string>
   <string name="fa_home">&#xf015;</string>
+  <string name="fa_heart"></string> <string name="fa_heart_o"></string>
+  <string name="fa_comments_o"></string>
+  <string name="fa_book">&#xf02d;</string>
 </resources>

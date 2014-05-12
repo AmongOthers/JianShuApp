@@ -1,4 +1,4 @@
-package jianshu.io.app;
+package jianshu.io.app.adapter;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.bitmap.core.BitmapDecorator;
 
+import jianshu.io.app.R;
 import jianshu.io.app.model.RecommendationItem;
 
 /**

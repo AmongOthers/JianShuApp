@@ -1,10 +1,9 @@
-package jianshu.io.app;
+package jianshu.io.app.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -13,13 +12,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import java.io.IOException;
-
+import jianshu.io.app.ArticleActivity;
+import jianshu.io.app.R;
+import jianshu.io.app.adapter.RecommendationAdapter;
+import jianshu.io.app.model.RecommendationItem;
+import jianshu.io.app.model.datapool.DataPool;
+import jianshu.io.app.model.datapool.HomePageDataPool;
+import jianshu.io.app.util.RecommendationAsyncTask;
 import jianshu.io.app.widget.EndlessListView;
 import jianshu.io.app.widget.EndlessListener;
 import jianshu.io.app.widget.LoadingTextView;
-import jianshu.io.app.model.HomePageDataPool;
-import jianshu.io.app.model.RecommendationItem;
 
 /**
  * Created by Administrator on 14-3-8.
@@ -34,7 +36,7 @@ public class RecommendationFragment extends Fragment implements SwipeRefreshLayo
   SwipeRefreshLayout mRefreshLayout;
   RecommendationAdapter mAdapter;
   LoadingTextView mFooter;
-  HomePageDataPool mPool;
+  DataPool mPool;
   View mEmptyView;
   boolean mIsEmpty;
 
@@ -83,7 +85,7 @@ public class RecommendationFragment extends Fragment implements SwipeRefreshLayo
 
   @Override
   public void onRefresh() {
-    new RecommendationAsyncTask(true, new OnPostExecuteTask() {
+    new RecommendationAsyncTask(true, this.mPool, new RecommendationAsyncTask.OnPostExecuteTask() {
       @Override
       public void run(RecommendationItem[] data) {
         mRefreshLayout.setRefreshing(false);
@@ -111,39 +113,6 @@ public class RecommendationFragment extends Fragment implements SwipeRefreshLayo
     }).execute();
   }
 
-  class RecommendationAsyncTask extends AsyncTask<Void, Void, RecommendationItem[]> {
-
-    private boolean isRefresh;
-    private OnPostExecuteTask task;
-
-    public RecommendationAsyncTask(boolean isRefresh, OnPostExecuteTask task) {
-      this.isRefresh = isRefresh;
-      this.task = task;
-    }
-
-    @Override
-    protected RecommendationItem[] doInBackground(Void... params) {
-      try {
-        if(this.isRefresh) {
-          return RecommendationFragment.this.mPool.refresh();
-        } else {
-          return RecommendationFragment.this.mPool.pull();
-        }
-      } catch (IOException e) {
-        return null;
-      }
-    }
-
-    @Override
-    protected void onPostExecute(RecommendationItem[] data) {
-      this.task.run(data);
-    }
-  }
-
-  interface OnPostExecuteTask {
-    void run(RecommendationItem[] data);
-  }
-
   @Override
   public boolean isAtTheEnd() {
     return mPool.isAtTheEnd();
@@ -152,7 +121,7 @@ public class RecommendationFragment extends Fragment implements SwipeRefreshLayo
   @Override
   public void onScrollEnd() {
     mFooter.startAnimation();
-    new RecommendationAsyncTask(false, new OnPostExecuteTask() {
+    new RecommendationAsyncTask(false, this.mPool, new RecommendationAsyncTask.OnPostExecuteTask() {
       @Override
       public void run(RecommendationItem[] data) {
         mFooter.endAnimation();

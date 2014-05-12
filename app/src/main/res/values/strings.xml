@@ -22,5 +22,6 @@
     <string name="title_activity_session">SessionActivity</string>
     <string name="like_symbol">♥</string>
     <string name="unlike_symbol">♡</string>
+    <string name="title_activity_hot">HotActivity</string>
 
 </resources>

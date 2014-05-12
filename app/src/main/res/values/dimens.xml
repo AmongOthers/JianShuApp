@@ -14,4 +14,7 @@
     <dimen name="middle_padding">12dp</dimen>
     <dimen name="menu_text_size">16sp</dimen>
 
+    <!--CardLibrary-->
+    <dimen name="card_base_empty_height">0dp</dimen>
+
     </resources>

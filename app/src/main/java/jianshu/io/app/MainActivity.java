@@ -22,6 +22,8 @@ import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
 
 import jianshu.io.app.dialog.NotReadyFragment;
+import jianshu.io.app.fragment.RecommendationFragment;
+import jianshu.io.app.fragment.WeeklyHotFragment;
 import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.UserInfo;
 import jianshu.io.app.model.UserInfoManager;
@@ -108,7 +110,7 @@ public class MainActivity extends FinalActivity
   private void setUiAccordingIfLogin() {
     if(JianshuSession.getsInstance().isUserLogin()) {
       showUserInfo(UserInfoManager.getsInstance().getUserInfo());
-      selectItem(0);
+      selectItem(1);
     } else {
       Intent intent = new Intent(this, LoginActivity.class);
       startActivityForResult(intent, LOGIN_FROM_START);
@@ -215,6 +217,8 @@ public class MainActivity extends FinalActivity
     switch (position) {
       case 0:
         return RecommendationFragment.newInstance();
+      case 1:
+        return WeeklyHotFragment.newInstance();
       default:
         return NotReadyFragment.newInstance();
     }

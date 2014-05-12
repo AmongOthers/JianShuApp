@@ -6,6 +6,9 @@
     <color name="white">#ffffff</color>
     <color name="white_trans">#80ffffff</color>
     <color name="jianshu_gray">#999</color>
+    <color name="card_list_gray">#f0f0f0</color>
+    <color name="textTitle">#3b3b3b</color>
+    <color name="textGray">#717171</color>
 
     <color name="googleplus">#dc4937</color>
     <color name="facebook">#04f</color>

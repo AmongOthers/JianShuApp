@@ -13,8 +13,8 @@
       android:id="@+id/title"
       android:text='广告时间'
       android:textStyle="bold"
-      android:textColor="#3b3b3b"
-      android:textSize="26dp"
+      android:textColor="@color/textTitle"
+      android:textSize="20dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
 
@@ -40,7 +40,7 @@
 
   <TextView
       android:id="@+id/summary"
-      android:textColor="#717171"
+      android:textColor="@color/textGray"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
 
