@@ -96,7 +96,7 @@
           android:textSize="@dimen/menu_text_size"
           android:textColor="@color/pressed_menu"
           android:background="@drawable/pressed_menu_background"
-          android:drawablePadding="@dimen/middle_padding"
+          android:drawablePadding="@dimen/thin_padding"
           app:iconLeft="@xml/fa_home"
           />
 
@@ -109,7 +109,7 @@
           android:textSize="@dimen/menu_text_size"
           android:textColor="@color/pressed_menu"
           android:background="@drawable/pressed_menu_background"
-          android:drawablePadding="@dimen/middle_padding"
+          android:drawablePadding="@dimen/thin_padding"
           app:iconLeft="@xml/fa_hot"
           />
 
@@ -122,7 +122,7 @@
           android:textSize="@dimen/menu_text_size"
           android:textColor="@color/pressed_menu"
           android:background="@drawable/pressed_menu_background"
-          android:drawablePadding="@dimen/middle_padding"
+          android:drawablePadding="@dimen/thin_padding"
           app:iconLeft="@xml/fa_th"
           />
     </LinearLayout>

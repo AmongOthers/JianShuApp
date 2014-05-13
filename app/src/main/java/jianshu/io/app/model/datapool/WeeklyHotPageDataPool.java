@@ -77,7 +77,7 @@ public class WeeklyHotPageDataPool extends DataPool{
     }
 
     boolean isLiking = false;
-    Elements likeStateEls = el.select("icon-heart");
+    Elements likeStateEls = el.select(".icon-heart");
     if(likeStateEls.size() > 0) {
       isLiking = true;
     } else {
