@@ -3,8 +3,6 @@ package jianshu.io.app;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.DownloadManager;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +12,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,9 +42,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jianshu.io.app.dialog.ScanFinishedDialogFragment;
+import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.widget.LoadingTextView;
 import jianshu.io.app.widget.ObservableWebView;
-import jianshu.io.app.model.JianshuSession;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
@@ -139,7 +139,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
       @Override
       public void onAnimationStart(Animation animation) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         that.scanFinishedDialogFragment = ScanFinishedDialogFragment.newInstance();
         that.scanFinishedDialogFragment.show(ft, "scan");
       }
@@ -484,8 +484,8 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
   @Override
   public void onViewButtonPressed() {
-    FragmentTransaction ft = getFragmentManager().beginTransaction();
-    Fragment f = getFragmentManager().findFragmentByTag("scan");
+    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    Fragment f = getSupportFragmentManager().findFragmentByTag("scan");
     if (f != null) {
       ft.remove(f);
       ft.commit();

@@ -1,14 +1,15 @@
 package jianshu.io.app;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.FinalBitmap;
-import net.tsz.afinal.annotation.view.ViewInject;
 
 import jianshu.io.app.dialog.NotReadyFragment;
 import jianshu.io.app.fragment.RecommendationFragment;
@@ -29,7 +28,7 @@ import jianshu.io.app.model.UserInfo;
 import jianshu.io.app.model.UserInfoManager;
 import jianshu.io.app.widget.AfinalRoundedImageView;
 
-public class MainActivity extends FinalActivity
+public class MainActivity extends ActionBarActivity
   implements AdapterView.OnItemClickListener,
   UserInfoManager.UserInfoManagerListener
 {
@@ -37,23 +36,14 @@ public class MainActivity extends FinalActivity
   private static final int LOGIN_FROM_START = 0;
   private static final int LOGIN_FROM_BUTTON = 1;
 
-  @ViewInject(id = R.id.left_drawer)
   LinearLayout mMenus;
-  @ViewInject(id = R.id.drawer_layout)
   DrawerLayout mDrawerLayout;
-  @ViewInject(id = R.id.drawer_container)
   View mDrawerContianer;
-  @ViewInject(id = R.id.user)
   View mUserView;
-  @ViewInject(id = R.id.userAvatar)
   AfinalRoundedImageView userAvatar;
-  @ViewInject(id = R.id.userName)
   TextView userName;
-  @ViewInject(id = R.id.userIntroduce)
   TextView userIntroduce;
-  @ViewInject(id = R.id.user_login)
   View userLoginView;
-  @ViewInject(id = R.id.login_btn)
   Button loginBtn;
 
   private CharSequence mTitle;
@@ -69,6 +59,8 @@ public class MainActivity extends FinalActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    initViews();
 
     getActionBar().setDisplayHomeAsUpEnabled(true);
     getActionBar().setHomeButtonEnabled(true);
@@ -95,6 +87,18 @@ public class MainActivity extends FinalActivity
     UserInfoManager.getsInstance().setListener(this);
 
     setUiAccordingIfLogin();
+  }
+
+  private void initViews() {
+    mMenus = (LinearLayout)findViewById(R.id.left_drawer);
+    mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+    mDrawerContianer = findViewById(R.id.drawer_container);
+    mUserView = findViewById(R.id.user);
+    userAvatar = (AfinalRoundedImageView)findViewById(R.id.userAvatar);
+    userName = (TextView)findViewById(R.id.userName);
+    userIntroduce = (TextView)findViewById(R.id.userIntroduce);
+    userLoginView = findViewById(R.id.user_login);
+    loginBtn = (Button)findViewById(R.id.login_btn);
   }
 
   @Override
@@ -201,7 +205,7 @@ public class MainActivity extends FinalActivity
     v.setSelected(true);
     this.selectedView = v;
     Fragment fragment = getRelatedFragment(position);
-    FragmentManager fragmentManager = getFragmentManager();
+    FragmentManager fragmentManager = getSupportFragmentManager();
     if (fragment instanceof DialogFragment) {
       ((DialogFragment) fragment).show(fragmentManager, "not ready");
     } else {
