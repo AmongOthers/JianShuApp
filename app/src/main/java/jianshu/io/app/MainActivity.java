@@ -21,8 +21,8 @@ import android.widget.TextView;
 import net.tsz.afinal.FinalBitmap;
 
 import jianshu.io.app.dialog.NotReadyFragment;
+import jianshu.io.app.fragment.HotPagerFragment;
 import jianshu.io.app.fragment.RecommendationFragment;
-import jianshu.io.app.fragment.WeeklyHotFragment;
 import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.UserInfo;
 import jianshu.io.app.model.UserInfoManager;
@@ -222,7 +222,7 @@ public class MainActivity extends ActionBarActivity
       case 0:
         return RecommendationFragment.newInstance();
       case 1:
-        return WeeklyHotFragment.newInstance();
+        return HotPagerFragment.newInstance();
       default:
         return NotReadyFragment.newInstance();
     }

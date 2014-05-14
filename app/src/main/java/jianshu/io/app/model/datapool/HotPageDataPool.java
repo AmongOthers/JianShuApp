@@ -13,14 +13,12 @@ import jianshu.io.app.model.RecommendationItem;
 /**
  * Created by Administrator on 2014/5/5.
  */
-public class WeeklyHotPageDataPool extends DataPool{
-
-  private static final String HOT_URL = "http://jianshu.io/top/weekly.html";
+public class HotPageDataPool extends DataPool{
 
   private int pageIndex = 1;
 
-  public WeeklyHotPageDataPool() {
-    super(HOT_URL);
+  public HotPageDataPool(String url) {
+    super(url);
   }
 
   @Override
@@ -31,7 +29,7 @@ public class WeeklyHotPageDataPool extends DataPool{
   @Override
   protected RecommendationItem[] getRecommendationItems(Document doc) {
     pageIndex++;
-    mLoadMoreUrl = HOT_URL + "?_=" + System.currentTimeMillis() +"&page=" + pageIndex;
+    mLoadMoreUrl = mStartUrl + "?_=" + System.currentTimeMillis() +"&page=" + pageIndex;
 
     Elements articleElements = doc.select("ul.top-notes li");
     if(articleElements != null) {

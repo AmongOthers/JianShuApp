@@ -21,7 +21,6 @@ import jianshu.io.app.ArticleActivity;
 import jianshu.io.app.R;
 import jianshu.io.app.model.RecommendationItem;
 import jianshu.io.app.model.datapool.DataPool;
-import jianshu.io.app.model.datapool.WeeklyHotPageDataPool;
 import jianshu.io.app.util.RecommendationAsyncTask;
 import jianshu.io.app.widget.EndlessCardListView;
 import jianshu.io.app.widget.EndlessListener;
@@ -31,10 +30,10 @@ import jianshu.io.app.widget.LoadingTextView;
 /**
  * Created by Administrator on 2014/5/7.
  */
-public class WeeklyHotFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
+public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
 
-  public static WeeklyHotFragment newInstance() {
-    return new WeeklyHotFragment();
+  public static HotFragment newInstance(HotFragmentListner listner, DataPool pool) {
+    return new HotFragment(listner, pool);
   }
 
   FinalBitmap fb;
@@ -45,6 +44,13 @@ public class WeeklyHotFragment extends Fragment implements SwipeRefreshLayout.On
   DataPool mPool;
   View mEmptyView;
   boolean mIsEmpty;
+  HotFragmentListner mListener;
+
+
+  public HotFragment(HotFragmentListner listner, DataPool pool) {
+    mListener = listner;
+    mPool = pool;
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,20 +63,17 @@ public class WeeklyHotFragment extends Fragment implements SwipeRefreshLayout.On
     super.onActivityCreated(savedInstanceState);
 
     final Activity activity = getActivity();
-
     this.fb = FinalBitmap.create(activity);
 
-    mPool = new WeeklyHotPageDataPool();
-
     mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
-    mListView = (EndlessCardListView) (activity.findViewById(R.id.hotlist));
+    mListView = (EndlessCardListView) (getView().findViewById(R.id.hotlist));
     mListView.setListener(this);
     mFooter = (LoadingTextView) activity.getLayoutInflater().inflate(R.layout.footer, null);
     mListView.setFooter(mFooter);
     mAdapter = new CardArrayAdapter(getActivity(), new ArrayList<Card>());
     mListView.setAdapter(mAdapter);
 
-    mRefreshLayout = (SwipeRefreshLayout) (activity.findViewById(R.id.ptr_layout));
+    mRefreshLayout = (SwipeRefreshLayout) (getView().findViewById(R.id.ptr_layout));
     mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
     mRefreshLayout.setOnRefreshListener(this);
     mRefreshLayout.setRefreshing(true);
@@ -102,10 +105,14 @@ public class WeeklyHotFragment extends Fragment implements SwipeRefreshLayout.On
 
   @Override
   public void onRefresh() {
+    if(mListener != null) {
+      mListener.onRefreshStart();
+    }
     new RecommendationAsyncTask(true, this.mPool, new RecommendationAsyncTask.OnPostExecuteTask() {
       @Override
       public void run(RecommendationItem[] data) {
         mRefreshLayout.setRefreshing(false);
+        mListener.onRefreshEnd();
         if(data != null) {
           if(mIsEmpty) {
             mIsEmpty = false;
@@ -116,7 +123,7 @@ public class WeeklyHotFragment extends Fragment implements SwipeRefreshLayout.On
           }
           mAdapter.addAll(initCard(data));
         } else {
-          Context context = WeeklyHotFragment.this.getActivity();
+          Context context = HotFragment.this.getActivity();
           if(context != null) {
             Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
           }
@@ -146,12 +153,17 @@ public class WeeklyHotFragment extends Fragment implements SwipeRefreshLayout.On
         if (data != null) {
           mAdapter.addAll(initCard(data));
         } else {
-          Context context = WeeklyHotFragment.this.getActivity();
+          Context context = HotFragment.this.getActivity();
           if(context != null) {
             Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
           }
         }
       }
     }).execute();
+  }
+
+  public interface HotFragmentListner {
+    void onRefreshStart();
+    void onRefreshEnd();
   }
 }
