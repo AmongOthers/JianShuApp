@@ -21,11 +21,13 @@ import android.widget.TextView;
 import net.tsz.afinal.FinalBitmap;
 
 import jianshu.io.app.dialog.NotReadyFragment;
+import jianshu.io.app.fragment.CardFragment;
 import jianshu.io.app.fragment.HotPagerFragment;
-import jianshu.io.app.fragment.RecommendationFragment;
 import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.UserInfo;
 import jianshu.io.app.model.UserInfoManager;
+import jianshu.io.app.model.datapool.DataPool;
+import jianshu.io.app.model.datapool.HomePageDataPool;
 import jianshu.io.app.widget.AfinalRoundedImageView;
 
 public class MainActivity extends ActionBarActivity
@@ -54,6 +56,7 @@ public class MainActivity extends ActionBarActivity
   private Handler handler;
   private boolean backFromLogin;
   private View selectedView;
+  private DataPool mHomeDataPool = new HomePageDataPool();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +117,7 @@ public class MainActivity extends ActionBarActivity
   private void setUiAccordingIfLogin() {
     if(JianshuSession.getsInstance().isUserLogin()) {
       showUserInfo(UserInfoManager.getsInstance().getUserInfo());
-      selectItem(1);
+      selectItem(0);
     } else {
       Intent intent = new Intent(this, LoginActivity.class);
       startActivityForResult(intent, LOGIN_FROM_START);
@@ -204,12 +207,12 @@ public class MainActivity extends ActionBarActivity
     }
     v.setSelected(true);
     this.selectedView = v;
-    Fragment fragment = getRelatedFragment(position);
     FragmentManager fragmentManager = getSupportFragmentManager();
+    Fragment fragment = getRelatedFragment(position);
     if (fragment instanceof DialogFragment) {
       ((DialogFragment) fragment).show(fragmentManager, "not ready");
     } else {
-      fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+      fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "home").commit();
     }
 
     setTitle(mTitles[position]);
@@ -218,14 +221,18 @@ public class MainActivity extends ActionBarActivity
 
 
   private Fragment getRelatedFragment(int position) {
+    Fragment fragment;
     switch (position) {
       case 0:
-        return RecommendationFragment.newInstance();
+        fragment = CardFragment.newInstance(HomePageDataPool.HOME_PAGE_URL);
+        break;
       case 1:
-        return HotPagerFragment.newInstance();
+        fragment = HotPagerFragment.newInstance();
+        break;
       default:
-        return NotReadyFragment.newInstance();
+        fragment = NotReadyFragment.newInstance();
     }
+    return fragment;
   }
 
   @Override

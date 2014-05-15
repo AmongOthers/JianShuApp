@@ -19,7 +19,7 @@ import jianshu.io.app.model.RecommendationItem;
 import jianshu.io.app.model.datapool.DataPool;
 import jianshu.io.app.model.datapool.HomePageDataPool;
 import jianshu.io.app.util.RecommendationAsyncTask;
-import jianshu.io.app.widget.EndlessListView;
+import jianshu.io.app.widget.EndlessCardListView;
 import jianshu.io.app.widget.EndlessListener;
 import jianshu.io.app.widget.LoadingTextView;
 
@@ -32,7 +32,7 @@ public class RecommendationFragment extends Fragment implements SwipeRefreshLayo
     return new RecommendationFragment();
   }
 
-  EndlessListView mListView;
+  EndlessCardListView mListView;
   SwipeRefreshLayout mRefreshLayout;
   RecommendationAdapter mAdapter;
   LoadingTextView mFooter;
@@ -55,7 +55,7 @@ public class RecommendationFragment extends Fragment implements SwipeRefreshLayo
     mPool = new HomePageDataPool();
 
     mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
-    mListView = (EndlessListView) (activity.findViewById(R.id.list));
+    mListView = (EndlessCardListView) (activity.findViewById(R.id.list));
     mListView.setListener(this);
     mFooter = (LoadingTextView) activity.getLayoutInflater().inflate(R.layout.footer, null);
     mListView.setFooter(mFooter);

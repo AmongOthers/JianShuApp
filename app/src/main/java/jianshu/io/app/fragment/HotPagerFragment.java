@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import jianshu.io.app.R;
-import jianshu.io.app.model.datapool.HotPageDataPool;
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -29,8 +28,6 @@ public class HotPagerFragment extends Fragment {
   private static final String WEEKLY_HOT_URL = "http://jianshu.io/top/weekly.html";
   private static final String MONTHLY_HOT_URL = "http://jianshu.io/top/monthly.html";
 
-  private HotPageDataPool mWeeklyPool = new HotPageDataPool(WEEKLY_HOT_URL);
-  private HotPageDataPool mMonthlyPool = new HotPageDataPool(MONTHLY_HOT_URL);
   private OnFragmentInteractionListener mListener;
   private ViewPager mPager;
   private PagerTabStrip mPagerTabStrip;
@@ -100,7 +97,7 @@ public class HotPagerFragment extends Fragment {
     public void onFragmentInteraction(Uri uri);
   }
 
-  private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter implements HotFragment.HotFragmentListner {
+  private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter implements CardFragment.HotFragmentListner {
     private static final int NUM_PAGES = 2;
 
     public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -110,9 +107,9 @@ public class HotPagerFragment extends Fragment {
     @Override
     public Fragment getItem(int position) {
       if(position == 0) {
-        return HotFragment.newInstance(this, mWeeklyPool);
+        return CardFragment.newInstance(WEEKLY_HOT_URL);
       } else {
-        return HotFragment.newInstance(this, mMonthlyPool);
+        return CardFragment.newInstance(MONTHLY_HOT_URL);
       }
     }
 

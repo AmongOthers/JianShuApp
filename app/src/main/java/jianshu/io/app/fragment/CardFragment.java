@@ -13,13 +13,12 @@ import android.widget.Toast;
 
 import net.tsz.afinal.FinalBitmap;
 
-import java.util.ArrayList;
-
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import jianshu.io.app.ArticleActivity;
 import jianshu.io.app.R;
 import jianshu.io.app.model.RecommendationItem;
+import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.datapool.DataPool;
 import jianshu.io.app.util.RecommendationAsyncTask;
 import jianshu.io.app.widget.EndlessCardListView;
@@ -30,10 +29,14 @@ import jianshu.io.app.widget.LoadingTextView;
 /**
  * Created by Administrator on 2014/5/7.
  */
-public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
+public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
 
-  public static HotFragment newInstance(HotFragmentListner listner, DataPool pool) {
-    return new HotFragment(listner, pool);
+  public static CardFragment newInstance(String url) {
+    CardFragment fragment = new CardFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString("url", url);
+    fragment.setArguments(bundle);
+    return fragment;
   }
 
   FinalBitmap fb;
@@ -44,47 +47,68 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
   DataPool mPool;
   View mEmptyView;
   boolean mIsEmpty;
-  HotFragmentListner mListener;
-
-
-  public HotFragment(HotFragmentListner listner, DataPool pool) {
-    mListener = listner;
-    mPool = pool;
-  }
+  String mUrl;
+  int[] mListViewState;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = getActivity().getLayoutInflater().inflate(R.layout.hot, null);
-    return view;
-  }
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
 
     final Activity activity = getActivity();
     this.fb = FinalBitmap.create(activity);
 
+    mUrl = getArguments().getString("url");
+    Object[] states = StatePool.getInstance().getState(getActivity(), mUrl);
+    mPool = (DataPool)states[0];
+    mAdapter = (CardArrayAdapter)states[1];
+    if(states[2] != null) {
+      mListViewState = (int[])states[2];
+    }
+
     mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
-    mListView = (EndlessCardListView) (getView().findViewById(R.id.hotlist));
+    mListView = (EndlessCardListView) (view.findViewById(R.id.hotlist));
     mListView.setListener(this);
     mFooter = (LoadingTextView) activity.getLayoutInflater().inflate(R.layout.footer, null);
     mListView.setFooter(mFooter);
-    mAdapter = new CardArrayAdapter(getActivity(), new ArrayList<Card>());
     mListView.setAdapter(mAdapter);
 
-    mRefreshLayout = (SwipeRefreshLayout) (getView().findViewById(R.id.ptr_layout));
+    mRefreshLayout = (SwipeRefreshLayout) (view.findViewById(R.id.ptr_layout));
     mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
     mRefreshLayout.setOnRefreshListener(this);
-    mRefreshLayout.setRefreshing(true);
-    onRefresh();
+
+    if(mAdapter.getCount() == 0) {
+      mRefreshLayout.setRefreshing(true);
+      onRefresh();
+    } else {
+      mAdapter.notifyDataSetChanged();
+    }
+
+    return view;
   }
 
-  private Card[] initCard(RecommendationItem[] data) {
+  @Override
+  public void onViewStateRestored(Bundle savedInstanceState) {
+    super.onViewStateRestored(savedInstanceState);
+    if(mListViewState != null) {
+      mListView.setSelectionFromTop(mListViewState[0], mListViewState[1]);
+    }
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    int index = mListView.getFirstVisiblePosition();
+    View v = mListView.getChildAt(0);
+    int top = (v == null) ? 0 : v.getTop();
+    StatePool.getInstance().putListViewState(mUrl, new int[]{index, top});
+  }
+
+  private Card[] initCard(Context context, RecommendationItem[] data) {
     Card[] result = new Card[data.length];
     int i = 0;
     for(RecommendationItem item : data) {
-      HotCard card = new HotCard(this.getActivity(), item, this.fb);
+      HotCard card = new HotCard(context, item, this.fb);
       result[i++] = card;
       card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
         @Override
@@ -97,22 +121,22 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
           intent.putExtra("author", item.getAuthor());
           startActivity(intent);
           getActivity().overridePendingTransition(R.anim.slide_in_left, 0);
-        }
-      });
+    }
+  });
     }
     return result;
   }
 
   @Override
   public void onRefresh() {
-    if(mListener != null) {
-      mListener.onRefreshStart();
-    }
     new RecommendationAsyncTask(true, this.mPool, new RecommendationAsyncTask.OnPostExecuteTask() {
       @Override
       public void run(RecommendationItem[] data) {
         mRefreshLayout.setRefreshing(false);
-        mListener.onRefreshEnd();
+        Context context = getActivity();
+        if(context == null) {
+          return;
+        }
         if(data != null) {
           if(mIsEmpty) {
             mIsEmpty = false;
@@ -121,9 +145,8 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
           } else {
             mAdapter.clear();
           }
-          mAdapter.addAll(initCard(data));
+          mAdapter.addAll(initCard(context, data));
         } else {
-          Context context = HotFragment.this.getActivity();
           if(context != null) {
             Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
           }
@@ -150,13 +173,14 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
       public void run(RecommendationItem[] data) {
         mFooter.endAnimation();
         mListView.notifyNewDataLoaded();
+        Context context = getActivity();
+        if(context == null) {
+          return;
+        }
         if (data != null) {
-          mAdapter.addAll(initCard(data));
+          mAdapter.addAll(initCard(context, data));
         } else {
-          Context context = HotFragment.this.getActivity();
-          if(context != null) {
-            Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
-          }
+          Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
         }
       }
     }).execute();

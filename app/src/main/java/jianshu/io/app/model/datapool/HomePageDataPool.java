@@ -4,6 +4,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import jianshu.io.app.model.ArticleInfo;
 import jianshu.io.app.model.RecommendationItem;
 
 /**
@@ -11,7 +12,8 @@ import jianshu.io.app.model.RecommendationItem;
  */
 public class HomePageDataPool extends DataPool {
 
-  protected final static String HOME_PAGE_URL = "http://jianshu.io";
+  public final static String HOME_PAGE_URL = "http://jianshu.io";
+
   protected final static String ARTICLE_SELECTOR = "div.article";
   protected final static String TITLE_SELECTOR = "a.title";
   protected final static String AVATAR_SELECTOR = "a.avatar > img";
@@ -69,6 +71,8 @@ public class HomePageDataPool extends DataPool {
     String url = HOME_PAGE_URL + urlEl.attr("href");
     Element authorEl = el.select(AUTHOR_SELECTOR).get(0);
     String author = authorEl.text();
-    return new RecommendationItem(title, avatarUrl, content, url, author, null);
+        Element articleInfoEl = el.select("div.article-info").get(0);
+    ArticleInfo articleInfo = parseArticleInfo(articleInfoEl);
+    return new RecommendationItem(title, avatarUrl, content, url, author, articleInfo);
   }
 }
