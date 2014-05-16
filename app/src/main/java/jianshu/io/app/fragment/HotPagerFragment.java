@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import jianshu.io.app.R;
+import jianshu.io.app.model.StatePool;
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -52,17 +53,25 @@ public class HotPagerFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.hot_viewpager, container, false);
+    View view =  inflater.inflate(R.layout.hot_viewpager, container, false);
+        mPager = (ViewPager) view.findViewById(R.id.pager);
+    mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
+    mPager.setAdapter(mPagerAdapter);
+    mPagerTabStrip = (PagerTabStrip)view.findViewById(R.id.pager_title_strip);
+    mPagerTabStrip.setTabIndicatorColorResource(R.color.card_list_gray);
+
+    Object[] state = StatePool.getInstance().getState("hotpager");
+    if(state != null) {
+      mPager.setCurrentItem((Integer)state[0]);
+    }
+
+    return view;
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-    mPager = (ViewPager) getActivity().findViewById(R.id.pager);
-    mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
-    mPager.setAdapter(mPagerAdapter);
-    mPagerTabStrip = (PagerTabStrip)getActivity().findViewById(R.id.pager_title_strip);
-    mPagerTabStrip.setTabIndicatorColorResource(R.color.card_list_gray);
+  public void onPause() {
+    super.onPause();
+    StatePool.getInstance().putState("hotpager", new Object[] {mPager.getCurrentItem()});
   }
 
   @Override

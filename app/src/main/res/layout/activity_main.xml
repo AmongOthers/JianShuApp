@@ -56,22 +56,26 @@
           android:layout_height="60dp"/>
 
       <TextView
-          android:id="@+id/userName"
           android:layout_gravity="center"
           android:gravity="center"
+          android:id="@+id/userName"
           android:textSize="30dp"
           android:textStyle="bold"
+          android:maxLines="2"
+          android:ellipsize="end"
           android:textColor="#bab2ad"
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"/>
 
       <TextView
-          android:id="@+id/userIntroduce"
           android:layout_gravity="center"
           android:gravity="center"
+          android:id="@+id/userIntroduce"
           android:textSize="18dp"
+          android:ellipsize="end"
+          android:maxLines="5"
           android:textColor="@color/jianshu_gray"
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"/>
 
     </LinearLayout>

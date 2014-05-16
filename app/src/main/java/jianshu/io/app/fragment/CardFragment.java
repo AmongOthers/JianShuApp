@@ -14,9 +14,9 @@ import android.widget.Toast;
 import net.tsz.afinal.FinalBitmap;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import jianshu.io.app.ArticleActivity;
 import jianshu.io.app.R;
+import jianshu.io.app.adapter.JianshuCardArrayAdapter;
 import jianshu.io.app.model.RecommendationItem;
 import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.datapool.DataPool;
@@ -29,7 +29,7 @@ import jianshu.io.app.widget.LoadingTextView;
 /**
  * Created by Administrator on 2014/5/7.
  */
-public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
+public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener, JianshuCardArrayAdapter.CardClickListener {
 
   public static CardFragment newInstance(String url) {
     CardFragment fragment = new CardFragment();
@@ -42,7 +42,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
   FinalBitmap fb;
   EndlessCardListView mListView;
   SwipeRefreshLayout mRefreshLayout;
-  CardArrayAdapter mAdapter;
+  JianshuCardArrayAdapter mAdapter;
   LoadingTextView mFooter;
   DataPool mPool;
   View mEmptyView;
@@ -54,14 +54,14 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = getActivity().getLayoutInflater().inflate(R.layout.hot, null);
 
-
     final Activity activity = getActivity();
     this.fb = FinalBitmap.create(activity);
 
     mUrl = getArguments().getString("url");
-    Object[] states = StatePool.getInstance().getState(getActivity(), mUrl);
+    Object[] states = StatePool.getInstance().getFragmentState(getActivity(), mUrl);
     mPool = (DataPool)states[0];
-    mAdapter = (CardArrayAdapter)states[1];
+    mAdapter = (JianshuCardArrayAdapter)states[1];
+    mAdapter.setCardClickListener(this);
     if(states[2] != null) {
       mListViewState = (int[])states[2];
     }
@@ -104,7 +104,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     StatePool.getInstance().putListViewState(mUrl, new int[]{index, top});
   }
 
-  private Card[] initCard(Context context, RecommendationItem[] data) {
+  private Card[] initCard(final Context context, RecommendationItem[] data) {
     Card[] result = new Card[data.length];
     int i = 0;
     for(RecommendationItem item : data) {
@@ -113,14 +113,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
       card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
         @Override
         public void onClick(Card card, View view) {
-          RecommendationItem item = ((HotCard)card).getItem();
-          Intent intent = new Intent(getActivity(), ArticleActivity.class);
-          intent.putExtra("url", item.getUrl());
-          intent.putExtra("title", item.getTitle());
-          intent.putExtra("summary", item.getSummary());
-          intent.putExtra("author", item.getAuthor());
-          startActivity(intent);
-          getActivity().overridePendingTransition(R.anim.slide_in_left, 0);
+          mAdapter.onClick(card);
     }
   });
     }
@@ -184,6 +177,19 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
       }
     }).execute();
+  }
+
+  @Override
+  public void onClick(Card card) {
+    Context context = getActivity();
+    RecommendationItem item = ((HotCard)card).getItem();
+    Intent intent = new Intent(context, ArticleActivity.class);
+    intent.putExtra("url", item.getUrl());
+    intent.putExtra("title", item.getTitle());
+    intent.putExtra("summary", item.getSummary());
+    intent.putExtra("author", item.getAuthor());
+    getActivity().startActivity(intent);
+    getActivity().overridePendingTransition(R.anim.slide_in_left, 0);
   }
 
   public interface HotFragmentListner {

@@ -24,6 +24,7 @@ import jianshu.io.app.dialog.NotReadyFragment;
 import jianshu.io.app.fragment.CardFragment;
 import jianshu.io.app.fragment.HotPagerFragment;
 import jianshu.io.app.model.JianshuSession;
+import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.UserInfo;
 import jianshu.io.app.model.UserInfoManager;
 import jianshu.io.app.model.datapool.DataPool;
@@ -57,11 +58,17 @@ public class MainActivity extends ActionBarActivity
   private boolean backFromLogin;
   private View selectedView;
   private DataPool mHomeDataPool = new HomePageDataPool();
+  private int mPosition;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    Object[] state = StatePool.getInstance().getState("main");
+    if(state != null) {
+      mPosition = (Integer)state[0];
+    }
 
     initViews();
 
@@ -105,8 +112,14 @@ public class MainActivity extends ActionBarActivity
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
+  protected void onPause() {
+    super.onPause();
+    StatePool.getInstance().putState("main", new Object[]{mPosition});
+  }
+
+  @Override
+  protected void onResumeFragments() {
+    super.onResumeFragments();
     if(this.backFromLogin) {
       this.backFromLogin = false;
       JianshuSession.getsInstance().validate();
@@ -117,7 +130,7 @@ public class MainActivity extends ActionBarActivity
   private void setUiAccordingIfLogin() {
     if(JianshuSession.getsInstance().isUserLogin()) {
       showUserInfo(UserInfoManager.getsInstance().getUserInfo());
-      selectItem(0);
+      selectItem(mPosition);
     } else {
       Intent intent = new Intent(this, LoginActivity.class);
       startActivityForResult(intent, LOGIN_FROM_START);
@@ -198,6 +211,7 @@ public class MainActivity extends ActionBarActivity
   }
 
   private void selectItem(int position) {
+    mPosition = position;
     View v = mMenus.getChildAt(position);
     if(this.selectedView == v) {
       return;

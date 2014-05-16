@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import jianshu.io.app.adapter.JianshuCardArrayAdapter;
 import jianshu.io.app.model.datapool.DataPool;
 import jianshu.io.app.model.datapool.HomePageDataPool;
 import jianshu.io.app.model.datapool.HotPageDataPool;
@@ -36,7 +36,7 @@ public class StatePool {
     mStateMap.get(url)[2] = state;
   }
 
-  public Object[] getState(Context context, String url) {
+  public Object[] getFragmentState(Context context, String url) {
     if(mStateMap.containsKey(url)) {
       return mStateMap.get(url);
     } else {
@@ -48,10 +48,22 @@ public class StatePool {
         pool = new HotPageDataPool(url);
       }
       result[0] = pool;
-      CardArrayAdapter adapter = new CardArrayAdapter(context, new ArrayList<Card>());
+      JianshuCardArrayAdapter adapter = new JianshuCardArrayAdapter(context, new ArrayList<Card>());
       result[1] = adapter;
       mStateMap.put(url, result);
       return result;
     }
   }
+
+  public Object[] getState(String tag) {
+    if(mStateMap.containsKey(tag)) {
+      return mStateMap.get(tag);
+    }
+    return null;
+  }
+
+  public void putState(String tag, Object[] state) {
+    mStateMap.put(tag, state);
+  }
+
 }
