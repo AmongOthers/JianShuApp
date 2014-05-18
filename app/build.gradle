@@ -33,7 +33,7 @@ dependencies {
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.shamanland:fonticon:0.1.+'
-    compile 'com.github.gabrielemariotti.cards:library:1.6.0'
+    compile project(':libraries:cardslib')
     compile project(':libraries:SwipeBackLayout')
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

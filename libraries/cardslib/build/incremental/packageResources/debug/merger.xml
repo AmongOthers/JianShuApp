@@ -1,0 +1,993 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res" >
+            <file
+                name="activated_background_card"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\activated_background_card.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="activated_background_kitkat_card"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\activated_background_kitkat_card.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_background"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_background.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_foreground_kitkat_selector"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_foreground_kitkat_selector.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_foreground_selector"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_foreground_selector.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_kitkat_selector"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_kitkat_selector.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_menu_button_expand"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_menu_button_expand.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_menu_button_overflow"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_menu_button_overflow.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_menu_button_rounded_overflow"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_menu_button_rounded_overflow.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_multichoice_selector"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_multichoice_selector.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_selector"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_selector.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_shadow"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_shadow.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="card_undo"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\card_undo.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="pressed_background_card"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\pressed_background_card.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="pressed_background_kitkat_card"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable\pressed_background_kitkat_card.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-hdpi\ic_menu_expand_card_dark_normal.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-hdpi\ic_menu_expand_card_dark_pressed.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-hdpi\ic_menu_overflow_card_dark_normal.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-hdpi\ic_menu_overflow_card_dark_pressed.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-hdpi\ic_menu_overflow_card_rounded_dark_normal.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-hdpi\ic_menu_overflow_card_rounded_dark_pressed.png"
+                qualifiers="hdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-mdpi\ic_menu_expand_card_dark_normal.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-mdpi\ic_menu_expand_card_dark_pressed.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-mdpi\ic_menu_overflow_card_dark_normal.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-mdpi\ic_menu_overflow_card_dark_pressed.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-mdpi\ic_menu_overflow_card_rounded_dark_normal.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-mdpi\ic_menu_overflow_card_rounded_dark_pressed.png"
+                qualifiers="mdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\ic_menu_expand_card_dark_normal.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\ic_menu_expand_card_dark_pressed.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\ic_menu_overflow_card_dark_normal.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\ic_menu_overflow_card_dark_pressed.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\ic_menu_overflow_card_rounded_dark_normal.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\ic_menu_overflow_card_rounded_dark_pressed.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_undobar_undo"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\ic_undobar_undo.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="undobar"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\undobar.9.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="undobar_button_focused"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\undobar_button_focused.9.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="undobar_button_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\undobar_button_pressed.9.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="undobar_divider"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xhdpi\undobar_divider.9.png"
+                qualifiers="xhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xxhdpi\ic_menu_expand_card_dark_normal.png"
+                qualifiers="xxhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_expand_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xxhdpi\ic_menu_expand_card_dark_pressed.png"
+                qualifiers="xxhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xxhdpi\ic_menu_overflow_card_dark_normal.png"
+                qualifiers="xxhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xxhdpi\ic_menu_overflow_card_dark_pressed.png"
+                qualifiers="xxhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_normal"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xxhdpi\ic_menu_overflow_card_rounded_dark_normal.png"
+                qualifiers="xxhdpi"
+                type="drawable" />
+            <file
+                name="ic_menu_overflow_card_rounded_dark_pressed"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\drawable-xxhdpi\ic_menu_overflow_card_rounded_dark_pressed.png"
+                qualifiers="xxhdpi"
+                type="drawable" />
+            <file
+                name="base_header_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\base_header_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="base_shadow_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\base_shadow_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="base_thumbnail_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\base_thumbnail_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="card_base_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\card_base_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="card_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\card_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="card_overlay_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\card_overlay_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="card_thumbnail_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\card_thumbnail_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="card_thumbnail_overlay_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\card_thumbnail_overlay_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="card_undo_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\card_undo_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="inner_base_expand"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\inner_base_expand.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="inner_base_header"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\inner_base_header.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="inner_base_main"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\inner_base_main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_card_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\list_card_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_card_thumbnail_layout"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\list_card_thumbnail_layout.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_card_undo_message"
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\layout\list_card_undo_message.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values\attrs.xml"
+                qualifiers="" >
+                <declare-styleable name="card_options" >
+
+                    <!-- Layout to build a card. Default value is  @layout/card_base_layout -->
+                    <attr
+                        name="card_layout_resourceID"
+                        format="reference" />
+
+                    <!-- Layout to build a shadow. Default value is @layout/base_shadow_layout -->
+                    <attr
+                        name="card_shadow_layout_resourceID"
+                        format="reference" />
+
+                    <!-- Layout to build a Header. Default value is @layout/base_header_layout -->
+                    <attr
+                        name="card_header_layout_resourceID"
+                        format="reference" />
+
+                    <!-- Layout to build a Thumbnail. Default value is @layout/base_thumbnail_layout -->
+                    <attr
+                        name="card_thumbnail_layout_resourceID"
+                        format="reference" />
+
+                    <!-- Layout used by card in a ListView. Default value is  @layout/list_card_layout -->
+                    <attr
+                        name="list_card_layout_resourceID"
+                        format="reference" />
+                </declare-styleable>
+                <declare-styleable name="ForegroundLinearLayout" >
+                    <attr name="android:foreground" />
+                    <attr name="android:foregroundInsidePadding" />
+                    <attr name="android:foregroundGravity" />
+                </declare-styleable>
+            </file>
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values\colors.xml"
+                qualifiers="" >
+                <color name="card_pressed" >#7E0099CC
+                </color>
+                <color name="card_background_header" >#FFF
+                </color>
+                <color name="card_activated_kitkat" >#ADE1F4
+                </color>
+                <color name="card_activated" >#CFE9F3
+                </color>
+                <color name="card_pressed_kitkat" >#10000000
+                </color>
+                <color name="card_text_color_header" >#000
+                </color>
+                <color name="card_expand_title_color" >#B3B2B2
+                </color>
+                <color name="card_background" >#FFF
+                </color>
+                <color name="card_backgroundExpand" >#515254
+                </color>
+            </file>
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values\dimens.xml"
+                qualifiers="" >
+                <dimen name="card_base_empty_height" >96dp
+                </dimen>
+                <dimen name="card_main_simple_title_margin_left" >5dp
+                </dimen>
+                <dimen name="card_header_button_padding_bottom" >0dp
+                </dimen>
+                <dimen name="grid_card_padding_bottom" >2dp
+                </dimen>
+                <dimen name="grid_card_padding_top" >2dp
+                </dimen>
+                <dimen name="card_header_outer_view_margin_top" >0dp
+                </dimen>
+                <dimen name="card_content_outer_view_margin_right" >0dp
+                </dimen>
+                <dimen name="list_card_padding_top" >2dp
+                </dimen>
+                <dimen name="card_expand_simple_title_paddingRight" >10dp
+                </dimen>
+                <dimen name="card_header_button_padding_top" >0dp
+                </dimen>
+                <dimen name="card_main_layout_view_margin_bottom" >0dp
+                </dimen>
+                <dimen name="card_header_simple_title_margin_bottom" >0dp
+                </dimen>
+                <dimen name="card_header_button_padding_right" >0dp
+                </dimen>
+                <dimen name="card_header_button_padding_left" >10dp
+                </dimen>
+                <dimen name="card_main_simple_title_margin_top" >0dp
+                </dimen>
+                <dimen name="list_card_padding_bottom" >6dp
+                </dimen>
+                <dimen name="card_expand_layout_padding" >2dp
+                </dimen>
+                <dimen name="card_header_simple_title_text_size" >20sp
+                </dimen>
+                <dimen name="card_main_layout_view_margin_top" >0dp
+                </dimen>
+                <dimen name="grid_card_padding_right" >2dp
+                </dimen>
+                <dimen name="card_shadow_view_margin_top" >0dp
+                </dimen>
+                <dimen name="card_shadow_height" >3dp
+                </dimen>
+                <dimen name="card_expand_simple_title_paddingLeft" >10dp
+                </dimen>
+                <dimen name="card_shadow_view_margin_left" >@dimen/card_background_default_radius
+                </dimen>
+                <dimen name="card_main_layout_view_margin_right" >0dp
+                </dimen>
+                <dimen name="list_card_padding_right" >8dp
+                </dimen>
+                <dimen name="card_header_simple_title_margin_top" >5dp
+                </dimen>
+                <dimen name="card_content_outer_view_margin_top" >0dp
+                </dimen>
+                <dimen name="card_header_outer_view_margin_bottom" >0dp
+                </dimen>
+                <dimen name="card_header_simple_title_margin_left" >10dp
+                </dimen>
+                <dimen name="grid_card_padding_left" >2dp
+                </dimen>
+                <dimen name="card_background_default_radius" >2dip
+                </dimen>
+                <dimen name="list_card_padding_left" >8dp
+                </dimen>
+                <dimen name="card_content_outer_view_margin_bottom" >0dp
+                </dimen>
+                <dimen name="card_header_button_margin_right" >2dp
+                </dimen>
+                <dimen name="card_content_outer_view_margin_left" >0dp
+                </dimen>
+                <dimen name="card_header_outer_view_margin_left" >0dp
+                </dimen>
+                <dimen name="card_expand_simple_title_text_size" >14sp
+                </dimen>
+                <dimen name="card_shadow_view_margin_bottom" >0dp
+                </dimen>
+                <dimen name="card_main_layout_view_margin_left" >0dp
+                </dimen>
+                <dimen name="card_header_button_overflow_margin_right" >3dp
+                </dimen>
+                <dimen name="card_thumbnail_height" >72dp
+                </dimen>
+                <dimen name="card_header_outer_view_margin_right" >0dp
+                </dimen>
+                <dimen name="card_header_simple_title_margin_right" >20dp
+                </dimen>
+                <dimen name="card_thumbnail_width" >72dp
+                </dimen>
+                <dimen name="card_shadow_view_margin_right" >@dimen/card_background_default_radius
+                </dimen>
+            </file>
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values\integers_undo.xml"
+                qualifiers="" >
+                <integer name="list_card_undobar_hide_delay" >
+5000
+                </integer>
+            </file>
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values\strings.xml"
+                qualifiers="" >
+                <plurals name="list_card_undo_items" >
+                    <item quantity="one">
+1 card removed
+                    </item>
+                    <item quantity="other">
+%d cards removed
+                    </item>
+                </plurals>
+
+                <string name="app_name" >CardsLib
+                </string>
+
+                <plurals name="card_selected_items" >
+                    <item quantity="one">
+1 item selected
+                    </item>
+                    <item quantity="other">
+%d items selected
+                    </item>
+                </plurals>
+
+                <string name="list_card_undo_title" >Undo
+                </string>
+            </file>
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values\styles.xml"
+                qualifiers="" >
+
+                <style name="grid_card" >
+                    <item name="android:paddingLeft">
+@dimen/grid_card_padding_left
+                    </item>
+                    <item name="android:paddingRight">
+@dimen/grid_card_padding_right
+                    </item>
+                    <item name="android:paddingBottom">
+@dimen/grid_card_padding_bottom
+                    </item>
+                    <item name="android:paddingTop">
+@dimen/grid_card_padding_top
+                    </item>
+                </style>
+
+                <style name="card.header_button_base.other" >
+                </style>
+
+                <style name="list_card.base" >
+                </style>
+
+                <style name="list_card.thumbnail" >
+                </style>
+
+                <style name="card.header_outer_layout" >
+                    <item name="android:layout_marginTop">
+@dimen/card_header_outer_view_margin_top
+                    </item>
+                    <item name="android:layout_marginBottom">
+@dimen/card_header_outer_view_margin_bottom
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_header_outer_view_margin_left
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_header_outer_view_margin_right
+                    </item>
+                </style>
+
+                <style name="card.main_layout" >
+                    <item name="android:background">
+@drawable/card_selector
+                    </item>
+                    <item name="android:layout_marginTop">
+@dimen/card_main_layout_view_margin_top
+                    </item>
+                    <item name="android:layout_marginBottom">
+@dimen/card_main_layout_view_margin_bottom
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_main_layout_view_margin_left
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_main_layout_view_margin_right
+                    </item>
+                </style>
+
+                <style name="card.header_button_base.expand" >
+                    <item name="android:background">
+@drawable/card_menu_button_expand
+                    </item>
+                </style>
+
+                <style name="card.main_contentExpand" >
+                    <item name="android:background">
+@color/card_backgroundExpand
+                    </item>
+                    <item name="android:padding">
+@dimen/card_expand_layout_padding
+                    </item>
+                </style>
+
+                <style name="card.base_simple_title" >
+                    <item name="android:textStyle">
+bold
+                    </item>
+                    <item name="android:layout_gravity">
+left|center_vertical
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_main_simple_title_margin_left
+                    </item>
+                    <item name="android:layout_marginTop">
+@dimen/card_main_simple_title_margin_top
+                    </item>
+                </style>
+
+                <style name="card" >
+                </style>
+
+                <style name="card.shadow_outer_layout" >
+                    <item name="android:layout_marginTop">
+@dimen/card_shadow_view_margin_top
+                    </item>
+                    <item name="android:layout_marginBottom">
+@dimen/card_shadow_view_margin_bottom
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_shadow_view_margin_left
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_shadow_view_margin_right
+                    </item>
+                </style>
+
+                <style name="card.header_button_base" >
+                    <item name="android:layout_width">
+wrap_content
+                    </item>
+                    <item name="android:layout_height">
+wrap_content
+                    </item>
+                    <item name="android:layout_alignParentRight">
+true
+                    </item>
+                    <item name="android:paddingLeft">
+@dimen/card_header_button_padding_left
+                    </item>
+                    <item name="android:focusable">
+false
+                    </item>
+                    <item name="android:focusableInTouchMode">
+false
+                    </item>
+                    <item name="android:clickable">
+true
+                    </item>
+                    <item name="android:layout_centerVertical">
+true
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_header_button_margin_right
+                    </item>
+                </style>
+
+                <style name="card.header_simple_title" >
+                    <item name="android:textSize">
+@dimen/card_header_simple_title_text_size
+                    </item>
+                    <item name="android:textColor">
+@color/card_text_color_header
+                    </item>
+                    <item name="android:layout_gravity">
+left|center_vertical
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_header_simple_title_margin_left
+                    </item>
+                    <item name="android:layout_marginTop">
+@dimen/card_header_simple_title_margin_top
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_header_simple_title_margin_right
+                    </item>
+                    <item name="android:layout_marginBottom">
+@dimen/card_header_simple_title_margin_bottom
+                    </item>
+                </style>
+
+                <style name="card.main_layout_foreground" >
+                    <item name="android:background">
+@drawable/card_background
+                    </item>
+                    <item name="android:foreground">
+@drawable/card_foreground_selector
+                    </item>
+                    <item name="android:layout_marginTop">
+@dimen/card_main_layout_view_margin_top
+                    </item>
+                    <item name="android:layout_marginBottom">
+@dimen/card_main_layout_view_margin_bottom
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_main_layout_view_margin_left
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_main_layout_view_margin_right
+                    </item>
+                </style>
+
+                <style name="card.header_compound_view" >
+                </style>
+
+                <style name="card.shadow_image" >
+                    <item name="android:layout_width">
+match_parent
+                    </item>
+                    <item name="android:layout_height">
+@dimen/card_shadow_height
+                    </item>
+                    <item name="android:src">
+@drawable/card_shadow
+                    </item>
+                    <item name="android:layout_below">
+@+id/card_main_content_layout
+                    </item>
+                </style>
+
+                <style name="list_card" >
+                    <item name="android:paddingLeft">
+@dimen/list_card_padding_left
+                    </item>
+                    <item name="android:paddingRight">
+@dimen/list_card_padding_right
+                    </item>
+                    <item name="android:paddingBottom">
+@dimen/list_card_padding_bottom
+                    </item>
+                    <item name="android:paddingTop">
+@dimen/list_card_padding_top
+                    </item>
+                </style>
+
+                <style name="card.main_layout.kitkat" >
+                    <item name="android:background">
+@drawable/card_kitkat_selector
+                    </item>
+                </style>
+
+                <style name="card.header_button_base.overflow" >
+                    <item name="android:background">
+@drawable/card_menu_button_rounded_overflow
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_header_button_overflow_margin_right
+                    </item>
+                </style>
+
+                <style name="card.thumbnail_compound_view" />
+
+                <style name="card_thumbnail_image" >
+                    <item name="android:layout_width">
+@dimen/card_thumbnail_width
+                    </item>
+                    <item name="android:layout_height">
+@dimen/card_thumbnail_height
+                    </item>
+                    <item name="android:layout_gravity">
+center
+                    </item>
+                    <item name="android:gravity">
+center
+                    </item>
+                    <item name="android:scaleType">
+centerCrop
+                    </item>
+                </style>
+
+                <style name="card.content_outer_layout" >
+                    <item name="android:layout_width">
+match_parent
+                    </item>
+                    <item name="android:minHeight">
+@dimen/card_base_empty_height
+                    </item>
+                    <item name="android:layout_marginTop">
+@dimen/card_content_outer_view_margin_top
+                    </item>
+                    <item name="android:layout_marginBottom">
+@dimen/card_content_outer_view_margin_bottom
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_content_outer_view_margin_left
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_content_outer_view_margin_right
+                    </item>
+                </style>
+
+                <style name="card.main_layout_foreground.kitkat" >
+                    <item name="android:foreground">
+@drawable/card_foreground_kitkat_selector
+                    </item>
+                </style>
+
+                <style name="card.expand_simple_title" >
+                    <item name="android:layout_gravity">
+left|center_vertical
+                    </item>
+                    <item name="android:gravity">
+center_vertical
+                    </item>
+                    <item name="android:textSize">
+@dimen/card_expand_simple_title_text_size
+                    </item>
+                    <item name="android:paddingLeft">
+@dimen/card_expand_simple_title_paddingLeft
+                    </item>
+                    <item name="android:paddingRight">
+@dimen/card_expand_simple_title_paddingRight
+                    </item>
+                    <item name="android:textColor">
+@color/card_expand_title_color
+                    </item>
+                </style>
+
+                <style name="card_thumbnail_outer_layout" >
+                    <item name="android:layout_width">
+wrap_content
+                    </item>
+                    <item name="android:layout_height">
+wrap_content
+                    </item>
+                </style>
+
+                <style name="card.header_button_frame" >
+                </style>
+            </file>
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values\styles_undo.xml"
+                qualifiers="" >
+
+                <style name="list_card_UndoBarMessage" >
+                    <item name="android:layout_width">
+0dp
+                    </item>
+                    <item name="android:layout_weight">
+1
+                    </item>
+                    <item name="android:layout_height">
+wrap_content
+                    </item>
+                    <item name="android:layout_marginLeft">
+16dp
+                    </item>
+                    <item name="android:layout_gravity">
+center_vertical
+                    </item>
+                    <item name="android:layout_marginRight">
+16dp
+                    </item>
+                    <item name="android:textAppearance">
+?android:textAppearanceSmall
+                    </item>
+                    <item name="android:textColor">
+#fff
+                    </item>
+                </style>
+
+                <style name="list_card_UndoBarButton" >
+                    <item name="android:layout_width">
+wrap_content
+                    </item>
+                    <item name="android:layout_height">
+match_parent
+                    </item>
+                    <item name="android:paddingLeft">
+16dp
+                    </item>
+                    <item name="android:paddingRight">
+16dp
+                    </item>
+                    <item name="android:background">
+@drawable/card_undo
+                    </item>
+                    <item name="android:drawableLeft">
+@drawable/ic_undobar_undo
+                    </item>
+                    <item name="android:drawablePadding">
+12dp
+                    </item>
+                    <item name="android:textAppearance">
+?android:textAppearanceSmall
+                    </item>
+                    <item name="android:textAllCaps">
+true
+                    </item>
+                    <item name="android:textStyle">
+bold
+                    </item>
+                    <item name="android:textColor">
+#fff
+                    </item>
+                    <item name="android:text">
+@string/list_card_undo_title
+                    </item>
+                </style>
+
+                <style name="list_card_UndoBar" >
+                    <item name="android:layout_width">
+match_parent
+                    </item>
+                    <item name="android:layout_height">
+48dp
+                    </item>
+                    <item name="android:layout_gravity">
+bottom
+                    </item>
+                    <item name="android:layout_marginLeft">
+8dp
+                    </item>
+                    <item name="android:layout_marginRight">
+8dp
+                    </item>
+                    <item name="android:layout_marginBottom">
+16dp
+                    </item>
+                    <item name="android:orientation">
+horizontal
+                    </item>
+                    <item name="android:background">
+@drawable/undobar
+                    </item>
+                    <item name="android:clickable">
+true
+                    </item>
+                    <item name="android:showDividers">
+middle
+                    </item>
+                    <item name="android:divider">
+@drawable/undobar_divider
+                    </item>
+                    <item name="android:dividerPadding">
+10dp
+                    </item>
+                </style>
+            </file>
+            <file
+                path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\main\res\values-v16\styles.xml"
+                qualifiers="v16" >
+
+                <style name="card.header_simple_title" >
+                    <item name="android:layout_gravity">
+left|center_vertical
+                    </item>
+                    <item name="android:fontFamily">
+sans-serif-condensed
+                    </item>
+                    <item name="android:textColor">
+@color/card_text_color_header
+                    </item>
+                    <item name="android:textSize">
+@dimen/card_header_simple_title_text_size
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_header_simple_title_margin_left
+                    </item>
+                    <item name="android:layout_marginTop">
+@dimen/card_header_simple_title_margin_top
+                    </item>
+                    <item name="android:layout_marginRight">
+@dimen/card_header_simple_title_margin_right
+                    </item>
+                    <item name="android:layout_marginBottom">
+@dimen/card_header_simple_title_margin_bottom
+                    </item>
+                </style>
+
+                <style name="card.expand_simple_title" >
+                    <item name="android:layout_gravity">
+left|center_vertical
+                    </item>
+                    <item name="android:gravity">
+center_vertical
+                    </item>
+                    <item name="android:fontFamily">
+sans-serif-condensed
+                    </item>
+                    <item name="android:textSize">
+@dimen/card_expand_simple_title_text_size
+                    </item>
+                    <item name="android:paddingLeft">
+@dimen/card_expand_simple_title_paddingLeft
+                    </item>
+                    <item name="android:paddingRight">
+@dimen/card_expand_simple_title_paddingRight
+                    </item>
+                    <item name="android:textColor">
+@color/card_expand_title_color
+                    </item>
+                </style>
+
+                <style name="card" />
+
+                <style name="card.base_simple_title" >
+                    <item name="android:textStyle">
+bold
+                    </item>
+                    <item name="android:fontFamily">
+sans-serif
+                    </item>
+                    <item name="android:layout_gravity">
+left|center_vertical
+                    </item>
+                    <item name="android:layout_marginLeft">
+@dimen/card_main_simple_title_margin_left
+                    </item>
+                    <item name="android:layout_marginTop">
+@dimen/card_main_simple_title_margin_top
+                    </item>
+                </style>
+            </file>
+        </source>
+        <source path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\build\res\rs\debug" />
+        <source path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\build\res\generated\debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib\src\debug\res" />
+    </dataSet>
+
+</merger>

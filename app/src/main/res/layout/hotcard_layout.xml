@@ -39,6 +39,7 @@
          You can also use your CardHeader subclass-->
     <it.gmariotti.cardslib.library.view.component.CardHeaderView
         style="@style/card.header_outer_layout"
+        card:card_header_layout_resourceID="@layout/hotcard_header_layout"
         android:id="@+id/card_header_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -50,12 +51,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <it.gmariotti.cardslib.library.view.component.CardShadowView
-        style="@style/card.shadow_outer_layout"
-        android:id="@+id/card_shadow_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
   </LinearLayout>
+
+  <!-- Compound view for Shadow
+       If you want to customize this element use attr card:card_shadow_layout_resourceID -->
+  <it.gmariotti.cardslib.library.view.component.CardShadowView
+      style="@style/card.shadow_outer_layout"
+      android:id="@+id/card_shadow_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+  <!-- Expand layout. You can customize this element with your CardExpand class -->
+  <FrameLayout
+      android:id="@+id/card_content_expand_layout"
+      style="@style/card.main_contentExpand"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+
+
+  </FrameLayout>
 
 </LinearLayout>
