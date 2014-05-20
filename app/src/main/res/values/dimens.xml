@@ -16,7 +16,11 @@
 
     <dimen name="card_icon_size">10sp</dimen>
     <dimen name="card_icon_padding">5sp</dimen>
+    <dimen name="card_padding">8dp</dimen>
+    <dimen name="card_info_left_margin">10dp</dimen>
+
     <!--CardLibrary-->
     <dimen name="card_base_empty_height">0dp</dimen>
+    <dimen name="card_background_default_radius">2dp</dimen>
 
     </resources>

@@ -12,7 +12,6 @@ import net.tsz.afinal.FinalBitmap;
 
 import org.jsoup.helper.StringUtil;
 
-import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
 import jianshu.io.app.R;
 import jianshu.io.app.model.RecommendationItem;
 
@@ -28,6 +27,7 @@ public class HomeCard extends JianshuBaseCard {
   private FontIconTextView topic;
   private FontIconTextView comment;
   private FontIconTextView like;
+  private TextView summary;
 
   public HomeCard(final Context context, RecommendationItem item, FinalBitmap fb) {
     super(context, item, fb, R.layout.homecard_content);
@@ -37,7 +37,8 @@ public class HomeCard extends JianshuBaseCard {
   public void setupInnerViewElements(ViewGroup parent, View view) {
     super.setupInnerViewElements(parent, view);
 
-//    this.title = (TextView)parent.findViewById(R.id.hot_title);
+    this.title = (TextView)parent.findViewById(R.id.hot_title);
+    this.summary = (TextView)parent.findViewById(R.id.hot_summary);
     this.author = (TextView)parent.findViewById(R.id.hot_author);
     this.avatar = (ImageView)parent.findViewById(R.id.hot_avatar);
     this.noteBook = (FontIconTextView)parent.findViewById(R.id.hot_notebook);
@@ -47,7 +48,8 @@ public class HomeCard extends JianshuBaseCard {
 
 
     this.fb.display(this.avatar, this.item.getAvatar());
-//    this.title.setText(this.item.getTitle());
+    this.title.setText(this.item.getTitle());
+    this.summary.setText(this.getItem().getSummary());
     this.author.setText(this.item.getAuthor());
     this.noteBook.setText(this.item.getNotebook());
     String topicsStr = StringUtil.join(this.item.getTopics(), "");
@@ -61,13 +63,6 @@ public class HomeCard extends JianshuBaseCard {
       this.like.setCompoundDrawables(HotCard.heartEmptyDrawable, null, null, null);
       this.like.setTextColor(HotCard.GrayColor);
     }
-
-    this.avatar.setClickable(true);
-    ViewToClickToExpand viewToClickToExpand = ViewToClickToExpand.builder().setupView(this.avatar);
-    setViewToClickToExpand(viewToClickToExpand);
   }
 
-  public RecommendationItem getItem() {
-    return this.item;
-  }
 }

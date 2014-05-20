@@ -7,4 +7,6 @@
   <string name="fa_heart_o">&#xf08a;</string>
   <string name="fa_comments_o">&#xf0e6;</string>
   <string name="fa_book">&#xf02d;</string>
+  <string name="fa_angle_up">&#xf106;</string>
+  <string name="fa_angle_down">&#xf107;</string>
 </resources>

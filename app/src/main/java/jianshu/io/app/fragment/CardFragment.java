@@ -14,7 +14,6 @@ import android.widget.Toast;
 import net.tsz.afinal.FinalBitmap;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 import jianshu.io.app.ArticleActivity;
 import jianshu.io.app.R;
 import jianshu.io.app.adapter.JianshuCardArrayAdapter;
@@ -26,8 +25,6 @@ import jianshu.io.app.widget.EndlessCardListView;
 import jianshu.io.app.widget.EndlessListener;
 import jianshu.io.app.widget.HomeCard;
 import jianshu.io.app.widget.HotCard;
-import jianshu.io.app.widget.HotCardExpand;
-import jianshu.io.app.widget.HotCardHeader;
 import jianshu.io.app.widget.JianshuBaseCard;
 import jianshu.io.app.widget.LoadingTextView;
 
@@ -113,20 +110,21 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     Card[] result = new Card[data.length];
     int i = 0;
     for (RecommendationItem item : data) {
-      Card card;
+      final JianshuBaseCard card;
       String summary = item.getSummary();
       if (summary != null && summary.length() > 0) {
         card = new HomeCard(context, item, this.fb);
-        CardHeader header = new HotCardHeader(context);
-        header.setTitle(item.getTitle());
-        card.addCardHeader(header);
-        HotCardExpand expand = new HotCardExpand(context);
-        card.addCardExpand(expand);
+//        CardHeader header = new HotCardHeader(context);
+//        header.setTitle(item.getTitle());
+//        card.addCardHeader(header);
+//        HotCardExpand expand = new HotCardExpand(context);
+//        expand.setSummary(item.getSummary());
+//        card.addCardExpand(expand);
       } else {
         card = new HotCard(context, item, this.fb);
       }
       result[i++] = card;
-      card.setOnClickListener(new Card.OnCardClickListener() {
+      card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
         @Override
         public void onClick(Card card, View view) {
           mAdapter.onClick(card);

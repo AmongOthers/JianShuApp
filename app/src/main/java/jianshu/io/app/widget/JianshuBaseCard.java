@@ -51,4 +51,5 @@ public class JianshuBaseCard extends Card {
   public RecommendationItem getItem() {
     return this.item;
   }
+
 }
