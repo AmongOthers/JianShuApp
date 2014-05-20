@@ -154,9 +154,9 @@ public class MainActivity extends ActionBarActivity
             case R.id.hot:
               position = 1;
               break;
-            case R.id.th:
-              position = 2;
-              break;
+//            case R.id.th:
+//              position = 2;
+//              break;
             default:
               break;
           }

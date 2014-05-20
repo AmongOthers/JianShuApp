@@ -40,15 +40,15 @@
             android:label="@string/title_activity_login"
             android:theme="@style/JianShuTheme.Translucent" >
         </activity>
-        <activity
-            android:name="jianshu.io.app.SessionActivity"
-            android:label="@string/title_activity_session" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <!--<activity-->
+            <!--android:name="jianshu.io.app.SessionActivity"-->
+            <!--android:label="@string/title_activity_session" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
     </application>
 
 </manifest>
