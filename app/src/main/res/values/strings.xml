@@ -23,5 +23,6 @@
     <string name="like_symbol">♥</string>
     <string name="unlike_symbol">♡</string>
     <string name="title_activity_hot">HotActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
 
 </resources>

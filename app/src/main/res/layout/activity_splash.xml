@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000"
+                tools:context=".SplashActivity">
+
+  <ImageView
+      android:id="@+id/splash"
+      android:scaleType="center"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+  <LinearLayout
+      android:visibility="gone"
+      android:id="@+id/intro"
+      android:orientation="vertical"
+      android:layout_alignParentBottom="true"
+      android:paddingLeft="30dp"
+      android:layout_marginBottom="30dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+    <TextView
+        android:text="简书"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="找回文字的力量"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="在这里更好地阅读和写作"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+  </LinearLayout>
+</RelativeLayout>

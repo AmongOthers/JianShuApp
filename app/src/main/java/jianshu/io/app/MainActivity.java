@@ -1,6 +1,10 @@
 package jianshu.io.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +24,8 @@ import android.widget.TextView;
 
 import net.tsz.afinal.FinalBitmap;
 
+import java.util.Calendar;
+
 import jianshu.io.app.dialog.NotReadyFragment;
 import jianshu.io.app.fragment.CardFragment;
 import jianshu.io.app.fragment.HotPagerFragment;
@@ -32,9 +38,8 @@ import jianshu.io.app.model.datapool.HomePageDataPool;
 import jianshu.io.app.widget.AfinalRoundedImageView;
 
 public class MainActivity extends ActionBarActivity
-  implements AdapterView.OnItemClickListener,
-  UserInfoManager.UserInfoManagerListener
-{
+    implements AdapterView.OnItemClickListener,
+    UserInfoManager.UserInfoManagerListener {
 
   private static final int LOGIN_FROM_START = 0;
   private static final int LOGIN_FROM_BUTTON = 1;
@@ -65,9 +70,11 @@ public class MainActivity extends ActionBarActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    initAlarm();
+
     Object[] state = StatePool.getInstance().getState("main");
-    if(state != null) {
-      mPosition = (Integer)state[0];
+    if (state != null) {
+      mPosition = (Integer) state[0];
     }
 
     initViews();
@@ -99,16 +106,34 @@ public class MainActivity extends ActionBarActivity
     setUiAccordingIfLogin();
   }
 
+  private void initAlarm() {
+    Intent intent = JianshuIntentService.getStartAt7Intent(this);
+    boolean isAlarmSet = (PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_NO_CREATE) != null);
+    if (!isAlarmSet) {
+      //马上刷新
+      startService(intent);
+
+      PendingIntent pendingInent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+      AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTimeInMillis(System.currentTimeMillis());
+      calendar.set(Calendar.HOUR_OF_DAY, 7);
+      calendar.set(Calendar.MINUTE, 0);
+      alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+          calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingInent);
+    }
+  }
+
   private void initViews() {
-    mMenus = (LinearLayout)findViewById(R.id.left_drawer);
-    mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+    mMenus = (LinearLayout) findViewById(R.id.left_drawer);
+    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerContianer = findViewById(R.id.drawer_container);
     mUserView = findViewById(R.id.user);
-    userAvatar = (AfinalRoundedImageView)findViewById(R.id.userAvatar);
-    userName = (TextView)findViewById(R.id.userName);
-    userIntroduce = (TextView)findViewById(R.id.userIntroduce);
+    userAvatar = (AfinalRoundedImageView) findViewById(R.id.userAvatar);
+    userName = (TextView) findViewById(R.id.userName);
+    userIntroduce = (TextView) findViewById(R.id.userIntroduce);
     userLoginView = findViewById(R.id.user_login);
-    loginBtn = (Button)findViewById(R.id.login_btn);
+    loginBtn = (Button) findViewById(R.id.login_btn);
   }
 
   @Override
@@ -117,18 +142,19 @@ public class MainActivity extends ActionBarActivity
     StatePool.getInstance().putState("main", new Object[]{mPosition});
   }
 
-  @Override
-  protected void onResumeFragments() {
-    super.onResumeFragments();
-    if(this.backFromLogin) {
-      this.backFromLogin = false;
-      JianshuSession.getsInstance().validate();
-      setUiAccordingIfLogin();
-    }
+    @Override
+    protected void onResumeFragments() {
+      super.onResumeFragments();
+      if (this.backFromLogin) {
+        this.backFromLogin = false;
+        JianshuSession.getsInstance().validate();
+        setUiAccordingIfLogin();
+      }
   }
 
   private void setUiAccordingIfLogin() {
-    if(JianshuSession.getsInstance().isUserLogin()) {
+    JianshuSession.getsInstance().validate();
+    if (JianshuSession.getsInstance().isUserLogin()) {
       showUserInfo(UserInfoManager.getsInstance().getUserInfo());
       selectItem(mPosition);
     } else {
@@ -140,7 +166,7 @@ public class MainActivity extends ActionBarActivity
 
   private void initDrawer() {
     int count = mMenus.getChildCount();
-    for(int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
       View view = mMenus.getChildAt(i);
       view.setOnClickListener(new View.OnClickListener() {
 
@@ -213,10 +239,10 @@ public class MainActivity extends ActionBarActivity
   private void selectItem(int position) {
     mPosition = position;
     View v = mMenus.getChildAt(position);
-    if(this.selectedView == v) {
+    if (this.selectedView == v) {
       return;
     }
-    if(this.selectedView != null) {
+    if (this.selectedView != null) {
       this.selectedView.setSelected(false);
     }
     v.setSelected(true);

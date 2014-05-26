@@ -17,6 +17,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 import jianshu.io.app.ArticleActivity;
 import jianshu.io.app.R;
 import jianshu.io.app.adapter.JianshuCardArrayAdapter;
+import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.RecommendationItem;
 import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.datapool.DataPool;
@@ -79,7 +80,17 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
     mRefreshLayout.setOnRefreshListener(this);
 
-    if (mAdapter.getCount() == 0) {
+    //判断userInfo是否有变化
+    boolean isUserInfoChanged = true;
+    String cachedUserToken = mAdapter.getUserToken();
+    String currentUserToken = JianshuSession.getsInstance().getUserToken();
+    if((currentUserToken == null && cachedUserToken == null) ||
+        ((currentUserToken != null && cachedUserToken != null) && currentUserToken.equals(cachedUserToken))) {
+      isUserInfoChanged = false;
+    }
+    mAdapter.setUserToken(currentUserToken);
+
+    if (isUserInfoChanged || mAdapter.getCount() == 0) {
       mRefreshLayout.setRefreshing(true);
       onRefresh();
     } else {

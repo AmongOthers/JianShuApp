@@ -25,7 +25,7 @@ public class JianshuSession {
   private static JianshuSession sInstance;
 
   public static synchronized JianshuSession init(Context context) {
-    if(sInstance == null) {
+    if (sInstance == null) {
       sInstance = new JianshuSession(context);
     }
     return sInstance;
@@ -43,6 +43,7 @@ public class JianshuSession {
   private CookieManager mCookieManager;
   private List<BasicClientCookie> mCookieList;
   private JianshuSessionListener listener;
+  private String mUserToken;
 
   private JianshuSession(Context context) {
     this.context = context;
@@ -64,7 +65,7 @@ public class JianshuSession {
   public synchronized void validate() {
     this.cookieStr = mCookieManager.getCookie(DOMAIN);
     mCookieList = new WebViewCookieParser().parse(this.cookieStr, DOMAIN);
-    if(isCookiesContainUserToken()) {
+    if (isCookiesContainSession() && isCookiesContainUserToken()) {
       setState(new LoginState());
     } else {
       setState(new LogoutState());
@@ -80,9 +81,13 @@ public class JianshuSession {
   }
 
   private synchronized void setState(JianshuSessionState newState) {
+    //虽然登陆有可能是换了用户，但是退出的状态就不会是叠加的
+    if (mSessionState instanceof LogoutState && newState instanceof LogoutState) {
+      return;
+    }
     mSessionState = newState;
-    if(this.listener != null) {
-      if(newState instanceof LoginState) {
+    if (this.listener != null) {
+      if (newState instanceof LoginState) {
         this.listener.onLogin();
       } else {
         this.listener.onLogout();
@@ -94,14 +99,27 @@ public class JianshuSession {
     return mSessionState;
   }
 
-  private boolean isCookiesContainUserToken() {
-    if(mCookieList != null && mCookieList.size() > 0) {
-      for(BasicClientCookie cookie : mCookieList) {
-        if(cookie.getName().trim().equals("remember_user_token")) {
+  private boolean isCookiesContainSession() {
+    if (mCookieList != null && mCookieList.size() > 0) {
+      for (BasicClientCookie cookie : mCookieList) {
+        if (cookie.getName().trim().equals("_session_id")) {
           return true;
         }
       }
     }
+    return false;
+  }
+
+  private boolean isCookiesContainUserToken() {
+    if (mCookieList != null && mCookieList.size() > 0) {
+      for (BasicClientCookie cookie : mCookieList) {
+        if (cookie.getName().trim().equals("remember_user_token")) {
+          mUserToken = cookie.getValue();
+          return true;
+        }
+      }
+    }
+    mUserToken = null;
     return false;
   }
 
@@ -137,7 +155,7 @@ public class JianshuSession {
 
     public LoginState() {
       BasicCookieStore cookieStore = new BasicCookieStore();
-      for(BasicClientCookie cookie : mCookieList) {
+      for (BasicClientCookie cookie : mCookieList) {
         cookieStore.addCookie(cookie);
       }
       HttpContext httpContext;
@@ -151,7 +169,7 @@ public class JianshuSession {
     public void notifyUserLogin(JianshuSession session) {
       String cookieStr = mCookieManager.getCookie(DOMAIN);
       //如果浏览器cookie发生变化，那么这是一个新的登陆
-      if(!cookieStr.equals(JianshuSession.this.cookieStr)) {
+      if (!cookieStr.equals(JianshuSession.this.cookieStr)) {
         JianshuSession.this.cookieStr = cookieStr;
         mCookieList = new WebViewCookieParser().parse(JianshuSession.this.cookieStr, DOMAIN);
         if (isCookiesContainUserToken()) {
@@ -209,8 +227,13 @@ public class JianshuSession {
 
   }
 
+  public String getUserToken() {
+    return mUserToken;
+  }
+
   public interface JianshuSessionListener {
     void onLogin();
+
     void onLogout();
   }
 }
