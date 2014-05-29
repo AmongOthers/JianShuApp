@@ -60,6 +60,11 @@ public abstract class DataPool {
       Element userEl = userElements.get(0);
       userId = userEl.attr("value");
     }
+    if(userId != null) {
+      JianshuSession.getsInstance().notifyUserLogin();
+    } else {
+      JianshuSession.getsInstance().notifyUserLogout();
+    }
     UserInfoManager.getsInstance().setUserId(userId);
   }
 

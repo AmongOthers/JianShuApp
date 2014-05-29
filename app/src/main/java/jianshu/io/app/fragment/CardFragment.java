@@ -82,13 +82,13 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     //判断userInfo是否有变化
     boolean isUserInfoChanged = true;
-    String cachedUserToken = mAdapter.getUserToken();
-    String currentUserToken = JianshuSession.getsInstance().getUserToken();
-    if((currentUserToken == null && cachedUserToken == null) ||
-        ((currentUserToken != null && cachedUserToken != null) && currentUserToken.equals(cachedUserToken))) {
+    String cachedSession = mAdapter.getSession();
+    String currentSession = JianshuSession.getsInstance().getSession();
+    if((currentSession == null && cachedSession == null) ||
+        ((currentSession != null && cachedSession != null) && currentSession.equals(cachedSession))) {
       isUserInfoChanged = false;
     }
-    mAdapter.setUserToken(currentUserToken);
+    mAdapter.setUserToken(currentSession);
 
     if (isUserInfoChanged || mAdapter.getCount() == 0) {
       mRefreshLayout.setRefreshing(true);

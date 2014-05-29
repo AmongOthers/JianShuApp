@@ -33,7 +33,7 @@ public class JianshuCardArrayAdapter extends CardArrayAdapter {
     mCardClickListener = cardClickListener;
   }
 
-  public String getUserToken() {
+  public String getSession() {
     return mUserToken;
   }
 

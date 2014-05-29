@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +38,7 @@ import jianshu.io.app.widget.AfinalRoundedImageView;
 
 public class MainActivity extends ActionBarActivity
     implements AdapterView.OnItemClickListener,
-    UserInfoManager.UserInfoManagerListener {
+    UserInfoManager.UserInfoManagerListener, JianshuSession.JianshuSessionListener {
 
   private static final int LOGIN_FROM_START = 0;
   private static final int LOGIN_FROM_BUTTON = 1;
@@ -137,8 +136,15 @@ public class MainActivity extends ActionBarActivity
   }
 
   @Override
+  protected void onResume() {
+    super.onResume();
+    JianshuSession.getsInstance().addListener(this);
+  }
+
+  @Override
   protected void onPause() {
     super.onPause();
+    JianshuSession.getsInstance().removeListener(this);
     StatePool.getInstance().putState("main", new Object[]{mPosition});
   }
 
@@ -329,4 +335,15 @@ public class MainActivity extends ActionBarActivity
     showUserInfo(userInfo);
   }
 
+  @Override
+  public void onLogin() {
+
+  }
+
+  @Override
+  public void onLogout() {
+    Intent intent = new Intent(this, LoginActivity.class);
+    startActivityForResult(intent, LOGIN_FROM_START);
+    MainActivity.this.overridePendingTransition(R.anim.slide_in_left, 0);
+  }
 }

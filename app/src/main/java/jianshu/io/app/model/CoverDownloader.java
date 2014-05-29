@@ -114,6 +114,8 @@ public class CoverDownloader {
           connection.disconnect();
         }
       }
+    } else {
+      throw new IOException("network fatal");
     }
   }
 

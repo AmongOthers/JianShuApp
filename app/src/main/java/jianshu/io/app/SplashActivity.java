@@ -41,6 +41,7 @@ public class SplashActivity extends Activity {
       String coverShown = preferences.getString("shown", null);
       if (coverShown == null || !coverShown.equals(cover)) {
         isSplashToShow = true;
+        preferences.edit().putString("shown", cover).commit();
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
           @Override

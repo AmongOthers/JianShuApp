@@ -32,8 +32,8 @@ dependencies {
     compile 'uk.co.androidalliance:edgeeffectoverride:1.0.1'
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.shamanland:fonticon:0.1.+'
     compile project(':libraries:cardslib')
     compile project(':libraries:SwipeBackLayout')
+    compile project(':libraries:fonticon')
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

@@ -11,12 +11,15 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jianshu.io.app.util.WebViewCookieParser;
 
 /**
  * Created by Administrator on 2014/4/12.
+ * session_id 每次登陆都会变化
+ * user_token 对用户来说是唯一不变的
  */
 public class JianshuSession {
 
@@ -42,8 +45,8 @@ public class JianshuSession {
   private String cookieStr;
   private CookieManager mCookieManager;
   private List<BasicClientCookie> mCookieList;
-  private JianshuSessionListener listener;
-  private String mUserToken;
+  private List<JianshuSessionListener> listeners = new ArrayList<JianshuSessionListener>();
+  private String mSession;
 
   private JianshuSession(Context context) {
     this.context = context;
@@ -63,17 +66,51 @@ public class JianshuSession {
   }
 
   public synchronized void validate() {
+    mSession = null;
     this.cookieStr = mCookieManager.getCookie(DOMAIN);
+    if(this.cookieStr == null) {
+      setState(new LogoutState());
+      return;
+    }
     mCookieList = new WebViewCookieParser().parse(this.cookieStr, DOMAIN);
-    if (isCookiesContainSession() && isCookiesContainUserToken()) {
+    for (BasicClientCookie cookie : mCookieList) {
+          if (cookie.getName().trim().equals("remember_user_token")) {
+            mSession = cookie.getValue();
+          }
+      }
+    if (mSession != null) {
       setState(new LoginState());
     } else {
       setState(new LogoutState());
     }
   }
 
-  public void setListener(JianshuSessionListener listener) {
-    this.listener = listener;
+  public void addListener(JianshuSessionListener listener) {
+    synchronized (this.listeners) {
+      this.listeners.add(listener);
+    }
+  }
+
+  public void removeListener(JianshuSessionListener listener) {
+    synchronized (this.listeners) {
+      this.listeners.remove(listener);
+    }
+  }
+
+  private void onLogin() {
+    synchronized (listeners) {
+      for(JianshuSessionListener listener : listeners) {
+        listener.onLogin();
+      }
+    }
+  }
+
+  private void onLogout() {
+    synchronized (listeners) {
+      for(JianshuSessionListener listener : listeners) {
+        listener.onLogout();
+      }
+    }
   }
 
   public synchronized boolean isUserLogin() {
@@ -86,41 +123,17 @@ public class JianshuSession {
       return;
     }
     mSessionState = newState;
-    if (this.listener != null) {
+    if (this.listeners != null) {
       if (newState instanceof LoginState) {
-        this.listener.onLogin();
+        onLogin();
       } else {
-        this.listener.onLogout();
+        onLogout();
       }
     }
   }
 
   public synchronized JianshuSessionState getState() {
     return mSessionState;
-  }
-
-  private boolean isCookiesContainSession() {
-    if (mCookieList != null && mCookieList.size() > 0) {
-      for (BasicClientCookie cookie : mCookieList) {
-        if (cookie.getName().trim().equals("_session_id")) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private boolean isCookiesContainUserToken() {
-    if (mCookieList != null && mCookieList.size() > 0) {
-      for (BasicClientCookie cookie : mCookieList) {
-        if (cookie.getName().trim().equals("remember_user_token")) {
-          mUserToken = cookie.getValue();
-          return true;
-        }
-      }
-    }
-    mUserToken = null;
-    return false;
   }
 
   public synchronized void notifyUserLogin() {
@@ -138,6 +151,11 @@ public class JianshuSession {
   public synchronized Object postSync(String url, boolean isHtml) {
     return mSessionState.postSync(this, url, isHtml);
   }
+
+  public String getSession() {
+    return mSession;
+  }
+
 
   abstract class JianshuSessionState {
 
@@ -170,11 +188,7 @@ public class JianshuSession {
       String cookieStr = mCookieManager.getCookie(DOMAIN);
       //如果浏览器cookie发生变化，那么这是一个新的登陆
       if (!cookieStr.equals(JianshuSession.this.cookieStr)) {
-        JianshuSession.this.cookieStr = cookieStr;
-        mCookieList = new WebViewCookieParser().parse(JianshuSession.this.cookieStr, DOMAIN);
-        if (isCookiesContainUserToken()) {
-          session.setState(new LoginState());
-        }
+        validate();
       }
     }
 
@@ -201,11 +215,7 @@ public class JianshuSession {
 
     @Override
     public void notifyUserLogin(JianshuSession session) {
-      JianshuSession.this.cookieStr = mCookieManager.getCookie(DOMAIN);
-      mCookieList = new WebViewCookieParser().parse(JianshuSession.this.cookieStr, DOMAIN);
-      if (isCookiesContainUserToken()) {
-        session.setState(new LoginState());
-      }
+      validate();
     }
 
     @Override
@@ -225,10 +235,6 @@ public class JianshuSession {
       return finalHttp.postSync(url);
     }
 
-  }
-
-  public String getUserToken() {
-    return mUserToken;
   }
 
   public interface JianshuSessionListener {

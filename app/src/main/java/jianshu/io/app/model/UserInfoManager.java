@@ -29,7 +29,7 @@ public class UserInfoManager implements JianshuSession.JianshuSessionListener {
   private UserInfoManager(Context context) {
     this.context = context;
     this.cachedUserInfo = UserInfo.loadFromFileCache(this.context);
-    JianshuSession.getsInstance().setListener(this);
+    JianshuSession.getsInstance().addListener(this);
     if(JianshuSession.getsInstance().isUserLogin()) {
       setUserInfo(this.cachedUserInfo);
     } else {

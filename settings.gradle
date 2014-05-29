@@ -1,1 +1,1 @@
-include ':app', ':libraries:SwipeBackLayout', ':libraries:cardslib'
+include ':app', ':libraries:SwipeBackLayout', ':libraries:cardslib', 'libraries:fonticon'

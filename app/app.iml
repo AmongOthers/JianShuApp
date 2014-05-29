@@ -76,8 +76,8 @@
     <orderEntry type="library" exported="" name="jsoup-1.7.3" level="project" />
     <orderEntry type="library" exported="" name="roundedimageview-1.2.4" level="project" />
     <orderEntry type="library" exported="" name="gridlayout-v7-19.0.1" level="project" />
-    <orderEntry type="library" exported="" name="fonticon-0.1.2" level="project" />
     <orderEntry type="library" exported="" name="edgeeffectoverride-1.0.1" level="project" />
+    <orderEntry type="module" module-name="fonticon" exported="" />
     <orderEntry type="module" module-name="cardslib" exported="" />
     <orderEntry type="module" module-name="SwipeBackLayout" exported="" />
   </component>
