@@ -26,7 +26,7 @@ public class SessionActivity extends Activity {
           return false;
         }
       });
-      mWebView.loadUrl("http://jianshu.io/sign_in");
+      mWebView.loadUrl("http://jianshu.io");
     }
 
 

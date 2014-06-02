@@ -13,7 +13,7 @@ import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 public class JianshuCardArrayAdapter extends CardArrayAdapter {
 
   private CardClickListener mCardClickListener;
-  private String mUserToken;
+  private String mSession;
 
   public JianshuCardArrayAdapter(Context context, List<Card> cards) {
     super(context, cards);
@@ -34,10 +34,10 @@ public class JianshuCardArrayAdapter extends CardArrayAdapter {
   }
 
   public String getSession() {
-    return mUserToken;
+    return mSession;
   }
 
-  public void setUserToken(String userToken) {
-    mUserToken = userToken;
+  public void setSession(String session) {
+    mSession = session;
   }
 }

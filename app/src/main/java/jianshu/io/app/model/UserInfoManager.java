@@ -73,7 +73,6 @@ public class UserInfoManager implements JianshuSession.JianshuSessionListener {
   public void setUserId(String userId) {
     String oldUserId = this.userId;
     this.userId = userId;
-    JianshuSession.getsInstance().validate();
     if(oldUserId == null || !oldUserId.equals(userId)) {
       if(this.cachedUserInfo != null) {
         if(this.cachedUserInfo.getUserId().equals(userId)) {

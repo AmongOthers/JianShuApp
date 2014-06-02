@@ -21,20 +21,21 @@ public class LoginActivity extends SwipeBackActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
 
+    CookieManager.getInstance().removeAllCookie();
+
     mWebView = (WebView) findViewById(R.id.login_webview);
     WebSettings settings = mWebView.getSettings();
     settings.setJavaScriptEnabled(true);
-    mWebView.setWebViewClient(new WebViewClient() {
-      @Override
-      public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        if (url.equals("http://jianshu.io/")) {
-          String cookie = CookieManager.getInstance().getCookie(url);
-          if (cookie != null && cookie.contains("_session_id")) {
-            JianshuSession.getsInstance().validate();
-            setResult(RESULT_OK);
-            LoginActivity.this.finish();
-            overridePendingTransition(0, R.anim.slide_out_right);
-          }
+          mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+              if (url.equals("http://jianshu.io/")) {
+                JianshuSession.getsInstance().validate();
+                if (JianshuSession.getsInstance().isUserLogin()) {
+                  setResult(RESULT_OK);
+                  LoginActivity.this.finish();
+                  overridePendingTransition(0, R.anim.slide_out_right);
+                }
         }
         return false;
       }

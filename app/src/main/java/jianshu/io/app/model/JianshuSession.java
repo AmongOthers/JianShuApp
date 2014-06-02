@@ -1,11 +1,14 @@
 package jianshu.io.app.model;
 
 import android.content.Context;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
 import net.tsz.afinal.FinalHttp;
 
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
@@ -42,22 +45,17 @@ public class JianshuSession {
   private JianshuSessionState mSessionState;
   private FinalHttp mFinalHttpForHtml;
   private FinalHttp mFinalHttpForJavaScript;
-  private String cookieStr;
+  private String mCookieStr;
   private CookieManager mCookieManager;
   private List<BasicClientCookie> mCookieList;
   private List<JianshuSessionListener> listeners = new ArrayList<JianshuSessionListener>();
+  private String mUserToken;
   private String mSession;
 
   private JianshuSession(Context context) {
     this.context = context;
 
-    mFinalHttpForJavaScript = new FinalHttp();
-    mFinalHttpForJavaScript.addHeader("Accept", "*/*;q=0.5, text/javascript, application/javascript, application/ecmascript, application/x-ecmascript");
-    mFinalHttpForJavaScript.addHeader("Accept-Language", "zh-CN,zh;q=0.8");
-
-    mFinalHttpForHtml = new FinalHttp();
-    mFinalHttpForHtml.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-    mFinalHttpForHtml.addHeader("Accept-Language", "zh-CN,zh;q=0.8");
+    createFinalHttp();
 
     CookieSyncManager.createInstance(context);
     mCookieManager = CookieManager.getInstance();
@@ -65,20 +63,61 @@ public class JianshuSession {
     validate();
   }
 
+  private void createFinalHttp() {
+    mFinalHttpForJavaScript = new FinalHttp();
+    initHttp(mFinalHttpForJavaScript);
+    mFinalHttpForJavaScript.addHeader("Accept", "*/*;q=0.5, text/javascript, application/javascript, application/ecmascript, application/x-ecmascript");
+
+    mFinalHttpForHtml = new FinalHttp();
+    initHttp(mFinalHttpForHtml);
+    mFinalHttpForHtml.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+  }
+
+  private void initHttp(FinalHttp http) {
+    http.addHeader("User-Agent", "Mozilla/5.0 (Linux; U; Android 4.0.3; zh-cn; HTC T328d) AndroidWebKit/534.30 (KHTML, Like Gecko) Version/4.0 Mobile Safari/534.30");
+    http.addHeader("Accept-Language", "zh-CN, en-US");
+    http.addHeader("Accept-Charset", "utf-8, iso-8859-1, utf-16, *;q=0.7");
+    http.getHttpClient().getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
+  }
+
   public synchronized void validate() {
-    mSession = null;
-    this.cookieStr = mCookieManager.getCookie(DOMAIN);
-    if(this.cookieStr == null) {
+    String cookieStr = mCookieManager.getCookie(DOMAIN);
+    if(mCookieStr == null && cookieStr == null) {
+      return;
+    } else if(mCookieStr != null && cookieStr == null) {
+      mCookieStr = null;
+      mCookieList = null;
+      mUserToken = null;
+      mSession = null;
       setState(new LogoutState());
       return;
+    } else if(mCookieStr != null && mCookieStr.equals(cookieStr)) {
+      return;
     }
-    mCookieList = new WebViewCookieParser().parse(this.cookieStr, DOMAIN);
+
+    mCookieStr = cookieStr;
+    mCookieList = new WebViewCookieParser().parse(mCookieStr, DOMAIN);
+    mUserToken = null;
+    mSession = null;
+    int breakCount = 0;
     for (BasicClientCookie cookie : mCookieList) {
-          if (cookie.getName().trim().equals("remember_user_token")) {
-            mSession = cookie.getValue();
-          }
+      String name = cookie.getName().trim();
+      if (name.equals("remember_user_token")) {
+        mUserToken = cookie.getValue();
+        breakCount++;
+      } else if (name.equals("_session_id")) {
+        mSession = cookie.getValue();
+        breakCount++;
       }
-    if (mSession != null) {
+      if(breakCount == 2) {
+        break;
+      }
+    }
+
+    Log.d("jianshu", "user token: " + mUserToken);
+    Log.d("jianshu", "session: " + mSession);
+
+    if (mUserToken != null) {
       setState(new LoginState());
     } else {
       setState(new LogoutState());
@@ -99,7 +138,7 @@ public class JianshuSession {
 
   private void onLogin() {
     synchronized (listeners) {
-      for(JianshuSessionListener listener : listeners) {
+      for (JianshuSessionListener listener : listeners) {
         listener.onLogin();
       }
     }
@@ -107,7 +146,7 @@ public class JianshuSession {
 
   private void onLogout() {
     synchronized (listeners) {
-      for(JianshuSessionListener listener : listeners) {
+      for (JianshuSessionListener listener : listeners) {
         listener.onLogout();
       }
     }
@@ -152,10 +191,13 @@ public class JianshuSession {
     return mSessionState.postSync(this, url, isHtml);
   }
 
+  public String getUserToken() {
+    return mUserToken;
+  }
+
   public String getSession() {
     return mSession;
   }
-
 
   abstract class JianshuSessionState {
 
@@ -176,6 +218,9 @@ public class JianshuSession {
       for (BasicClientCookie cookie : mCookieList) {
         cookieStore.addCookie(cookie);
       }
+
+      createFinalHttp();
+
       HttpContext httpContext;
       httpContext = mFinalHttpForJavaScript.getHttpContext();
       httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
@@ -185,11 +230,7 @@ public class JianshuSession {
 
     @Override
     public void notifyUserLogin(JianshuSession session) {
-      String cookieStr = mCookieManager.getCookie(DOMAIN);
-      //如果浏览器cookie发生变化，那么这是一个新的登陆
-      if (!cookieStr.equals(JianshuSession.this.cookieStr)) {
-        validate();
-      }
+      validate();
     }
 
     @Override
@@ -213,8 +254,13 @@ public class JianshuSession {
 
   public class LogoutState extends JianshuSessionState {
 
+    public LogoutState() {
+      createFinalHttp();
+    }
+
     @Override
     public void notifyUserLogin(JianshuSession session) {
+      Log.d("jianshu", "Logout notifyUserLogin");
       validate();
     }
 

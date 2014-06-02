@@ -15,11 +15,15 @@ public class WebViewCookieParser {
       String[] cookieStrs = cookieStr.split(";");
       cookies = new ArrayList<BasicClientCookie>(cookieStrs.length);
       for (int i = 0; i < cookieStrs.length; i++) {
-        String[] nvp = cookieStrs[i].split("=");
-        BasicClientCookie c = new BasicClientCookie(nvp[0], nvp[1]);
-        //c.setVersion(1);
-        c.setDomain(domain);
-        cookies.add(c);
+        String temp = cookieStrs[i];
+        int firstIndex = temp.indexOf("=");
+        if(firstIndex > 0) {
+          String name = temp.substring(0, firstIndex);
+          String value = temp.substring(firstIndex + 1);
+          BasicClientCookie c = new BasicClientCookie(name, value);
+          c.setDomain(domain);
+          cookies.add(c);
+        }
       }
     }
     return cookies;

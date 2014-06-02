@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/E:/AndroidStudioProjects/JianShuApp/libraries/fonticon/src/main/res/values/font_icon_button.xml -->
+    <eat-comment />
+
+    <declare-styleable name="CompoundDrawables">
+        <attr name="iconLeft" format="reference" />
+        <attr name="iconTop" format="reference" />
+        <attr name="iconRight" format="reference" />
+        <attr name="iconBottom" format="reference" />
+    </declare-styleable>
+    <!-- From: file:/E:/AndroidStudioProjects/JianShuApp/libraries/fonticon/src/main/res/values/font_icon_drawable.xml -->
+    <eat-comment />
+
+    <declare-styleable name="FontIconDrawable">
+        <attr name="text" format="string|reference" />
+        <attr name="textColor" format="color|reference" />
+        <attr name="textSize" format="dimension|reference" />
+    </declare-styleable>
+    <!-- From: file:/E:/AndroidStudioProjects/JianShuApp/libraries/fonticon/src/main/res/values/font_icon_view.xml -->
+    <eat-comment />
+
+    <declare-styleable name="FontIconView">
+        <attr name="overridePressed" format="boolean" />
+        <attr name="pressedGlowColor" format="color|reference" />
+        <attr name="pressedGlowRadius" format="dimension|reference" />
+    </declare-styleable>
+
+</resources>

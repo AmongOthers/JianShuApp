@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,7 +35,7 @@ public class CoverDownloader {
   public static final Pattern CoverPattern = Pattern.compile("\\(http(.*)\\)");
   private static CoverDownloader sInstance;
   StackBlurManager mStackBlurManager;
-  private static final int[] STEPS = new int[]{205, 155, 105, 55, 5, 0};
+  private static final int[] STEPS = new int[]{205, 155, 105, 55, 5};
   private File mCoverFile;
 
   public static CoverDownloader getInstance() {
@@ -61,6 +62,7 @@ public class CoverDownloader {
     FileUtils.deleteDirectory(todayDir);
     todayDir.mkdirs();
     mCoverFile = new File(todayDirName + "/" + "cover.jpg");
+    Log.d("jianshu", "fetchCover: " + mCoverFile);
     download();
     process();
     context.getSharedPreferences("jianshu", Context.MODE_PRIVATE).edit().
@@ -70,11 +72,12 @@ public class CoverDownloader {
   public Bitmap[] loadCover(Context context) {
     String coverFileName = context.getSharedPreferences("jianshu", Context.MODE_PRIVATE).getString("cover", null);
     if(coverFileName != null) {
-      Bitmap[] bitmaps = new Bitmap[STEPS.length];
+      Bitmap[] bitmaps = new Bitmap[STEPS.length + 1];
       for(int i = 0; i < STEPS.length; i++) {
         String temp = coverFileName + STEPS[i];
         bitmaps[i] = getBitmapFromFile(new File(temp));
       }
+      bitmaps[STEPS.length] = getBitmapFromFile(new File(coverFileName));
       return bitmaps;
     } else {
       return null;

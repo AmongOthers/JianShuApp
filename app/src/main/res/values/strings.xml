@@ -24,5 +24,6 @@
     <string name="unlike_symbol">♡</string>
     <string name="title_activity_hot">HotActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_clear_cover_flag">ClearCoverFlag</string>
 
 </resources>

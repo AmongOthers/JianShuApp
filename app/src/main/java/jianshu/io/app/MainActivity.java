@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -153,12 +154,12 @@ public class MainActivity extends ActionBarActivity
       super.onResumeFragments();
       if (this.backFromLogin) {
         this.backFromLogin = false;
-        JianshuSession.getsInstance().validate();
         setUiAccordingIfLogin();
       }
   }
 
   private void setUiAccordingIfLogin() {
+    Log.d("jianshu", "setUiAccordingIfLogin");
     JianshuSession.getsInstance().validate();
     if (JianshuSession.getsInstance().isUserLogin()) {
       showUserInfo(UserInfoManager.getsInstance().getUserInfo());

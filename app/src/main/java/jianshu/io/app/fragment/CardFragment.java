@@ -88,7 +88,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ((currentSession != null && cachedSession != null) && currentSession.equals(cachedSession))) {
       isUserInfoChanged = false;
     }
-    mAdapter.setUserToken(currentSession);
+    mAdapter.setSession(currentSession);
 
     if (isUserInfoChanged || mAdapter.getCount() == 0) {
       mRefreshLayout.setRefreshing(true);
