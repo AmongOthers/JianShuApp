@@ -1,9 +1,15 @@
 
 package jianshu.io.app.widget;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.shamanland.fonticon.FontIconDrawable;
 
@@ -26,9 +32,17 @@ public class JianshuBaseCard extends Card {
   protected static Drawable heartEmptyDrawable;
   protected static int GrayColor = -1;
   protected static int JianshuColor = -1;
+  private AnimatorSet rightFlip;
+  private AnimatorSet leftFlip;
+  private GestureDetector mGestureDetector;
+  private GestureDetector.SimpleOnGestureListener mGestureListener;
 
   public JianshuBaseCard(final Context context, RecommendationItem item, FinalBitmap fb, int layoutId) {
     super(context, layoutId);
+
+    rightFlip = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.anim.card_flip_right);
+    leftFlip = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.anim.card_flip_left);
+
     this.item = item;
     this.fb = fb;
     if(JianshuBaseCard.resources == null) {
@@ -52,4 +66,37 @@ public class JianshuBaseCard extends Card {
     return this.item;
   }
 
+  @Override
+  public void setupInnerViewElements(ViewGroup parent, View view) {
+    super.setupInnerViewElements(parent, view);
+
+    final View parentView = (View) parent.getParent();
+    rightFlip.setTarget(parentView);
+    leftFlip.setTarget(parentView);
+
+    mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+
+      @Override
+      public boolean onSingleTapUp(MotionEvent e) {
+        int width = parentView.getWidth();
+        float x = e.getX();
+        boolean isPressingRight = x >= width / 2;
+        if(isPressingRight) {
+          leftFlip.start();
+        } else {
+          rightFlip.start();
+        }
+        return false;
+      }
+    };
+    mGestureDetector = new GestureDetector(getContext(), mGestureListener);
+    //注意不是绑定到parentView上
+    parent.setOnTouchListener(new View.OnTouchListener() {
+
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event);
+      }
+    });
+  }
 }

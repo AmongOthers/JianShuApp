@@ -37,14 +37,14 @@ public class HomeCard extends JianshuBaseCard {
   public void setupInnerViewElements(ViewGroup parent, View view) {
     super.setupInnerViewElements(parent, view);
 
-    this.title = (TextView)parent.findViewById(R.id.hot_title);
-    this.summary = (TextView)parent.findViewById(R.id.hot_summary);
-    this.author = (TextView)parent.findViewById(R.id.hot_author);
-    this.avatar = (ImageView)parent.findViewById(R.id.hot_avatar);
-    this.noteBook = (FontIconTextView)parent.findViewById(R.id.hot_notebook);
-    this.topic = (FontIconTextView)parent.findViewById(R.id.hot_th);
-    this.comment = (FontIconTextView)parent.findViewById(R.id.hot_comment);
-    this.like = (FontIconTextView)parent.findViewById(R.id.hot_like);
+    this.title = (TextView) parent.findViewById(R.id.hot_title);
+    this.summary = (TextView) parent.findViewById(R.id.hot_summary);
+    this.author = (TextView) parent.findViewById(R.id.hot_author);
+    this.avatar = (ImageView) parent.findViewById(R.id.hot_avatar);
+    this.noteBook = (FontIconTextView) parent.findViewById(R.id.hot_notebook);
+    this.topic = (FontIconTextView) parent.findViewById(R.id.hot_th);
+    this.comment = (FontIconTextView) parent.findViewById(R.id.hot_comment);
+    this.like = (FontIconTextView) parent.findViewById(R.id.hot_like);
 
 
     this.fb.display(this.avatar, this.item.getAvatar());
@@ -56,7 +56,7 @@ public class HomeCard extends JianshuBaseCard {
     this.topic.setText(topicsStr);
     this.comment.setText(String.valueOf(this.item.getCommentCount()));
     this.like.setText(String.valueOf(this.item.getLikeCount()));
-    if(this.getItem().isLiking()) {
+    if (this.getItem().isLiking()) {
       this.like.setCompoundDrawables(HotCard.heartDrawable, null, null, null);
       this.like.setTextColor(HotCard.JianshuColor);
     } else {

@@ -120,6 +120,8 @@ public class JianshuSession {
     if (mUserToken != null) {
       setState(new LoginState());
     } else {
+      //此时认为该session已经失效了
+      mSession = null;
       setState(new LogoutState());
     }
   }
