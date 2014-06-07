@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:background="@color/card_list_gray"
+    android:id="@+id/ptr_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <it.gmariotti.cardslib.library.extra.staggeredgrid.view.CardGridStaggeredView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      card:item_margin="8dp"
+      card:column_count_portrait="2"
+      card:column_count_landscape="3"
+      card:grid_paddingRight="8dp"
+      card:grid_paddingLeft="8dp"
+      card:list_card_layout_resourceID="@layout/staggered_card"
+      android:id="@+id/timestream_grid"/>
+  >
+</android.support.v4.widget.SwipeRefreshLayout>

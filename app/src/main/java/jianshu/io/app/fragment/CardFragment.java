@@ -17,6 +17,9 @@ import it.gmariotti.cardslib.library.internal.Card;
 import jianshu.io.app.ArticleActivity;
 import jianshu.io.app.R;
 import jianshu.io.app.adapter.JianshuCardArrayAdapter;
+import jianshu.io.app.card.HomeCard;
+import jianshu.io.app.card.HotCard;
+import jianshu.io.app.card.JianshuBaseCard;
 import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.RecommendationItem;
 import jianshu.io.app.model.StatePool;
@@ -24,9 +27,6 @@ import jianshu.io.app.model.datapool.DataPool;
 import jianshu.io.app.util.RecommendationAsyncTask;
 import jianshu.io.app.widget.EndlessCardListView;
 import jianshu.io.app.widget.EndlessListener;
-import jianshu.io.app.widget.HomeCard;
-import jianshu.io.app.widget.HotCard;
-import jianshu.io.app.widget.JianshuBaseCard;
 import jianshu.io.app.widget.LoadingTextView;
 
 /**

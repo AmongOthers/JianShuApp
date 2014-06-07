@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+  <LinearLayout
+      android:padding="5dp"
+      android:layout_alignParentTop="true"
+      android:orientation="vertical"
+      android:id="@+id/timestream_frame"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+ <TextView
+      android:id="@+id/timestream_title"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      android:text="写作之于我"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+
+  <TextView
+      android:id="@+id/timestream_summary"
+      android:textSize="15sp"
+      android:textColor="@color/textGray"
+      android:text="作为思考的写作 小时候，比较自卑，原因有很多。虽然成绩在就读的学校都还算不错。但是遇到很多不喜欢我的老师，有的老师认为我容易骄傲，有的老师觉得我上课爱插话。还有这样那样各种缺点。喜欢我的老师也有，但是总是在关键时刻就走了。比如小学升毕业班那年，班主任走了。初中升毕业班那年，班主任和英语老师..."
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+      </LinearLayout>
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:id="@+id/timestream_divider"
+      android:layout_below="@id/timestream_frame"
+      android:background="@color/card_list_gray"
+      android:layout_width="match_parent"
+      android:layout_height="1dp">
+
+  </LinearLayout>
+
+  <RelativeLayout
+      android:id="@+id/timestream_meta"
+      android:padding="5dp"
+      android:layout_below="@id/timestream_divider"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/timestream_avatar"
+        android:src="@drawable/me"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
+    <LinearLayout
+        android:paddingLeft="5dp"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/timestream_avatar"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+      <TextView
+          android:textSize="10sp"
+          android:text="书摘反思"
+          android:paddingBottom="5dp"
+          android:textColor="@color/textGray"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:textSize="10sp"
+          android:textStyle="italic"
+          android:text="6月06日 20:20"
+          android:textColor="@color/textGray"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+  </RelativeLayout>
+
+</RelativeLayout>

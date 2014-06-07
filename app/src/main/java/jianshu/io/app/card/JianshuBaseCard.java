@@ -1,5 +1,4 @@
-
-package jianshu.io.app.widget;
+package jianshu.io.app.card;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;

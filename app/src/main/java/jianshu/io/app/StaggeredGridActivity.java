@@ -1,17 +1,22 @@
 package jianshu.io.app;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import jianshu.io.app.fragment.TimeStreamFragment;
 
-public class StaggeredGrid extends Activity {
+
+public class StaggeredGridActivity extends ActionBarActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_staggered_grid);
+    getSupportFragmentManager().beginTransaction().
+        replace(R.id.frame, TimeStreamFragment.newInstance()).
+        commit();
   }
 
 

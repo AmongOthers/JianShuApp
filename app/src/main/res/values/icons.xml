@@ -9,4 +9,8 @@
   <string name="fa_book">&#xf02d;</string>
   <string name="fa_angle_up">&#xf106;</string>
   <string name="fa_angle_down">&#xf107;</string>
+  <string name="fa_quote_left">&#xf10d;</string>
+  <string name="fa_quote_right">&#xf10e;</string>
+  <string name="fa_eye">&#xf06e;</string>
+  <string name="fa_plus">&#xf067;</string>
 </resources>
