@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="jianshu.io.app.StaggeredGrid">
+
+  <it.gmariotti.cardslib.library.extra.staggeredgrid.view.CardGridStaggeredView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      card:item_margin="8dp"
+      card:column_count_portrait="3"
+      card:column_count_landscape="3"
+      card:grid_paddingRight="8dp"
+      card:grid_paddingLeft="8dp"
+      card:list_card_layout_resourceID="@layout/staggered_card"
+      android:id="@+id/carddemo_extras_grid_stag"/>
+
+</RelativeLayout>

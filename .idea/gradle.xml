@@ -7,12 +7,12 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="E:\AndroidStudioProjects\JianShuApp" />
-            <option value="E:\AndroidStudioProjects\JianShuApp\app" />
-            <option value="E:\AndroidStudioProjects\JianShuApp\libraries" />
-            <option value="E:\AndroidStudioProjects\JianShuApp\libraries\SwipeBackLayout" />
-            <option value="E:\AndroidStudioProjects\JianShuApp\libraries\cardslib" />
-            <option value="E:\AndroidStudioProjects\JianShuApp\libraries\fonticon" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/libraries" />
+            <option value="$PROJECT_DIR$/libraries/SwipeBackLayout" />
+            <option value="$PROJECT_DIR$/libraries/cardslib" />
+            <option value="$PROJECT_DIR$/libraries/fonticon" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -3,12 +3,6 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
-  <component name="ProjectPlainTextFileTypeManager">
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/card_flip_left_in.xml" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/card_flip_left_out.xml" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/card_flip_right_in.xml" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim/card_flip_right_out.xml" />
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

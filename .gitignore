@@ -2,4 +2,7 @@
 /local.properties
 /.idea/workspace.xml
 .DS_Store
+app/build/
+libraries/cardslib/build/
 libraries/fonticon/build/
+libraries/SwipeBackLayout/build/
