@@ -13,7 +13,7 @@ import net.tsz.afinal.FinalBitmap;
 import org.jsoup.helper.StringUtil;
 
 import jianshu.io.app.R;
-import jianshu.io.app.model.RecommendationItem;
+import jianshu.io.app.model.ArticleItem;
 
 /**
  * Created by Administrator on 2014/5/11.
@@ -28,7 +28,7 @@ public class HotCard extends JianshuBaseCard {
   private FontIconTextView comment;
   private FontIconTextView like;
 
-  public HotCard(final Context context, RecommendationItem item, FinalBitmap fb) {
+  public HotCard(final Context context, ArticleItem item, FinalBitmap fb) {
     super(context, item, fb, R.layout.hotcard_content);
   }
 

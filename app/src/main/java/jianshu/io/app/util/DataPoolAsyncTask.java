@@ -4,26 +4,25 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
-import jianshu.io.app.model.RecommendationItem;
 import jianshu.io.app.model.datapool.DataPool;
 
 /**
  * Created by Administrator on 2014/5/11.
  */
-public class RecommendationAsyncTask extends AsyncTask<Void, Void, RecommendationItem[]> {
+public class DataPoolAsyncTask extends AsyncTask<Void, Void, Object[]> {
 
   private boolean isRefresh;
   private DataPool pool;
   private OnPostExecuteTask task;
 
-  public RecommendationAsyncTask(boolean isRefresh, DataPool pool, OnPostExecuteTask task) {
+  public DataPoolAsyncTask(boolean isRefresh, DataPool pool, OnPostExecuteTask task) {
     this.isRefresh = isRefresh;
     this.pool = pool;
     this.task = task;
   }
 
   @Override
-  protected RecommendationItem[] doInBackground(Void... params) {
+  protected Object[] doInBackground(Void... params) {
     try {
       if(this.isRefresh) {
         return this.pool.refresh();
@@ -36,11 +35,11 @@ public class RecommendationAsyncTask extends AsyncTask<Void, Void, Recommendatio
   }
 
   @Override
-  protected void onPostExecute(RecommendationItem[] data) {
+  protected void onPostExecute(Object[] data) {
     this.task.run(data);
   }
 
   public interface OnPostExecuteTask {
-    void run(RecommendationItem[] data);
+    void run(Object[] data);
   }
 }

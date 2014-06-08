@@ -5,12 +5,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import jianshu.io.app.model.ArticleInfo;
-import jianshu.io.app.model.RecommendationItem;
+import jianshu.io.app.model.ArticleItem;
 
 /**
  * Created by Administrator on 2014/3/29.
  */
-public class HomePageDataPool extends DataPool {
+public class HomePageDataPool extends ArticleDataPool {
 
   public final static String HOME_PAGE_URL = "http://jianshu.io";
 
@@ -33,7 +33,7 @@ public class HomePageDataPool extends DataPool {
   }
 
   @Override
-  protected RecommendationItem[] getRecommendationItems(Document doc) {
+  protected ArticleItem[] getArticleItems(Document doc) {
     Elements loadMoreElements = doc.select(LOAD_MORE_SELECTOR);
     if (loadMoreElements.size() > 0) {
       mLoadMoreUrl = getHtmlUrl(loadMoreElements.get(0).attr("data-url"));
@@ -45,7 +45,7 @@ public class HomePageDataPool extends DataPool {
     Elements articleElements = doc.select(ARTICLE_SELECTOR);
     if (articleElements != null) {
       int i = 0;
-      RecommendationItem[] result = new RecommendationItem[articleElements.size()];
+      ArticleItem[] result = new ArticleItem[articleElements.size()];
       for (Element el : articleElements) {
         result[i++] = parseElement(el);
       }
@@ -60,7 +60,7 @@ public class HomePageDataPool extends DataPool {
     return HOME_PAGE_URL + fragments[0] + ".html?" + fragments[1];
   }
 
-  public RecommendationItem parseElement(Element el) {
+  public ArticleItem parseElement(Element el) {
     Element titleEl = el.select(TITLE_SELECTOR).get(0);
     String title = titleEl.text();
     Element avatarEl = el.select(AVATAR_SELECTOR).get(0);
@@ -73,6 +73,6 @@ public class HomePageDataPool extends DataPool {
     String author = authorEl.text();
         Element articleInfoEl = el.select("div.article-info").get(0);
     ArticleInfo articleInfo = parseArticleInfo(articleInfoEl);
-    return new RecommendationItem(title, avatarUrl, content, url, author, articleInfo);
+    return new ArticleItem(title, avatarUrl, content, url, author, articleInfo);
   }
 }

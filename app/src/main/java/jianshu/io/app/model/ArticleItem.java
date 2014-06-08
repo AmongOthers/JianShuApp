@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Administrator on 14-3-21.
  */
-public class RecommendationItem {
+public class ArticleItem {
 
   private String title;
   private String avatar;
@@ -14,13 +14,13 @@ public class RecommendationItem {
   private String author;
   private ArticleInfo articleInfo;
 
-  public RecommendationItem(String title,
-                            String avatar,
-                            String summary,
-                            String url,
-                            String author,
-                            ArticleInfo articleInfo
-                            ) {
+  public ArticleItem(String title,
+                     String avatar,
+                     String summary,
+                     String url,
+                     String author,
+                     ArticleInfo articleInfo
+  ) {
     this.title = title;
     this.avatar = avatar;;
     this.summary = summary;

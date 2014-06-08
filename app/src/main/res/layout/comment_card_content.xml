@@ -24,7 +24,6 @@
         android:id="@+id/timestream_comment"
         android:textSize="15sp"
         android:textColor="@color/textGray"
-        android:text="\@m1ch3ll3 打算写个走开系列\n\@LostAbaddon 深有同感\n\@欧阳名 握手，主队拜仁？"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -36,11 +35,9 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/timestream_article"
+        android:id="@+id/timestream_target"
         android:textColor="@color/textGray"
-        android:textStyle="bold"
         android:textSize="15sp"
-        android:text="《喊我女球迷的，走开好么？》"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -80,14 +77,15 @@
         android:layout_height="wrap_content">
 
       <TextView
+          android:id="@+id/timestream_user"
           android:textSize="10sp"
-          android:text="李子李子短信"
           android:paddingBottom="5dp"
           android:textColor="@color/textGray"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"/>
 
       <TextView
+          android:id="@+id/timestream_time"
           android:textSize="10sp"
           android:textStyle="italic"
           android:text="6月06日 20:20"

@@ -5,12 +5,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import jianshu.io.app.model.ArticleInfo;
-import jianshu.io.app.model.RecommendationItem;
+import jianshu.io.app.model.ArticleItem;
 
 /**
  * Created by Administrator on 2014/5/5.
  */
-public class HotPageDataPool extends DataPool{
+public class HotPageDataPool extends ArticleDataPool{
 
   private int pageIndex = 1;
 
@@ -24,14 +24,14 @@ public class HotPageDataPool extends DataPool{
   }
 
   @Override
-  protected RecommendationItem[] getRecommendationItems(Document doc) {
+  protected ArticleItem[] getArticleItems(Document doc) {
     pageIndex++;
     mLoadMoreUrl = mStartUrl + "?_=" + System.currentTimeMillis() +"&page=" + pageIndex;
 
     Elements articleElements = doc.select("ul.top-notes li");
     if(articleElements != null) {
       int i = 0;
-      RecommendationItem[] result = new RecommendationItem[articleElements.size()];
+      ArticleItem[] result = new ArticleItem[articleElements.size()];
       for(Element el : articleElements) {
         result[i++] = parseElement(el);
       }
@@ -41,7 +41,7 @@ public class HotPageDataPool extends DataPool{
     }
   }
 
-  private RecommendationItem parseElement(Element el) {
+  private ArticleItem parseElement(Element el) {
     Element titleEl = el.select("h4 > a").get(0);
     String title = titleEl.text();
     String url = "http://jianshu.io" + titleEl.attr("href");
@@ -49,7 +49,7 @@ public class HotPageDataPool extends DataPool{
     String avatarUrl = avatarEl.attr("src");
     Element articleInfoEl = el.select("div.article-info").get(0);
     ArticleInfo articleInfo = parseArticleInfo(articleInfoEl);
-    return new RecommendationItem(title, avatarUrl, "", url, "", articleInfo);
+    return new ArticleItem(title, avatarUrl, "", url, "", articleInfo);
   }
 
 }

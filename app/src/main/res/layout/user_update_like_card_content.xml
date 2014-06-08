@@ -20,11 +20,10 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/timestream_like_article"
-        android:textSize="15sp"
         android:paddingLeft="5dp"
+        android:id="@+id/timestream_target"
         android:textColor="@color/textGray"
-        android:text="《给每个人每座山写个温暖的故事》"
+        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -64,14 +63,15 @@
         android:layout_height="wrap_content">
 
       <TextView
+          android:id="@+id/timestream_user"
           android:textSize="10sp"
-          android:text="简叔"
           android:paddingBottom="5dp"
           android:textColor="@color/textGray"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"/>
 
       <TextView
+          android:id="@+id/timestream_time"
           android:textSize="10sp"
           android:textStyle="italic"
           android:text="6月06日 20:20"

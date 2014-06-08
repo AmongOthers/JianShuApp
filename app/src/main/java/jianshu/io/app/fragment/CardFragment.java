@@ -20,11 +20,11 @@ import jianshu.io.app.adapter.JianshuCardArrayAdapter;
 import jianshu.io.app.card.HomeCard;
 import jianshu.io.app.card.HotCard;
 import jianshu.io.app.card.JianshuBaseCard;
+import jianshu.io.app.model.ArticleItem;
 import jianshu.io.app.model.JianshuSession;
-import jianshu.io.app.model.RecommendationItem;
 import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.datapool.DataPool;
-import jianshu.io.app.util.RecommendationAsyncTask;
+import jianshu.io.app.util.DataPoolAsyncTask;
 import jianshu.io.app.widget.EndlessCardListView;
 import jianshu.io.app.widget.EndlessListener;
 import jianshu.io.app.widget.LoadingTextView;
@@ -43,7 +43,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
   }
 
   FinalBitmap fb;
-  EndlessCardListView mListView;
+  EndlessCardListView mContentView;
   SwipeRefreshLayout mRefreshLayout;
   JianshuCardArrayAdapter mAdapter;
   LoadingTextView mFooter;
@@ -70,11 +70,11 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
-    mListView = (EndlessCardListView) (view.findViewById(R.id.hotlist));
-    mListView.setListener(this);
+    mContentView = (EndlessCardListView) (view.findViewById(R.id.hotlist));
+    mContentView.setListener(this);
     mFooter = (LoadingTextView) activity.getLayoutInflater().inflate(R.layout.footer, null);
-    mListView.setFooter(mFooter);
-    mListView.setAdapter(mAdapter);
+    mContentView.setFooter(mFooter);
+    mContentView.setAdapter(mAdapter);
 
     mRefreshLayout = (SwipeRefreshLayout) (view.findViewById(R.id.ptr_layout));
     mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
@@ -104,23 +104,24 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
   public void onViewStateRestored(Bundle savedInstanceState) {
     super.onViewStateRestored(savedInstanceState);
     if (mListViewState != null) {
-      mListView.setSelectionFromTop(mListViewState[0], mListViewState[1]);
+      mContentView.setSelectionFromTop(mListViewState[0], mListViewState[1]);
     }
   }
 
   @Override
   public void onPause() {
     super.onPause();
-    int index = mListView.getFirstVisiblePosition();
-    View v = mListView.getChildAt(0);
+    int index = mContentView.getFirstVisiblePosition();
+    View v = mContentView.getChildAt(0);
     int top = (v == null) ? 0 : v.getTop();
     StatePool.getInstance().putListViewState(mUrl, new int[]{index, top});
   }
 
-  private Card[] initCard(final Context context, RecommendationItem[] data) {
+  private Card[] initCard(final Context context, Object[] data) {
     Card[] result = new Card[data.length];
     int i = 0;
-    for (RecommendationItem item : data) {
+    for (Object temp : data) {
+      ArticleItem item = (ArticleItem)temp;
       final JianshuBaseCard card;
       String summary = item.getSummary();
       if (summary != null && summary.length() > 0) {
@@ -147,19 +148,19 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
   @Override
   public void onRefresh() {
-    new RecommendationAsyncTask(true, this.mPool, new RecommendationAsyncTask.OnPostExecuteTask() {
-      @Override
-      public void run(RecommendationItem[] data) {
-        mRefreshLayout.setRefreshing(false);
-        Context context = getActivity();
-        if (context == null) {
+    new DataPoolAsyncTask(true, this.mPool, new DataPoolAsyncTask.OnPostExecuteTask() {
+          @Override
+          public void run(Object[] data) {
+            mRefreshLayout.setRefreshing(false);
+            Context context = getActivity();
+            if (context == null) {
           return;
         }
         if (data != null) {
           if (mIsEmpty) {
             mIsEmpty = false;
             mRefreshLayout.removeView(mEmptyView);
-            mRefreshLayout.addView(mListView);
+            mRefreshLayout.addView(mContentView);
           } else {
             mAdapter.clear();
           }
@@ -170,7 +171,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
           }
           if (mAdapter.getCount() == 0 && !mIsEmpty) {
             mIsEmpty = true;
-            mRefreshLayout.removeView(mListView);
+            mRefreshLayout.removeView(mContentView);
             mRefreshLayout.addView(mEmptyView);
           }
         }
@@ -186,11 +187,11 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
   @Override
   public void onScrollEnd() {
     mFooter.startAnimation();
-    new RecommendationAsyncTask(false, this.mPool, new RecommendationAsyncTask.OnPostExecuteTask() {
+    new DataPoolAsyncTask(false, this.mPool, new DataPoolAsyncTask.OnPostExecuteTask() {
       @Override
-      public void run(RecommendationItem[] data) {
+      public void run(Object[] data) {
         mFooter.endAnimation();
-        mListView.notifyNewDataLoaded();
+        mContentView.notifyNewDataLoaded();
         Context context = getActivity();
         if (context == null) {
           return;
@@ -207,7 +208,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
   @Override
   public void onClick(Card card) {
     Context context = getActivity();
-    RecommendationItem item = ((JianshuBaseCard) card).getItem();
+    ArticleItem item = ((JianshuBaseCard) card).getItem();
     Intent intent = new Intent(context, ArticleActivity.class);
     intent.putExtra("url", item.getUrl());
     intent.putExtra("title", item.getTitle());

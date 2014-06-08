@@ -15,8 +15,7 @@
  <TextView
       android:id="@+id/timestream_title"
       android:textSize="20sp"
-      android:textStyle="bold"
-      android:text="写作之于我"
+      android:textColor="@color/textTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
 
@@ -24,7 +23,6 @@
       android:id="@+id/timestream_summary"
       android:textSize="15sp"
       android:textColor="@color/textGray"
-      android:text="作为思考的写作 小时候，比较自卑，原因有很多。虽然成绩在就读的学校都还算不错。但是遇到很多不喜欢我的老师，有的老师认为我容易骄傲，有的老师觉得我上课爱插话。还有这样那样各种缺点。喜欢我的老师也有，但是总是在关键时刻就走了。比如小学升毕业班那年，班主任走了。初中升毕业班那年，班主任和英语老师..."
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
       </LinearLayout>
@@ -63,14 +61,15 @@
         android:layout_height="wrap_content">
 
       <TextView
+          android:id="@+id/timestream_author"
           android:textSize="10sp"
-          android:text="书摘反思"
           android:paddingBottom="5dp"
           android:textColor="@color/textGray"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"/>
 
       <TextView
+          android:id="@+id/timestream_time"
           android:textSize="10sp"
           android:textStyle="italic"
           android:text="6月06日 20:20"

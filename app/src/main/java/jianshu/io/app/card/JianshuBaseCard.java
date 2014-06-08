@@ -16,7 +16,7 @@ import net.tsz.afinal.FinalBitmap;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import jianshu.io.app.R;
-import jianshu.io.app.model.RecommendationItem;
+import jianshu.io.app.model.ArticleItem;
 
 /**
  * Created by Administrator on 2014/5/11.
@@ -24,7 +24,7 @@ import jianshu.io.app.model.RecommendationItem;
 public class JianshuBaseCard extends Card {
 
   protected FinalBitmap fb;
-  protected RecommendationItem item;
+  protected ArticleItem item;
 
   protected static Resources resources;
   protected static Drawable heartDrawable;
@@ -36,7 +36,7 @@ public class JianshuBaseCard extends Card {
   private GestureDetector mGestureDetector;
   private GestureDetector.SimpleOnGestureListener mGestureListener;
 
-  public JianshuBaseCard(final Context context, RecommendationItem item, FinalBitmap fb, int layoutId) {
+  public JianshuBaseCard(final Context context, ArticleItem item, FinalBitmap fb, int layoutId) {
     super(context, layoutId);
 
     rightFlip = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.anim.card_flip_right);
@@ -61,7 +61,7 @@ public class JianshuBaseCard extends Card {
     }
   }
 
-  public RecommendationItem getItem() {
+  public ArticleItem getItem() {
     return this.item;
   }
 

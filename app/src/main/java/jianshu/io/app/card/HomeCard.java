@@ -13,7 +13,7 @@ import net.tsz.afinal.FinalBitmap;
 import org.jsoup.helper.StringUtil;
 
 import jianshu.io.app.R;
-import jianshu.io.app.model.RecommendationItem;
+import jianshu.io.app.model.ArticleItem;
 
 /**
  * Created by Administrator on 2014/5/11.
@@ -29,7 +29,7 @@ public class HomeCard extends JianshuBaseCard {
   private FontIconTextView like;
   private TextView summary;
 
-  public HomeCard(final Context context, RecommendationItem item, FinalBitmap fb) {
+  public HomeCard(final Context context, ArticleItem item, FinalBitmap fb) {
     super(context, item, fb, R.layout.homecard_content);
   }
 

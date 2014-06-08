@@ -7,23 +7,14 @@
   <LinearLayout
       android:padding="5dp"
       android:layout_alignParentTop="true"
-      android:orientation="horizontal"
+      android:orientation="vertical"
       android:id="@+id/timestream_frame"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-    <com.shamanland.fonticon.FontIconView
-        android:textSize="15sp"
-        android:text="@string/fa_plus"
-        android:textColor="@color/jianshu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <TextView
-        android:paddingLeft="5dp"
-        android:id="@+id/timestream_target"
-        android:textColor="@color/textGray"
-        android:textSize="15sp"
+        android:id="@+id/timestream_unknown"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -46,26 +37,24 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-    <com.shamanland.fonticon.FontIconView
+    <ImageView
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timestream_icon"
-        android:textColor="@color/jianshu"
-        android:text="@string/fa_th"
-        android:textSize="40dp" />
+        android:id="@+id/timestream_avatar"
+        android:src="@drawable/me"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
 
     <LinearLayout
         android:paddingLeft="5dp"
         android:orientation="vertical"
-        android:layout_toRightOf="@id/timestream_icon"
+        android:layout_toRightOf="@id/timestream_avatar"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
       <TextView
-          android:id="@+id/timestream_collection"
+          android:id="@+id/timestream_author"
           android:textSize="10sp"
           android:paddingBottom="5dp"
           android:textColor="@color/textGray"
