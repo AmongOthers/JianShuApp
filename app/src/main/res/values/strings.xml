@@ -25,6 +25,6 @@
     <string name="title_activity_hot">HotActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_clear_cover_flag">ClearCoverFlag</string>
-    <string name="title_activity_staggered_grid">StaggeredGrid</string>
+    <string name="title_activity_staggered_grid">最新动态</string>
 
 </resources>

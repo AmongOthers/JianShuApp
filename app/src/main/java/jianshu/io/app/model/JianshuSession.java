@@ -54,12 +54,8 @@ public class JianshuSession {
 
   private JianshuSession(Context context) {
     this.context = context;
-
-    createFinalHttp();
-
     CookieSyncManager.createInstance(context);
     mCookieManager = CookieManager.getInstance();
-
     validate();
   }
 
@@ -83,6 +79,7 @@ public class JianshuSession {
   public synchronized void validate() {
     String cookieStr = mCookieManager.getCookie(DOMAIN);
     if(mCookieStr == null && cookieStr == null) {
+      setState(new LogoutState());
       return;
     } else if(mCookieStr != null && cookieStr == null) {
       mCookieStr = null;
