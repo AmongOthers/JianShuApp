@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -13,30 +14,30 @@ import android.widget.Toast;
 
 import net.tsz.afinal.FinalBitmap;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import it.gmariotti.cardslib.library.extra.staggeredgrid.view.CardGridStaggeredView;
 import it.gmariotti.cardslib.library.internal.Card;
 import jianshu.io.app.R;
 import jianshu.io.app.adapter.TimeStreamCardArrayAdapter;
 import jianshu.io.app.card.CollectinUpdateCard;
-import jianshu.io.app.card.UserCommentCard;
 import jianshu.io.app.card.UnknownUpdateCard;
+import jianshu.io.app.card.UserCommentCard;
 import jianshu.io.app.card.UserSubscribeCard;
 import jianshu.io.app.card.UserUpdateArticleCard;
 import jianshu.io.app.card.UserUpdateFollowCard;
 import jianshu.io.app.card.UserUpdateLikeCard;
 import jianshu.io.app.model.CollectionUpdateItem;
-import jianshu.io.app.model.UserCommentUpdateItem;
+import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.UnknownUpdateItem;
 import jianshu.io.app.model.UpdateItem;
+import jianshu.io.app.model.UserCommentUpdateItem;
 import jianshu.io.app.model.UserSubscribeUpdateItem;
 import jianshu.io.app.model.UserUpdateArticleUpdateItem;
 import jianshu.io.app.model.UserUpdateFollowUpdateItem;
 import jianshu.io.app.model.UserUpdateLikeUpdateItem;
 import jianshu.io.app.model.datapool.TimeStreamDataPool;
 import jianshu.io.app.util.DataPoolAsyncTask;
+import jianshu.io.app.widget.EndlessListener;
+import jianshu.io.app.widget.EndlessStaggeredGridView;
+import jianshu.io.app.widget.LoadingTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,16 +47,20 @@ import jianshu.io.app.util.DataPoolAsyncTask;
  * Use the {@link TimeStreamFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
 
   OnFragmentInteractionListener mListener;
   TimeStreamCardArrayAdapter mAdapter;
-  CardGridStaggeredView mContentView;
+  EndlessStaggeredGridView mContentView;
   FinalBitmap mFb;
   boolean mIsEmpty;
   SwipeRefreshLayout mRefreshLayout;
+  View mHeader;
+  LoadingTextView mFooter;
   TimeStreamDataPool mPool;
   View mEmptyView;
+  private static final String LIST_STATE = "listState";
+  Parcelable mListState;
 
   public static TimeStreamFragment newInstance() {
     TimeStreamFragment fragment = new TimeStreamFragment();
@@ -77,21 +82,50 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
     View view = inflater.inflate(R.layout.fragment_timestream, container, false);
     Activity activity = getActivity();
     mFb = FinalBitmap.create(activity);
-    mPool = new TimeStreamDataPool();
+    Object[] states = StatePool.getInstance().getFragmentState(getActivity(), TimeStreamDataPool.TIMELINE_URL);
+    mPool = (TimeStreamDataPool) states[0];
+    mAdapter = (TimeStreamCardArrayAdapter) states[1];
+    if (states[2] != null) {
+      mListState = (Parcelable) states[2];
+    }
 
-    mContentView = (CardGridStaggeredView)view.findViewById(R.id.timestream_grid);
+    mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
+    mContentView = (EndlessStaggeredGridView)view.findViewById(R.id.timestream_grid);
+    mContentView.setListener(this);
+    mHeader = activity .getLayoutInflater().inflate(R.layout.header, null);
+    mFooter = (LoadingTextView) activity.getLayoutInflater().inflate(R.layout.footer, null);
+    mContentView.addHeaderView(mHeader);
+    mContentView.setFooter(mFooter);
+    mContentView.setAdapter(mAdapter);
+
     mRefreshLayout = (SwipeRefreshLayout) (view.findViewById(R.id.ptr_layout));
     mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
     mRefreshLayout.setOnRefreshListener(this);
-    List<Card> cards = new ArrayList<Card>();
-    mAdapter = new TimeStreamCardArrayAdapter(activity, cards);
-    mContentView.setAdapter(mAdapter);
-    mRefreshLayout.setRefreshing(true);
-    onRefresh();
 
-    mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
+    if (mAdapter.getCount() == 0) {
+      mRefreshLayout.setRefreshing(true);
+      onRefresh();
+    } else {
+      mAdapter.notifyDataSetChanged();
+    }
 
     return view;
+  }
+
+  @Override
+  public void onViewStateRestored(Bundle savedInstanceState) {
+    super.onViewStateRestored(savedInstanceState);
+    if(mListState != null) {
+      mContentView.onRestoreInstanceState(mListState);
+    }
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    //如果第一个项目可见，那么恢复的时候将会跳到顶部
+    mListState = mContentView.onSaveInstanceState();
+    StatePool.getInstance().putListViewState(TimeStreamDataPool.TIMELINE_URL, mListState);
   }
 
   @Override
@@ -166,6 +200,32 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
       }
     }
     return result;
+  }
+
+  @Override
+  public boolean isAtTheEnd() {
+    return mPool.isAtTheEnd();
+  }
+
+  @Override
+  public void onScrollEnd() {
+    mFooter.startAnimation();
+    new DataPoolAsyncTask(false, this.mPool, new DataPoolAsyncTask.OnPostExecuteTask() {
+      @Override
+      public void run(Object[] data) {
+        mFooter.endAnimation();
+        mContentView.notifyNewDataLoaded();
+        Context context = getActivity();
+        if (context == null) {
+          return;
+        }
+        if (data != null) {
+          mAdapter.addAll(initCard(context, data));
+        } else {
+          Toast.makeText(context, ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
+        }
+      }
+    }).execute();
   }
 
   /**

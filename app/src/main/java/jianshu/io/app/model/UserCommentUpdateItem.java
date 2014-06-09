@@ -8,7 +8,7 @@ public class UserCommentUpdateItem extends UserUpdateItem{
   String mContent;
 
   public UserCommentUpdateItem(String content, String user, String article, String avatarUrl, String time) {
-    super(user, user + " 评论了文章 " + article.replace("《", "").replace("》", ""), article, avatarUrl, time);
+    super(user, user + " 评论了文章 " + article, article, avatarUrl, time);
     mContent = content;
   }
 

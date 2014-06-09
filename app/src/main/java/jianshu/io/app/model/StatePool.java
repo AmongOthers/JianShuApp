@@ -8,9 +8,11 @@ import java.util.Map;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import jianshu.io.app.adapter.JianshuCardArrayAdapter;
+import jianshu.io.app.adapter.TimeStreamCardArrayAdapter;
 import jianshu.io.app.model.datapool.DataPool;
 import jianshu.io.app.model.datapool.HomePageDataPool;
 import jianshu.io.app.model.datapool.HotPageDataPool;
+import jianshu.io.app.model.datapool.TimeStreamDataPool;
 
 /**
  * Created by Administrator on 2014/5/15.
@@ -32,7 +34,7 @@ public class StatePool {
     return instance;
   }
 
-  public void putListViewState(String url, int[] state) {
+  public void putListViewState(String url, Object state) {
     mStateMap.get(url)[2] = state;
   }
 
@@ -44,12 +46,19 @@ public class StatePool {
       DataPool pool;
       if(url.equals(HomePageDataPool.HOME_PAGE_URL)) {
         pool = new HomePageDataPool();
+      } else if(url.equals(TimeStreamDataPool.TIMELINE_URL)) {
+        pool = new TimeStreamDataPool();
       } else {
         pool = new HotPageDataPool(url);
       }
       result[0] = pool;
-      JianshuCardArrayAdapter adapter = new JianshuCardArrayAdapter(context, new ArrayList<Card>());
-      result[1] = adapter;
+      if(url.equals(TimeStreamDataPool.TIMELINE_URL)) {
+        TimeStreamCardArrayAdapter adapter = new TimeStreamCardArrayAdapter(context, new ArrayList<Card>());
+        result[1] = adapter;
+      } else {
+        JianshuCardArrayAdapter adapter = new JianshuCardArrayAdapter(context, new ArrayList<Card>());
+        result[1] = adapter;
+      }
       mStateMap.put(url, result);
       return result;
     }

@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <it.gmariotti.cardslib.library.extra.staggeredgrid.view.CardGridStaggeredView
+  <jianshu.io.app.widget.EndlessStaggeredGridView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       card:item_margin="8dp"

@@ -18,7 +18,8 @@ import jianshu.io.app.model.UserUpdateLikeUpdateItem;
  */
 public class TimeStreamDataPool extends DataPool {
 
-  protected static final String TIMELINE_URL = "http://jianshu.io/timeline";
+  public static final String TIMELINE_URL = "http://jianshu.io/timeline";
+
   protected final static String LOAD_MORE_SELECTOR = "div.load-more button";
   protected final static String CURRENT_USER_SLUG = "meta#current_user_slug";
 
@@ -119,7 +120,7 @@ public class TimeStreamDataPool extends DataPool {
 
   private String getHtmlUrl(String url) {
     String[] fragments = url.split("\\?");
-    return TIMELINE_URL + fragments[0] + ".html?" + fragments[1];
+    return TIMELINE_URL + ".html?" + fragments[1];
   }
 
   private String parseMetaTime(Element timelineEl) {
