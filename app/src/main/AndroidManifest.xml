@@ -22,7 +22,6 @@
     <activity
         android:name="jianshu.io.app.SplashActivity"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -46,7 +45,6 @@
         android:name="jianshu.io.app.ArticleActivity"
         android:label="@string/title_activity_article"
         android:parentActivityName="jianshu.io.app.MainActivity"
-        android:screenOrientation="portrait"
         android:theme="@style/JianShuTheme.Translucent">
 
       <!-- Parent activity meta-data to support API level 7+ -->
@@ -57,10 +55,7 @@
     <activity
         android:name="jianshu.io.app.MainActivity"
         android:label="@string/app_name"
-        android:launchMode="singleTop"
-        android:screenOrientation="portrait">
-      android:screenOrientation="portrait"
-    </activity>
+        android:launchMode="singleTop" />
 
     <service
         android:name="jianshu.io.app.JianshuIntentService"

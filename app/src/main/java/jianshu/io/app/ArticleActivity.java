@@ -89,6 +89,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private DownloadManager mDownloadManager;
   private Bitmap scanBitmap;
   private String content;
+  private Menu menu;
 
 
   protected static String Css;
@@ -102,9 +103,9 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
     Intent intent = getIntent();
     mUrl = intent.getStringExtra("url");
-    mTitle = intent.getStringExtra("title");
-    mSummary = intent.getStringExtra("summary");
-    mAuthor = intent.getStringExtra("author");
+//    mTitle = intent.getStringExtra("title");
+//    mSummary = intent.getStringExtra("summary");
+//    mAuthor = intent.getStringExtra("author");
     mLoadingArticle = (LoadingTextView) findViewById(R.id.loading_article);
     mWebView = (ObservableWebView) findViewById(R.id.web);
     mWebView.setOnScrollChangedCallback(this);
@@ -259,6 +260,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         Object httpResult = JianshuSession.getsInstance().getSync(mUrl, true);
         if (httpResult instanceof String) {
           Document doc = Jsoup.parse((String) httpResult);
+          parseArticleInfo(doc);
           //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
           Element likeBtnEl = doc.select(".like > .btn").get(0);
           String likeUrlAttr = likeBtnEl.attr("href");
@@ -312,6 +314,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       @Override
       protected void onPostExecute(String s) {
         mLoadingArticle.endAnimation();
+        setShareIntent(that.menu);
         mLoadingArticle.setVisibility(View.INVISIBLE);
         if (s != null) {
           that.content = s;
@@ -324,6 +327,11 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         updateLike();
       }
     }).execute();
+  }
+
+  private void parseArticleInfo(Document doc) {
+    mTitle = doc.select("h1.title").get(0).text();
+    mAuthor = doc.select("div.meta-top span").get(0).text();
   }
 
   protected String getCss() {
@@ -355,7 +363,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.article, menu);
-    setShareIntent(menu);
+    this.menu = menu;
     return true;
   }
 

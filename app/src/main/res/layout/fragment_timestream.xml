@@ -11,6 +11,7 @@
   <jianshu.io.app.widget.EndlessStaggeredGridView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:fastScrollEnabled="true"
       card:item_margin="8dp"
       card:column_count_portrait="2"
       card:column_count_landscape="3"

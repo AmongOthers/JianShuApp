@@ -113,9 +113,10 @@ public class TimeStreamDataPool extends DataPool {
     Element articleContentEl = timelineEl.select("div.article-content").get(0);
     Element titleEl = articleContentEl.select("a.title").get(0);
     String title = titleEl.text();
+    String url = "http://jianshu.io" + titleEl.attr("href");
     Element contentEl = articleContentEl.select("p").get(0);
     String content = contentEl.text();
-    return new UserUpdateArticleUpdateItem(title, content, avatarUrl, time);
+    return new UserUpdateArticleUpdateItem(title, content, url, avatarUrl, time);
   }
 
   private String getHtmlUrl(String url) {

@@ -18,6 +18,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 import jianshu.io.app.R;
 import jianshu.io.app.adapter.TimeStreamCardArrayAdapter;
 import jianshu.io.app.card.CollectinUpdateCard;
+import jianshu.io.app.card.TimeStreamCard;
 import jianshu.io.app.card.UnknownUpdateCard;
 import jianshu.io.app.card.UserCommentCard;
 import jianshu.io.app.card.UserSubscribeCard;
@@ -25,6 +26,7 @@ import jianshu.io.app.card.UserUpdateArticleCard;
 import jianshu.io.app.card.UserUpdateFollowCard;
 import jianshu.io.app.card.UserUpdateLikeCard;
 import jianshu.io.app.model.CollectionUpdateItem;
+import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.UnknownUpdateItem;
 import jianshu.io.app.model.UpdateItem;
@@ -47,7 +49,7 @@ import jianshu.io.app.widget.LoadingTextView;
  * Use the {@link TimeStreamFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener {
+public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, EndlessListener, TimeStreamCardArrayAdapter.CardClickListener {
 
   OnFragmentInteractionListener mListener;
   TimeStreamCardArrayAdapter mAdapter;
@@ -85,6 +87,7 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
     Object[] states = StatePool.getInstance().getFragmentState(getActivity(), TimeStreamDataPool.TIMELINE_URL);
     mPool = (TimeStreamDataPool) states[0];
     mAdapter = (TimeStreamCardArrayAdapter) states[1];
+    mAdapter.setCardClickListener(this);
     if (states[2] != null) {
       mListState = (Parcelable) states[2];
     }
@@ -102,7 +105,17 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
     mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
     mRefreshLayout.setOnRefreshListener(this);
 
-    if (mAdapter.getCount() == 0) {
+    //判断userInfo是否有变化
+    boolean isUserInfoChanged = true;
+    String cachedSession = mAdapter.getSession();
+    String currentSession = JianshuSession.getsInstance().getSession();
+    if((currentSession == null && cachedSession == null) ||
+        ((currentSession != null && cachedSession != null) && currentSession.equals(cachedSession))) {
+      isUserInfoChanged = false;
+    }
+    mAdapter.setSession(currentSession);
+
+    if (isUserInfoChanged || mAdapter.getCount() == 0) {
       mRefreshLayout.setRefreshing(true);
       onRefresh();
     } else {
@@ -123,7 +136,7 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
   @Override
   public void onPause() {
     super.onPause();
-    //如果第一个项目可见，那么恢复的时候将会跳到顶部
+    //如果第一个项目可见，那么恢复的时候将会跳到顶部，于是增加了一个1px的header解决这个BUG
     mListState = mContentView.onSaveInstanceState();
     StatePool.getInstance().putListViewState(TimeStreamDataPool.TIMELINE_URL, mListState);
   }
@@ -181,23 +194,31 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
   private Card[] initCard(Context context, Object[] data) {
     int i = 0;
     Card[] result = new Card[data.length];
+    Card card;
     for(Object temp : data) {
       UpdateItem item = (UpdateItem)temp;
       if(item instanceof UserUpdateArticleUpdateItem) {
-        result[i++] = new UserUpdateArticleCard(context, (UserUpdateArticleUpdateItem)item, mFb);
+        card = new UserUpdateArticleCard(context, (UserUpdateArticleUpdateItem)item, mFb);
       } else if(item instanceof UserCommentUpdateItem) {
-        result[i++] = new UserCommentCard(context, (UserCommentUpdateItem)item, mFb);
+        card = new UserCommentCard(context, (UserCommentUpdateItem)item, mFb);
       } else if(item instanceof UserUpdateLikeUpdateItem) {
-        result[i++] = new UserUpdateLikeCard(context, (UserUpdateLikeUpdateItem)item, mFb);
+        card = new UserUpdateLikeCard(context, (UserUpdateLikeUpdateItem)item, mFb);
       } else if(item instanceof UserUpdateFollowUpdateItem) {
-        result[i++] = new UserUpdateFollowCard(context, (UserUpdateFollowUpdateItem)item, mFb);
+        card = new UserUpdateFollowCard(context, (UserUpdateFollowUpdateItem)item, mFb);
       } else if(item instanceof UserSubscribeUpdateItem) {
-        result[i++] = new UserSubscribeCard(context, (UserSubscribeUpdateItem)item, mFb);
+        card = new UserSubscribeCard(context, (UserSubscribeUpdateItem)item, mFb);
       } else if(item instanceof CollectionUpdateItem) {
-        result[i++] = new CollectinUpdateCard(context, (CollectionUpdateItem)item, mFb);
+        card = new CollectinUpdateCard(context, (CollectionUpdateItem)item, mFb);
       } else {
-        result[i++] = new UnknownUpdateCard(context, (UnknownUpdateItem)item, mFb);
+        card = new UnknownUpdateCard(context, (UnknownUpdateItem)item, mFb);
       }
+      card.addPartialOnClickListener(Card.CLICK_LISTENER_CONTENT_VIEW, new Card.OnCardClickListener() {
+        @Override
+        public void onClick(Card card, View view) {
+          mAdapter.onClick(card);
+        }
+      });
+      result[i++] = card;
     }
     return result;
   }
@@ -226,6 +247,11 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
         }
       }
     }).execute();
+  }
+
+  @Override
+  public void onClick(Card card) {
+    ((TimeStreamCard)card).onClick(getActivity());
   }
 
   /**

@@ -11,13 +11,33 @@ import it.gmariotti.cardslib.library.internal.Card;
  * Created by Administrator on 2014/6/7.
  */
 public class TimeStreamCardArrayAdapter extends CardGridStaggeredArrayAdapter {
-  /**
-   * Constructor
-   *
-   * @param context The current context.
-   * @param cards   The cards to represent in the ListView.
-   */
+
+  private CardClickListener mCardClickListener;
+  private String mSession;
+
   public TimeStreamCardArrayAdapter(Context context, List<Card> cards) {
     super(context, cards);
+  }
+
+  public void onClick(Card card) {
+    if (mCardClickListener != null) {
+      mCardClickListener.onClick(card);
+    }
+  }
+
+  public interface CardClickListener {
+    void onClick(Card card);
+  }
+
+  public void setCardClickListener(CardClickListener cardClickListener) {
+    mCardClickListener = cardClickListener;
+  }
+
+  public String getSession() {
+    return mSession;
+  }
+
+  public void setSession(String session) {
+    mSession = session;
   }
 }
