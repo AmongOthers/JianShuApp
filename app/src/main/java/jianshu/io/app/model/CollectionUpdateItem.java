@@ -8,12 +8,14 @@ public class CollectionUpdateItem extends UpdateItem{
   String mCollection;
   String mTarget;
   String mAction;
+  String mUrl;
 
-  public CollectionUpdateItem(String collection, String action, String target, String time) {
+  public CollectionUpdateItem(String url, String collection, String action, String target, String time) {
     super(null, time);
     mCollection = collection;
     mAction = action;
     mTarget = target;
+    mUrl = url;
   }
 
   public String getCollection() {
@@ -24,4 +26,7 @@ public class CollectionUpdateItem extends UpdateItem{
     return mAction;
   }
 
+  public String getUrl() {
+    return mUrl;
+  }
 }

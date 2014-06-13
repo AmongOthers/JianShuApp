@@ -40,7 +40,6 @@ public class UserUpdateArticleCard extends TimeStreamCard {
     intent.putExtra("url", item.getUrl());
     intent.putExtra("title", item.getTitle());
     intent.putExtra("summary", item.getSummary());
-    intent.putExtra("author", "");
     activity.startActivity(intent);
     activity.overridePendingTransition(R.anim.slide_in_left, 0);
   }

@@ -32,7 +32,7 @@ public class TimeStreamDataPool extends DataPool {
   }
 
   @Override
-  protected Object[] getItems(Document doc) {
+  protected Object[] getItems(Document doc) throws LoginRequiredException {
     return getUpdateItems(doc);
   }
 
@@ -64,7 +64,8 @@ public class TimeStreamDataPool extends DataPool {
           Element targetMetaEl = metaEls.get(1);
           String target = targetMetaEl.text();
           if(action.contains(user + " 喜欢")) {
-            result[i] = new UserUpdateLikeUpdateItem(user, action, target, avatarUrl, time);
+            String url = "http://jianshu.io" + targetMetaEl.attr("href");
+            result[i] = new UserUpdateLikeUpdateItem(url, user, action, target, avatarUrl, time);
           } else if(action.contains(user + " 关注")) {
             result[i] = new UserUpdateFollowUpdateItem(user, action, target, avatarUrl, time);
           } else if(action.contains(user + " 订阅")) {
@@ -87,7 +88,8 @@ public class TimeStreamDataPool extends DataPool {
         String user = userMetaEl.text();
         Element targetMetaEl = metaEls.get(1);
         String target = targetMetaEl.text();
-        result[i] = new CollectionUpdateItem(user, action, target, time);
+        String url = "http://jianshu.io" + targetMetaEl.attr("href");
+        result[i] = new CollectionUpdateItem(url, user, action, target, time);
       } else {
         result[i] = parseUnknownUpdateItem(timelineEl, avatarUrl, time);
       }
@@ -98,7 +100,11 @@ public class TimeStreamDataPool extends DataPool {
   private UpdateItem parseComment(Element timelineEl, String avatarUrl, String time, String user, String target) {
     Element commentContentEl = timelineEl.select("p.comment-content").get(0);
     String commentContent = extracContent(commentContentEl.text());
-    return new UserCommentUpdateItem(commentContent, user, target, avatarUrl, time);
+    Element commentUrlEl = timelineEl.select("a.reply").get(0);
+    String url = "http://jianshu.io" + commentUrlEl.attr("href");
+    int index = url.indexOf("?");
+    url = url.substring(0, index);
+    return new UserCommentUpdateItem(url, commentContent, user, target, avatarUrl, time);
   }
 
   private String extracContent(String text) {

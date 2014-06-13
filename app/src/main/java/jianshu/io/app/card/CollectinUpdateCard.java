@@ -1,12 +1,15 @@
 package jianshu.io.app.card;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.tsz.afinal.FinalBitmap;
 
+import jianshu.io.app.ArticleActivity;
 import jianshu.io.app.R;
 import jianshu.io.app.model.CollectionUpdateItem;
 
@@ -31,5 +34,14 @@ public class CollectinUpdateCard extends TimeStreamCard {
     String action = item.getAction();
     mTarget = (TextView)view.findViewById(R.id.timestream_target);
     mTarget.setText(action);
+  }
+
+  @Override
+  public void onClick(Activity activity) {
+    CollectionUpdateItem item = (CollectionUpdateItem)mItem;
+    Intent intent = new Intent(activity, ArticleActivity.class);
+    intent.putExtra("url", item.getUrl());
+    activity.startActivity(intent);
+    activity.overridePendingTransition(R.anim.slide_in_left, 0);
   }
 }

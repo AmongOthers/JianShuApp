@@ -14,6 +14,7 @@ public class DataPoolAsyncTask extends AsyncTask<Void, Void, Object[]> {
   private boolean isRefresh;
   private DataPool pool;
   private OnPostExecuteTask task;
+  private Exception exception;
 
   public DataPoolAsyncTask(boolean isRefresh, DataPool pool, OnPostExecuteTask task) {
     this.isRefresh = isRefresh;
@@ -30,16 +31,20 @@ public class DataPoolAsyncTask extends AsyncTask<Void, Void, Object[]> {
         return this.pool.pull();
       }
     } catch (IOException e) {
+      this.exception = e;
+      return null;
+    } catch (DataPool.LoginRequiredException e) {
+      this.exception = e;
       return null;
     }
   }
 
   @Override
   protected void onPostExecute(Object[] data) {
-    this.task.run(data);
+    this.task.run(this.exception, data);
   }
 
   public interface OnPostExecuteTask {
-    void run(Object[] data);
+    void run(Exception exception, Object[] data);
   }
 }

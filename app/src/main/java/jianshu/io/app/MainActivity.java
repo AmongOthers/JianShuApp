@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,17 +28,17 @@ import java.util.Calendar;
 import jianshu.io.app.dialog.NotReadyFragment;
 import jianshu.io.app.fragment.CardFragment;
 import jianshu.io.app.fragment.HotPagerFragment;
+import jianshu.io.app.fragment.TimeStreamFragment;
 import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.StatePool;
 import jianshu.io.app.model.UserInfo;
 import jianshu.io.app.model.UserInfoManager;
-import jianshu.io.app.model.datapool.DataPool;
 import jianshu.io.app.model.datapool.HomePageDataPool;
 import jianshu.io.app.widget.AfinalRoundedImageView;
 
 public class MainActivity extends ActionBarActivity
     implements AdapterView.OnItemClickListener,
-    UserInfoManager.UserInfoManagerListener, JianshuSession.JianshuSessionListener {
+    UserInfoManager.UserInfoManagerListener, JianshuSession.JianshuSessionListener, TimeStreamFragment.OnFragmentInteractionListener{
 
   private static final int LOGIN_FROM_START = 0;
   private static final int LOGIN_FROM_BUTTON = 1;
@@ -62,7 +61,6 @@ public class MainActivity extends ActionBarActivity
   private Handler handler;
   private boolean backFromLogin;
   private View selectedView;
-  private DataPool mHomeDataPool = new HomePageDataPool();
   private int mPosition;
 
   @Override
@@ -159,15 +157,13 @@ public class MainActivity extends ActionBarActivity
   }
 
   private void setUiAccordingIfLogin() {
-    Log.d("jianshu", "setUiAccordingIfLogin");
+    selectItem(mPosition);
     JianshuSession.getsInstance().validate();
     if (JianshuSession.getsInstance().isUserLogin()) {
       showUserInfo(UserInfoManager.getsInstance().getUserInfo());
       selectItem(mPosition);
     } else {
-      Intent intent = new Intent(this, LoginActivity.class);
-      startActivityForResult(intent, LOGIN_FROM_START);
-      MainActivity.this.overridePendingTransition(R.anim.slide_in_left, 0);
+      onLoginRequired();
     }
   }
 
@@ -187,9 +183,9 @@ public class MainActivity extends ActionBarActivity
             case R.id.hot:
               position = 1;
               break;
-//            case R.id.th:
-//              position = 2;
-//              break;
+            case R.id.timeline:
+              position = 2;
+              break;
             default:
               break;
           }
@@ -276,6 +272,9 @@ public class MainActivity extends ActionBarActivity
       case 1:
         fragment = HotPagerFragment.newInstance();
         break;
+      case 2:
+        fragment = TimeStreamFragment.newInstance();
+        break;
       default:
         fragment = NotReadyFragment.newInstance();
     }
@@ -343,6 +342,13 @@ public class MainActivity extends ActionBarActivity
 
   @Override
   public void onLogout() {
+    Intent intent = new Intent(this, LoginActivity.class);
+    startActivityForResult(intent, LOGIN_FROM_START);
+    MainActivity.this.overridePendingTransition(R.anim.slide_in_left, 0);
+  }
+
+  @Override
+  public void onLoginRequired() {
     Intent intent = new Intent(this, LoginActivity.class);
     startActivityForResult(intent, LOGIN_FROM_START);
     MainActivity.this.overridePendingTransition(R.anim.slide_in_left, 0);

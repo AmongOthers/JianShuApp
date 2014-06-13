@@ -25,7 +25,7 @@ public abstract class DataPool {
     mStartUrl = startUrl;
   }
 
-  public Object[] refresh() throws IOException {
+  public Object[] refresh() throws IOException, LoginRequiredException {
     onRefresh();
     mIsAtTheEnd = false;
     return load(mStartUrl);
@@ -33,20 +33,28 @@ public abstract class DataPool {
 
   protected abstract void onRefresh();
 
-  private Object[] load(String url) throws IOException {
+  private Object[] load(String url) throws IOException, LoginRequiredException {
     Object httpResult = JianshuSession.getsInstance().getSync(url, true);
     if (httpResult instanceof String) {
       Document doc = Jsoup.parse((String) httpResult);
-
+      if(doc.select("div.login-page").size() > 0) {
+        JianshuSession.getsInstance().validate();
+        if(JianshuSession.getsInstance().getState() instanceof JianshuSession.LogoutState) {
+          throw new LoginRequiredException();
+        }
+      }
       parsePageUserInfo(doc);
-
       return this.getItems(doc);
+    } else {
+      JianshuSession.getsInstance().validate();
+      if(JianshuSession.getsInstance().getState() instanceof JianshuSession.LogoutState) {
+        throw new LoginRequiredException();
+      }
     }
-
     return null;
   }
 
-  protected abstract Object[] getItems(Document doc);
+  protected abstract Object[] getItems(Document doc) throws IOException, LoginRequiredException;
 
   private void parsePageUserInfo(Document doc) {
     //页面中如果包含用户信息，说明是已登录的
@@ -64,7 +72,7 @@ public abstract class DataPool {
     UserInfoManager.getsInstance().setUserId(userId);
   }
 
-  public Object[] pull() throws IOException {
+  public Object[] pull() throws IOException, LoginRequiredException {
     if (!mIsAtTheEnd) {
       return load(mLoadMoreUrl);
     } else {
@@ -74,6 +82,11 @@ public abstract class DataPool {
 
   public boolean isAtTheEnd() {
     return mIsAtTheEnd;
+  }
+
+  //清先登录
+  public class LoginRequiredException extends Exception {
+
   }
 
 }

@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
 
 import jianshu.io.app.dialog.ScanFinishedDialogFragment;
 import jianshu.io.app.model.JianshuSession;
+import jianshu.io.app.model.StatePool;
 import jianshu.io.app.widget.LoadingTextView;
 import jianshu.io.app.widget.ObservableWebView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -235,6 +236,18 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
     mFinalHttp = new FinalHttp();
 
+    Object[] state = StatePool.getInstance().getState("article");
+    if(state != null) {
+      String url = (String)state[0];
+      if(mUrl.equals(url)) {
+        this.mTitle = (String)state[1];
+        this.mAuthor = (String)state[2];
+        this.content = (String)state[3];
+        mWebView.setVisibility(View.VISIBLE);
+        mWebView.loadData(this.content, "text/html; charset=UTF-8", null);
+        return;
+      }
+    }
     loadArticle();
   }
 
@@ -305,6 +318,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
               getCss(),
               title.toString(), authorInfo.toString(), content.toString()
           );
+          StatePool.getInstance().putState("article", new Object[]{mUrl, mTitle, mAuthor, extractedDocStr});
           return extractedDocStr;
         } else {
           return null;
@@ -368,16 +382,18 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   }
 
   private void setShareIntent(Menu menu) {
-    MenuItem item = menu.findItem(R.id.menu_item_share);
-    Intent shareIntent = new Intent();
-    shareIntent.setAction(Intent.ACTION_SEND);
-    shareIntent.putExtra(Intent.EXTRA_TITLE, mTitle);
-    shareIntent.putExtra(Intent.EXTRA_TEXT, getSharedContent());
-    shareIntent.putExtra(Intent.EXTRA_ORIGINATING_URI, mUrl);
-    shareIntent.setType("text/plain");
-    mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-    if (mShareActionProvider != null) {
-      mShareActionProvider.setShareIntent(shareIntent);
+    if (menu != null) {
+      MenuItem item = menu.findItem(R.id.menu_item_share);
+      Intent shareIntent = new Intent();
+      shareIntent.setAction(Intent.ACTION_SEND);
+      shareIntent.putExtra(Intent.EXTRA_TITLE, mTitle);
+      shareIntent.putExtra(Intent.EXTRA_TEXT, getSharedContent());
+      shareIntent.putExtra(Intent.EXTRA_ORIGINATING_URI, mUrl);
+      shareIntent.setType("text/plain");
+      mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+      if (mShareActionProvider != null) {
+        mShareActionProvider.setShareIntent(shareIntent);
+      }
     }
   }
 

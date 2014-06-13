@@ -3,6 +3,6 @@
     <string-array name="drawer_titles">
         <item>首页</item>
         <item>热门</item>
-        <item>专题</item>
+        <item>动态</item>
     </string-array>
 </resources>

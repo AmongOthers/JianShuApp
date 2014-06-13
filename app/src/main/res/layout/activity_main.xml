@@ -117,6 +117,19 @@
           app:iconLeft="@xml/fa_hot"
           />
 
+      <com.shamanland.fonticon.FontIconTextView
+          android:id="@+id/timeline"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/middle_padding"
+          android:text="动态"
+          android:textSize="@dimen/menu_text_size"
+          android:textColor="@color/pressed_menu"
+          android:background="@drawable/pressed_menu_background"
+          android:drawablePadding="@dimen/thin_padding"
+          app:iconLeft="@xml/fa_rss"
+          />
+
       <!--<com.shamanland.fonticon.FontIconTextView-->
           <!--android:id="@+id/th"-->
           <!--android:layout_width="match_parent"-->

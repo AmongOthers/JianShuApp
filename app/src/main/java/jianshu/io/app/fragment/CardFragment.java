@@ -80,6 +80,20 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
     mRefreshLayout.setOnRefreshListener(this);
 
+    return view;
+  }
+
+  @Override
+  public void onViewStateRestored(Bundle savedInstanceState) {
+    super.onViewStateRestored(savedInstanceState);
+    if (mListViewState != null) {
+      mContentView.setSelectionFromTop(mListViewState[0], mListViewState[1]);
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
     //判断userInfo是否有变化
     boolean isUserInfoChanged = true;
     String cachedSession = mAdapter.getSession();
@@ -95,16 +109,6 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
       onRefresh();
     } else {
       mAdapter.notifyDataSetChanged();
-    }
-
-    return view;
-  }
-
-  @Override
-  public void onViewStateRestored(Bundle savedInstanceState) {
-    super.onViewStateRestored(savedInstanceState);
-    if (mListViewState != null) {
-      mContentView.setSelectionFromTop(mListViewState[0], mListViewState[1]);
     }
   }
 
@@ -150,7 +154,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
   public void onRefresh() {
     new DataPoolAsyncTask(true, this.mPool, new DataPoolAsyncTask.OnPostExecuteTask() {
           @Override
-          public void run(Object[] data) {
+          public void run(Exception e, Object[] data) {
             mRefreshLayout.setRefreshing(false);
             Context context = getActivity();
             if (context == null) {
@@ -189,7 +193,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     mFooter.startAnimation();
     new DataPoolAsyncTask(false, this.mPool, new DataPoolAsyncTask.OnPostExecuteTask() {
       @Override
-      public void run(Object[] data) {
+      public void run(Exception e, Object[] data) {
         mFooter.endAnimation();
         mContentView.notifyNewDataLoaded();
         Context context = getActivity();

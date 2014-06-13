@@ -1,0 +1,6 @@
+<font-icon
+    xmlns:android="http://schemas.android.com/apk/res-auto"
+    android:text="@string/fa_rss"
+    android:textSize="@dimen/ab_icon_size"
+    android:textColor="@color/pressed_menu"
+    />
