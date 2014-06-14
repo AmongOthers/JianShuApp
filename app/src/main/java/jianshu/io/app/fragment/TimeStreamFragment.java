@@ -23,6 +23,7 @@ import jianshu.io.app.card.UserCommentCard;
 import jianshu.io.app.card.UserSubscribeCard;
 import jianshu.io.app.card.UserUpdateArticleCard;
 import jianshu.io.app.card.UserUpdateFollowCard;
+import jianshu.io.app.card.UserUpdateJoinCard;
 import jianshu.io.app.card.UserUpdateLikeCard;
 import jianshu.io.app.model.CollectionUpdateItem;
 import jianshu.io.app.model.JianshuSession;
@@ -33,6 +34,7 @@ import jianshu.io.app.model.UserCommentUpdateItem;
 import jianshu.io.app.model.UserSubscribeUpdateItem;
 import jianshu.io.app.model.UserUpdateArticleUpdateItem;
 import jianshu.io.app.model.UserUpdateFollowUpdateItem;
+import jianshu.io.app.model.UserUpdateJoinUpdateItem;
 import jianshu.io.app.model.UserUpdateLikeUpdateItem;
 import jianshu.io.app.model.datapool.DataPool;
 import jianshu.io.app.model.datapool.TimeStreamDataPool;
@@ -220,6 +222,8 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
         card = new UserSubscribeCard(context, (UserSubscribeUpdateItem) item, mFb);
       } else if (item instanceof CollectionUpdateItem) {
         card = new CollectinUpdateCard(context, (CollectionUpdateItem) item, mFb);
+      } else if(item instanceof UserUpdateJoinUpdateItem) {
+        card = new UserUpdateJoinCard(context, (UserUpdateJoinUpdateItem) item, mFb);
       } else {
         card = new UnknownUpdateCard(context, (UnknownUpdateItem) item, mFb);
       }

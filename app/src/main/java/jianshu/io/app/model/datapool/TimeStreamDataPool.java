@@ -5,12 +5,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import jianshu.io.app.model.CollectionUpdateItem;
-import jianshu.io.app.model.UserCommentUpdateItem;
 import jianshu.io.app.model.UnknownUpdateItem;
 import jianshu.io.app.model.UpdateItem;
+import jianshu.io.app.model.UserCommentUpdateItem;
 import jianshu.io.app.model.UserSubscribeUpdateItem;
 import jianshu.io.app.model.UserUpdateArticleUpdateItem;
 import jianshu.io.app.model.UserUpdateFollowUpdateItem;
+import jianshu.io.app.model.UserUpdateJoinUpdateItem;
 import jianshu.io.app.model.UserUpdateLikeUpdateItem;
 
 /**
@@ -61,15 +62,19 @@ public class TimeStreamDataPool extends DataPool {
           Elements metaEls = span.select("a");
           Element userMetaEl = metaEls.get(0);
           String user = userMetaEl.text();
-          Element targetMetaEl = metaEls.get(1);
-          String target = targetMetaEl.text();
-          if(action.contains(user + " 喜欢")) {
-            String url = "http://jianshu.io" + targetMetaEl.attr("href");
-            result[i] = new UserUpdateLikeUpdateItem(url, user, action, target, avatarUrl, time);
-          } else if(action.contains(user + " 关注")) {
-            result[i] = new UserUpdateFollowUpdateItem(user, action, target, avatarUrl, time);
-          } else if(action.contains(user + " 订阅")) {
-            result[i] = new UserSubscribeUpdateItem(user, action, target, avatarUrl, time);
+          if(action.contains(user + " 加入简书")) {
+            result[i] = new UserUpdateJoinUpdateItem(user, action, "", avatarUrl, time);
+          } else {
+            Element targetMetaEl = metaEls.get(1);
+            String target = targetMetaEl.text();
+            if(action.contains(user + " 喜欢")) {
+              String url = "http://jianshu.io" + targetMetaEl.attr("href");
+              result[i] = new UserUpdateLikeUpdateItem(url, user, action, target, avatarUrl, time);
+            } else if(action.contains(user + " 关注")) {
+              result[i] = new UserUpdateFollowUpdateItem(user, action, target, avatarUrl, time);
+            } else if(action.contains(user + " 订阅")) {
+              result[i] = new UserSubscribeUpdateItem(user, action, target, avatarUrl, time);
+            }
           }
         }
       } else if (timelineEl.hasClass("comment")) {

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+  <LinearLayout
+      android:padding="5dp"
+      android:layout_alignParentTop="true"
+      android:orientation="horizontal"
+      android:id="@+id/timestream_frame"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+    <com.shamanland.fonticon.FontIconView
+        android:textSize="15sp"
+        android:text="@string/fa_child"
+        android:textColor="@color/jianshu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:paddingLeft="5dp"
+        android:id="@+id/timestream_target"
+        android:textColor="@color/textGray"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:id="@+id/timestream_divider"
+      android:layout_below="@id/timestream_frame"
+      android:background="@color/card_list_gray"
+      android:layout_width="match_parent"
+      android:layout_height="1dp">
+
+  </LinearLayout>
+
+  <RelativeLayout
+      android:id="@+id/timestream_meta"
+      android:padding="5dp"
+      android:layout_below="@id/timestream_divider"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/timestream_avatar"
+        android:src="@drawable/me"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
+    <LinearLayout
+        android:paddingLeft="5dp"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/timestream_avatar"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+      <TextView
+          android:id="@+id/timestream_user"
+          android:textSize="10sp"
+          android:paddingBottom="5dp"
+          android:textColor="@color/textGray"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:id="@+id/timestream_time"
+          android:textSize="10sp"
+          android:textStyle="italic"
+          android:text="6月06日 20:20"
+          android:textColor="@color/textGray"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+  </RelativeLayout>
+
+</RelativeLayout>
