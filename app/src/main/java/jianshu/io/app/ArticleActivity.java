@@ -273,6 +273,10 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         Object httpResult = JianshuSession.getsInstance().getSync(mUrl, true);
         if (httpResult instanceof String) {
           Document doc = Jsoup.parse((String) httpResult);
+          //您要访问的页面不存在
+          if(doc.select("body.error").size() > 0) {
+            return (String)httpResult;
+          }
           parseArticleInfo(doc);
           //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
           Element likeBtnEl = doc.select(".like > .btn").get(0);
