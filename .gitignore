@@ -2,6 +2,7 @@
 /local.properties
 /.idea/workspace.xml
 .DS_Store
+build/
 app/build/
 libraries/cardslib/build/
 libraries/fonticon/build/
