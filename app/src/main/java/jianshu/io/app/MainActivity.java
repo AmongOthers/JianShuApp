@@ -11,7 +11,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +43,6 @@ public class MainActivity extends ActionBarActivity
   private static final int LOGIN_FROM_BUTTON = 1;
 
   LinearLayout mMenus;
-  DrawerLayout mDrawerLayout;
   View mDrawerContianer;
   View mUserView;
   AfinalRoundedImageView userAvatar;
@@ -77,13 +75,10 @@ public class MainActivity extends ActionBarActivity
 
     initViews();
 
-    getActionBar().setDisplayHomeAsUpEnabled(true);
-    getActionBar().setHomeButtonEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     mTitles = getResources().getStringArray(R.array.drawer_titles);
     mTitle = mDrawerTitle = getTitle();
-
-    initDrawer();
 
     this.finalBitmap = FinalBitmap.create(this);
 
@@ -124,7 +119,6 @@ public class MainActivity extends ActionBarActivity
 
   private void initViews() {
     mMenus = (LinearLayout) findViewById(R.id.left_drawer);
-    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerContianer = findViewById(R.id.drawer_container);
     mUserView = findViewById(R.id.user);
     userAvatar = (AfinalRoundedImageView) findViewById(R.id.userAvatar);
@@ -165,53 +159,6 @@ public class MainActivity extends ActionBarActivity
     } else {
       onLoginRequired();
     }
-  }
-
-  private void initDrawer() {
-    int count = mMenus.getChildCount();
-    for (int i = 0; i < count; i++) {
-      View view = mMenus.getChildAt(i);
-      view.setOnClickListener(new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-          int position = 0;
-          switch (v.getId()) {
-            case R.id.home:
-              position = 0;
-              break;
-            case R.id.hot:
-              position = 1;
-              break;
-            case R.id.timeline:
-              position = 2;
-              break;
-            default:
-              break;
-          }
-          selectItem(position);
-        }
-      });
-    }
-
-    mDrawerToggle = new ActionBarDrawerToggle(
-        this,                  /* host Activity */
-        mDrawerLayout,         /* DrawerLayout object */
-        R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-        R.string.drawer_open,  /* "open drawer" description for accessibility */
-        R.string.drawer_close  /* "close drawer" description for accessibility */
-    ) {
-      public void onDrawerClosed(View view) {
-        getActionBar().setTitle(mTitle);
-        invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-      }
-
-      public void onDrawerOpened(View drawerView) {
-        getActionBar().setTitle(mDrawerTitle);
-        invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-      }
-    };
-    mDrawerLayout.setDrawerListener(mDrawerToggle);
   }
 
   @Override
@@ -259,7 +206,6 @@ public class MainActivity extends ActionBarActivity
     }
 
     setTitle(mTitles[position]);
-    mDrawerLayout.closeDrawer(mDrawerContianer);
   }
 
 
@@ -292,13 +238,6 @@ public class MainActivity extends ActionBarActivity
 //    MenuInflater inflater = getMenuInflater();
 //    inflater.inflate(R.menu.main, menu);
     return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override
-  public boolean onPrepareOptionsMenu(Menu menu) {
-    // If the nav drawer is open, hide action items related to the content view
-    boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerContianer);
-    return super.onPrepareOptionsMenu(menu);
   }
 
   @Override

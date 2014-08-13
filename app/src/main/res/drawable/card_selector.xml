@@ -22,6 +22,6 @@
           android:exitFadeDuration="@android:integer/config_mediumAnimTime">
 
     <item android:state_activated="true" android:drawable="@drawable/activated_background_card"/>
-    <item android:state_pressed="true" android:drawable="@drawable/jianshu_list_pressed_holo_light"/>
+    <item android:state_pressed="true" android:drawable="@color/grey"/>
     <item android:drawable="@drawable/card_background"/>
 </selector>

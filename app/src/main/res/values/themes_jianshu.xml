@@ -3,68 +3,9 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="Dialog" parent="android:Theme.Holo.Dialog">
-    <item name="android:buttonStyle">@style/ButtonJianShu</item>
-  </style>
+  <style name="jianshu" parent="@style/_jianshu"/>
 
-  <style name="JianShuTheme.Translucent">
-    <item name="android:windowIsTranslucent">true</item>
-  </style>
-
-  <style name="JianShuTheme" parent="@style/JianShu">
-    <item name="android:actionBarItemBackground">@drawable/selectable_background_jianshuactionbar</item>
-    <item name="android:popupMenuStyle">@style/PopupMenu.Jianshuactionbar</item>
-    <item name="android:dropDownListViewStyle">@style/DropDownListView.Jianshuactionbar</item>
-    <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Jianshuactionbar</item>
-    <item name="android:actionDropDownStyle">@style/DropDownNav.Jianshuactionbar</item>
-    <item name="android:actionBarStyle">@style/ActionBar.Solid.Jianshuactionbar</item>
-    <item name="android:actionModeBackground">@drawable/cab_background_top_jianshuactionbar</item>
-    <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_jianshuactionbar</item>
-    <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Jianshuactionbar</item>
-
-    <!-- Light.DarkActionBar specific -->
-    <item name="android:actionBarWidgetTheme">@style/Theme.Jianshuactionbar.Widget</item>
-  </style>
-
-  <style name="JianShu" parent="@style/_JianShu"/>
-
-  <style name="_JianShu" parent="Theme.AppCompat.Light.DarkActionBar">
-
-    <item name="android:editTextStyle">@style/EditTextJianShu</item>
-
-    <item name="android:textColorHighlight">#99e58c7c</item>
-
-    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewJianShu</item>
-
-    <item name="android:checkboxStyle">@style/CheckBoxJianShu</item>
-
-    <item name="android:radioButtonStyle">@style/RadioButtonJianShu</item>
-
-    <item name="android:buttonStyle">@style/ButtonJianShu</item>
-
-    <item name="android:imageButtonStyle">@style/ImageButtonJianShu</item>
-
-    <item name="android:spinnerStyle">@style/SpinnerJianShu</item>
-
-    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemJianShu</item>
-
-    <item name="android:progressBarStyleHorizontal">@style/ProgressBarJianShu</item>
-
-    <item name="android:seekBarStyle">@style/SeekBarJianShu</item>
-
-    <item name="android:ratingBarStyle">@style/RatingBarJianShu</item>
-
-    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigJianShu</item>
-
-    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallJianShu</item>
-
-    <item name="android:buttonStyleToggle">@style/ToggleJianShu</item>
-
-    <item name="android:listViewStyle">@style/ListViewJianShu</item>
-
-    <item name="android:listViewWhiteStyle">@style/ListViewJianShu.White</item>
-
-    <item name="android:spinnerItemStyle">@style/SpinnerItemJianShu</item>
+  <style name="_jianshu" parent="android:Theme.Holo.Light.DarkActionBar">
 
   </style>
 

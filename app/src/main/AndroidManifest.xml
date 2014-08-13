@@ -9,8 +9,7 @@
       android:name="jianshu.io.app.JianshuApplication"
       android:allowBackup="true"
       android:icon="@drawable/ic_launcher"
-      android:label="@string/app_name"
-      android:theme="@style/JianShuTheme">
+      android:label="@string/app_name">
     <activity
         android:name="jianshu.io.app.SplashActivity"
         android:label="@string/app_name"
@@ -23,8 +22,7 @@
     <activity
         android:name="jianshu.io.app.LoginActivity"
         android:launchMode="singleTask"
-        android:label="@string/title_activity_login"
-        android:theme="@style/JianShuTheme.Translucent">
+        android:label="@string/title_activity_login">
     </activity>
     <!--<activity-->
         <!--android:name="jianshu.io.app.SessionActivity"-->
@@ -37,8 +35,7 @@
     <activity
         android:name="jianshu.io.app.ArticleActivity"
         android:label="@string/title_activity_article"
-        android:parentActivityName="jianshu.io.app.MainActivity"
-        android:theme="@style/JianShuTheme.Translucent">
+        android:parentActivityName="jianshu.io.app.MainActivity">
 
       <!-- Parent activity meta-data to support API level 7+ -->
       <meta-data

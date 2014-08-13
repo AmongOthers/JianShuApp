@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="left_16">16dp</dimen>
+  <dimen name="left_72">72dp</dimen>
+  <dimen name="icon_size">32dp</dimen>
+  <dimen name="icon_padding">8dp</dimen>
+</resources>
