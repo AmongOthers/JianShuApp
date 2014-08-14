@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="jianshu" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="android:actionBarStyle">@style/ActionBar.Solid.Jianshuactionbar</item>
+  </style>
+
+  <style name="ActionBar.Solid.Jianshuactionbar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+    <!--<item name="android:background">@drawable/ab_solid_jianshuactionbar</item>-->
+    <item name="android:background">@color/primary</item>
+  </style>
+
+  <style name="drawer_menu_style">
+    <item name="android:clickable">true</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:textSize">15sp</item>
+    <item name="android:paddingLeft">@dimen/left_16</item>
+    <item name="android:textColor">@color/secondary_text</item>
+    <item name="android:background">@drawable/pressed_menu_background</item>
+    <item name="android:drawablePadding">24dp</item>
+  </style>
+
+  <style name="ActionBarTitleStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    <item name="android:textColor">@color/action_bar_title_color</item>
+  </style>
+
+</resources>

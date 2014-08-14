@@ -44,6 +44,8 @@
     </activity>
     <activity
         android:name="jianshu.io.app.MainActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/jianshu"
         android:label="@string/app_name"
         android:launchMode="singleTask" />
 

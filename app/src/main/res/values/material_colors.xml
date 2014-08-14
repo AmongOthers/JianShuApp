@@ -5,4 +5,5 @@
   <color name="grey">#9e9e9e</color>
   <color name="accent">#6889ff</color>
   <color name="secondary_text">#8a000000</color>
+  <color name="action_bar_title_color">#fff</color>
 </resources>

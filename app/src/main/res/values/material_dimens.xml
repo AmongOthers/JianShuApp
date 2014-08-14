@@ -4,4 +4,8 @@
   <dimen name="left_72">72dp</dimen>
   <dimen name="icon_size">32dp</dimen>
   <dimen name="icon_padding">8dp</dimen>
+  <dimen name="menu_offset">56dp</dimen>
+  <dimen name="action_bar_icon_size">32dp</dimen>
+  <dimen name="action_bar_title_left_margin">72dp</dimen>
+  <dimen name="action_bar_icon_left_margin">16dp</dimen>
 </resources>

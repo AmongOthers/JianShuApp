@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <com.shamanland.fonticon.FontIconView
+    style="@style/ActionBarTitleStyle"
+    android:id="@+id/icon"
+    android:text="@string/fa_bars"
+    android:clickable="true"
+    android:padding="8dp"
+    app:overridePressed="true"
+    android:layout_alignParentLeft="true"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="@dimen/action_bar_icon_left_margin"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+  <TextView
+    style="@style/ActionBarTitleStyle"
+    android:id="@+id/title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="@dimen/action_bar_title_left_margin"
+    android:text="Inbox" />
+</RelativeLayout>

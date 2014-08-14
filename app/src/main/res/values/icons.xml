@@ -15,4 +15,6 @@
   <string name="fa_plus">&#xf067;</string>
   <string name="fa_rss">&#xf09e;</string>
   <string name="fa_child">&#xf1ae;</string>
+  <string name="fa_bars">&#xf0c9;</string>
+  <string name="fa_arrow_left">&#xf060;</string>
 </resources>

@@ -17,7 +17,7 @@ public class JianshuApplication extends Application {
   public void onCreate() {
     super.onCreate();
     FontIconTypefaceHolder.init(getAssets(), "fontawesome.ttf");
-    CrashHandler.getInstance().init(this);
+//    CrashHandler.getInstance().init(this);
     JianshuSession.init(this);
     UserInfoManager.init(this);
   }

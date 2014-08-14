@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fff"
+              android:orientation="vertical">
+
+  <jianshu.io.app.widget.BannerImageView
+    android:id="@+id/banner"
+    android:src="@drawable/banner"
+    android:scaleType="centerCrop"
+    android:layout_width="match_parent"
+    android:layout_height="10dp"/>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <com.shamanland.fonticon.FontIconTextView
+      android:id="@+id/home"
+      style="@style/drawer_menu_style"
+      android:text="首页"
+      app:iconLeft="@xml/fa_home"
+      />
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <com.shamanland.fonticon.FontIconTextView
+      android:id="@+id/hot"
+      style="@style/drawer_menu_style"
+      android:text="热门"
+      app:iconLeft="@xml/fa_hot"
+      />
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <com.shamanland.fonticon.FontIconTextView
+      android:id="@+id/timeline"
+      style="@style/drawer_menu_style"
+      android:text="动态"
+      app:iconLeft="@xml/fa_rss"
+      />
+  </LinearLayout>
+
+</LinearLayout>
