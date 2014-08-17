@@ -20,7 +20,11 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.tsz.afinal.FinalBitmap;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 import jianshu.io.app.dialog.NotReadyFragment;
 import jianshu.io.app.fragment.CardFragment;
@@ -41,14 +45,21 @@ public class MainActivity extends ActionBarActivity
   private static final int LOGIN_FROM_START = 0;
   private static final int LOGIN_FROM_BUTTON = 1;
 
+  static final Map<Integer, String> mTitles = new HashMap<Integer, String>(){
+  };
+
+  static {
+    mTitles.put(R.id.home, "首页");
+    mTitles.put(R.id.hot, "热门");
+    mTitles.put(R.id.timeline, "动态");
+  }
+
   private CharSequence mTitle;
   private CharSequence mDrawerTitle;
-  private String[] mTitles;
   private FinalBitmap finalBitmap;
   private Handler handler;
   private boolean backFromLogin;
-  private View selectedView;
-  private int mPosition;
+  private int mSelectedMenuId;
   private SlidingMenuLayout mSlidingMenuLayout;
   private ActionBarDecor mActionBarDecor;
 
@@ -82,23 +93,37 @@ public class MainActivity extends ActionBarActivity
       }
     });
 
-    initAlarm();
+    initDrawer(menu);
 
     Object[] state = StatePool.getInstance().getState("main");
     if (state != null) {
-      mPosition = (Integer) state[0];
+      mSelectedMenuId = (Integer) state[0];
+    } else {
+      mSelectedMenuId = R.id.home;
     }
 
-    mTitles = getResources().getStringArray(R.array.drawer_titles);
-    mTitle = mDrawerTitle = getTitle();
-
     this.finalBitmap = FinalBitmap.create(this);
-
     this.handler = new Handler();
 
     UserInfoManager.getsInstance().setListener(this);
 
     setUiAccordingIfLogin();
+
+    initAlarm();
+  }
+
+  private void initDrawer(View menu) {
+    ArrayList<View> items = new ArrayList<View>();
+    menu.findViewsWithText(items, "menu", View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+    for(View item : items) {
+      item.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          selectItem(v.getId());
+          mSlidingMenuLayout.toggle();
+        }
+      });
+    }
   }
 
   private void initAlarm() {
@@ -129,7 +154,7 @@ public class MainActivity extends ActionBarActivity
   protected void onPause() {
     super.onPause();
     JianshuSession.getsInstance().removeListener(this);
-    StatePool.getInstance().putState("main", new Object[]{mPosition});
+    StatePool.getInstance().putState("main", new Object[]{mSelectedMenuId});
   }
 
   @Override
@@ -142,7 +167,7 @@ public class MainActivity extends ActionBarActivity
   }
 
   private void setUiAccordingIfLogin() {
-    selectItem(mPosition);
+    selectItem(mSelectedMenuId);
 //    JianshuSession.getsInstance().validate();
 //    if (JianshuSession.getsInstance().isUserLogin()) {
 //      showUserInfo(UserInfoManager.getsInstance().getUserInfo());
@@ -177,36 +202,30 @@ public class MainActivity extends ActionBarActivity
 
   }
 
-  private void selectItem(int position) {
+  private void selectItem(int id) {
     FragmentManager fragmentManager = getSupportFragmentManager();
-    Fragment fragment = getRelatedFragment(position);
+    Fragment fragment = getRelatedFragment(id);
     fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "main").commit();
-    mActionBarDecor.setTitle(mTitles[position]);
+    mActionBarDecor.setTitle(mTitles.get(id));
   }
 
 
-  private Fragment getRelatedFragment(int position) {
+  private Fragment getRelatedFragment(int id) {
     Fragment fragment;
-    switch (position) {
-      case 0:
+    switch (id) {
+      case R.id.home:
         fragment = CardFragment.newInstance(HomePageDataPool.HOME_PAGE_URL);
         break;
-      case 1:
+      case R.id.hot:
         fragment = HotPagerFragment.newInstance();
         break;
-      case 2:
+      case R.id.timeline:
         fragment = TimeStreamFragment.newInstance();
         break;
       default:
         fragment = NotReadyFragment.newInstance();
     }
     return fragment;
-  }
-
-  @Override
-  public void setTitle(CharSequence title) {
-    mTitle = title;
-    getActionBar().setTitle(mTitle);
   }
 
   @Override

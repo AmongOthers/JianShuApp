@@ -22,6 +22,7 @@
       android:id="@+id/home"
       style="@style/drawer_menu_style"
       android:text="首页"
+      android:contentDescription="menu"
       app:iconLeft="@xml/fa_home"
       />
   </LinearLayout>
@@ -34,6 +35,7 @@
       android:id="@+id/hot"
       style="@style/drawer_menu_style"
       android:text="热门"
+      android:contentDescription="menu"
       app:iconLeft="@xml/fa_hot"
       />
   </LinearLayout>
@@ -46,6 +48,7 @@
       android:id="@+id/timeline"
       style="@style/drawer_menu_style"
       android:text="动态"
+      android:contentDescription="menu"
       app:iconLeft="@xml/fa_rss"
       />
   </LinearLayout>
