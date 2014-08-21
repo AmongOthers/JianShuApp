@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -18,6 +19,8 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -25,6 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.tsz.afinal.FinalHttp;
 
@@ -44,6 +49,7 @@ import java.util.regex.Pattern;
 import jianshu.io.app.dialog.ScanFinishedDialogFragment;
 import jianshu.io.app.model.JianshuSession;
 import jianshu.io.app.model.StatePool;
+import jianshu.io.app.widget.ActionBarDecor;
 import jianshu.io.app.widget.LoadingTextView;
 import jianshu.io.app.widget.ObservableWebView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -91,7 +97,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private Bitmap scanBitmap;
   private String content;
   private Menu menu;
-
+  private ActionBarDecor mActionBarDecor;
 
   protected static String Css;
 
@@ -99,12 +105,18 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_article);
-
-    this.handler = new Handler();
+    mActionBarDecor = new ActionBarDecor(this, this.getActionBar(), true);
+    mActionBarDecor.setIconClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        onBackPressed();
+      }
+    });
 
     Intent intent = getIntent();
+    mTitle = intent.getStringExtra("title");
+    mActionBarDecor.setTitle(mTitle);
     mUrl = intent.getStringExtra("url");
-//    mTitle = intent.getStringExtra("title");
 //    mSummary = intent.getStringExtra("summary");
 //    mAuthor = intent.getStringExtra("author");
     mLoadingArticle = (LoadingTextView) findViewById(R.id.loading_article);
@@ -114,6 +126,8 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     mWebView.addJavascriptInterface(this, "article");
     mRetryButton = (Button) findViewById(R.id.retry);
     this.scanLight = (View) findViewById(R.id.scan_light);
+
+    this.handler = new Handler();
 
     final ArticleActivity that = this;
 
@@ -215,9 +229,6 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
       }
     });
 
-    ActionBar actionBar = getActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
-
     //滑动返回
     mSwipeBackLayout = getSwipeBackLayout();
     mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
@@ -237,12 +248,12 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     mFinalHttp = new FinalHttp();
 
     Object[] state = StatePool.getInstance().getState("article");
-    if(state != null) {
-      String url = (String)state[0];
-      if(mUrl.equals(url)) {
-        this.mTitle = (String)state[1];
-        this.mAuthor = (String)state[2];
-        this.content = (String)state[3];
+    if (state != null) {
+      String url = (String) state[0];
+      if (mUrl.equals(url)) {
+        this.mTitle = (String) state[1];
+        this.mAuthor = (String) state[2];
+        this.content = (String) state[3];
         mWebView.setVisibility(View.VISIBLE);
         mWebView.loadData(this.content, "text/html; charset=UTF-8", null);
         return;
@@ -274,8 +285,8 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         if (httpResult instanceof String) {
           Document doc = Jsoup.parse((String) httpResult);
           //您要访问的页面不存在
-          if(doc.select("body.error").size() > 0) {
-            return (String)httpResult;
+          if (doc.select("body.error").size() > 0) {
+            return (String) httpResult;
           }
           parseArticleInfo(doc);
           //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
@@ -525,16 +536,12 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   }
 
   @Override
-  public void onScrollChanged(boolean isAtTheEnd) {
-    if (isAtTheEnd) {
-      if (mLikeView.getVisibility() == View.GONE) {
-        mLikeView.setVisibility(View.VISIBLE);
-        mLikeView.startAnimation(this.fadeIn);
-      }
-    } else {
-      if (mLikeView.getVisibility() == View.VISIBLE) {
-        mLikeView.startAnimation(this.fadeOut);
-      }
-    }
+  public void onScrollChanged(final int l, final int t, final int oldl, final int oldt) {
+//    float gap = getResources().getDimension(R.dimen.action_bar_scroll_gap);
+//    if(t >= 2 * gap) {
+//      mActionBarDecor.hide();
+//    } else if(t <= gap) {
+//      mActionBarDecor.show();
+//    }
   }
 }

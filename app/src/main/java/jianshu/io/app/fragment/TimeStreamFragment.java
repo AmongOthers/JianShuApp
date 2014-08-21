@@ -104,7 +104,7 @@ public class TimeStreamFragment extends Fragment implements SwipeRefreshLayout.O
     mContentView.setAdapter(mAdapter);
 
     mRefreshLayout = (SwipeRefreshLayout) (view.findViewById(R.id.ptr_layout));
-    mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
+    mRefreshLayout.setColorScheme(R.color.accent, R.color.accent, R.color.accent, R.color.accent);
     mRefreshLayout.setOnRefreshListener(this);
 
     return view;

@@ -66,26 +66,13 @@ public class MainActivity extends ActionBarActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    boolean isTranslucent = false;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      Window w = getWindow();
-      w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-      w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-      isTranslucent = true;
-    }
     setContentView(R.layout.activity_main);
-    if(isTranslucent) {
-      SystemBarTintManager tintManager = new SystemBarTintManager(this);
-      tintManager.setTintColor(getResources().getColor(R.color.primary_dark));
-      tintManager.setStatusBarTintEnabled(true);
-      tintManager.setNavigationBarTintEnabled(true);
-    }
 
     mSlidingMenuLayout = new SlidingMenuLayout(this);
     View menu = this.getLayoutInflater().inflate(R.layout.drawer_menu, null);
     mSlidingMenuLayout.init(this, menu);
 
-    mActionBarDecor = new ActionBarDecor(this);
+    mActionBarDecor = new ActionBarDecor(this, getSupportActionBar(), false);
     mActionBarDecor.setIconClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {

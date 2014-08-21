@@ -2,8 +2,11 @@
 <resources>
   <color name="primary">#e91e63</color>
   <color name="primary_dark">#c51162</color>
-  <color name="grey">#9e9e9e</color>
-  <color name="accent">#6889ff</color>
+  <color name="accent">#5af158</color>
+  <color name="progress_2">#ffff00</color>
+  <color name="progress_3">#b2ff59</color>
+  <color name="progress_4">#18ffff</color>
+  <color name="grey">#40000000</color>
   <color name="secondary_text">#8a000000</color>
   <color name="action_bar_title_color">#fff</color>
 </resources>

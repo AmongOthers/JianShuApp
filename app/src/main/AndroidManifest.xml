@@ -34,6 +34,7 @@
     <!--</activity>-->
     <activity
         android:name="jianshu.io.app.ArticleActivity"
+        android:theme="@style/jianshu_translucent"
         android:label="@string/title_activity_article"
         android:parentActivityName="jianshu.io.app.MainActivity">
 

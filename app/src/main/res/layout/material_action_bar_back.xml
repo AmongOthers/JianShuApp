@@ -9,7 +9,7 @@
   <com.shamanland.fonticon.FontIconView
     style="@style/ActionBarTitleStyle"
     android:id="@+id/icon"
-    android:text="@string/fa_bars"
+    android:text="@string/fa_arrow_left"
     android:clickable="true"
     android:padding="8dp"
     app:overridePressed="true"

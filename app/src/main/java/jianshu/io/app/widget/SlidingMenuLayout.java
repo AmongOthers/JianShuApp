@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -113,6 +116,7 @@ public class SlidingMenuLayout extends RelativeLayout {
     float mLastDragX;
     boolean mIsBeingDragged;
     Paint mFadePaint = new Paint();
+    Drawable mShadowRight;
 
     public MenuLayout(Context context, View menu) {
       super(context);
@@ -120,6 +124,8 @@ public class SlidingMenuLayout extends RelativeLayout {
       mWidthOffset = (int) getResources().getDimension(R.dimen.menu_offset);
       //a touch event on the edge should be considered to open the menu
       mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop() * 2;
+      //引用了SwipeBackLayout的阴影
+      mShadowRight = getResources().getDrawable(R.drawable.shadow_right);
     }
 
 
@@ -203,6 +209,10 @@ public class SlidingMenuLayout extends RelativeLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
       super.dispatchDraw(canvas);
+      mShadowRight.setBounds(mRight, 0,
+          mRight + mShadowRight.getIntrinsicWidth(), mHeight);
+      mShadowRight.setAlpha((int) (mOpenPercent * 255));
+      mShadowRight.draw(canvas);
       int alpha = (int) (0.5 * 255 * Math.abs(mOpenPercent));
       mFadePaint.setColor(Color.argb(alpha, 0, 0, 0));
       //避免边缘有白边

@@ -77,7 +77,7 @@ public class CardFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     mContentView.setAdapter(mAdapter);
 
     mRefreshLayout = (SwipeRefreshLayout) (view.findViewById(R.id.ptr_layout));
-    mRefreshLayout.setColorScheme(R.color.jianshu, R.color.card_list_gray, R.color.jianshu, R.color.card_list_gray);
+    mRefreshLayout.setColorScheme(R.color.accent, R.color.progress_2, R.color.progress_3, R.color.progress_4);
     mRefreshLayout.setOnRefreshListener(this);
 
     return view;

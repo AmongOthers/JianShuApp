@@ -28,12 +28,8 @@ public class ObservableWebView extends WebView
   protected void onScrollChanged(final int l, final int t, final int oldl, final int oldt)
   {
     super.onScrollChanged(l, t, oldl, oldt);
-    int height = getHeight();
-    int range = getRealSize()[1];
-    int threshold = (int) (range - height * 1.2);
-    boolean isAtTheEnd = t >= threshold;
     if(mOnScrollChangedCallback != null){
-        mOnScrollChangedCallback.onScrollChanged(isAtTheEnd);
+        mOnScrollChangedCallback.onScrollChanged(l, t, oldl, oldt);
     }
   }
 
@@ -58,6 +54,7 @@ public class ObservableWebView extends WebView
    */
   public interface OnScrollChangedCallback
   {
-    void onScrollChanged(boolean isAtThenEnd);
+    void onScrollChanged(final int l, final int t, final int oldl, final int oldt);
+//    void onScrollChanged(boolean isAtThenEnd);
   }
 }
