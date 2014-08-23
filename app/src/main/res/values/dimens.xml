@@ -20,6 +20,10 @@
 
     <!--CardLibrary-->
     <dimen name="card_base_empty_height">0dp</dimen>
-    <dimen name="card_background_default_radius">2dp</dimen>
+      <!-- List -->
+    <dimen name="list_card_padding_left">8dp</dimen>
+    <dimen name="list_card_padding_right">8dp</dimen>
+    <dimen name="list_card_padding_bottom">0dp</dimen>
+    <dimen name="list_card_padding_top">8dp</dimen>
 
     </resources>

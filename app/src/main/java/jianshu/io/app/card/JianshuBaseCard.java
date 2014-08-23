@@ -65,37 +65,37 @@ public class JianshuBaseCard extends Card {
     return this.item;
   }
 
-  @Override
-  public void setupInnerViewElements(ViewGroup parent, View view) {
-    super.setupInnerViewElements(parent, view);
-
-    final View parentView = (View) parent.getParent();
-    rightFlip.setTarget(parentView);
-    leftFlip.setTarget(parentView);
-
-    mGestureListener = new GestureDetector.SimpleOnGestureListener() {
-
-      @Override
-      public boolean onSingleTapUp(MotionEvent e) {
-        int width = parentView.getWidth();
-        float x = e.getX();
-        boolean isPressingRight = x >= width / 2;
-        if(isPressingRight) {
-          leftFlip.start();
-        } else {
-          rightFlip.start();
-        }
-        return false;
-      }
-    };
-    mGestureDetector = new GestureDetector(getContext(), mGestureListener);
-    //注意不是绑定到parentView上
-    parent.setOnTouchListener(new View.OnTouchListener() {
-
-      @Override
-      public boolean onTouch(View v, MotionEvent event) {
-        return mGestureDetector.onTouchEvent(event);
-      }
-    });
-  }
+//  @Override
+//  public void setupInnerViewElements(ViewGroup parent, View view) {
+//    super.setupInnerViewElements(parent, view);
+//
+//    final View parentView = (View) parent.getParent();
+//    rightFlip.setTarget(parentView);
+//    leftFlip.setTarget(parentView);
+//
+//    mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+//
+//      @Override
+//      public boolean onSingleTapUp(MotionEvent e) {
+//        int width = parentView.getWidth();
+//        float x = e.getX();
+//        boolean isPressingRight = x >= width / 2;
+//        if(isPressingRight) {
+//          leftFlip.start();
+//        } else {
+//          rightFlip.start();
+//        }
+//        return false;
+//      }
+//    };
+//    mGestureDetector = new GestureDetector(getContext(), mGestureListener);
+//    //注意不是绑定到parentView上
+//    parent.setOnTouchListener(new View.OnTouchListener() {
+//
+//      @Override
+//      public boolean onTouch(View v, MotionEvent event) {
+//        return mGestureDetector.onTouchEvent(event);
+//      }
+//    });
+//  }
 }

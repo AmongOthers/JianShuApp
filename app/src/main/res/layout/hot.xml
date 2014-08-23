@@ -9,7 +9,6 @@
               android:layout_height="match_parent">
 
   <jianshu.io.app.widget.EndlessCardListView
-    android:fastScrollEnabled="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     card:list_card_layout_resourceID="@layout/hotcard"
