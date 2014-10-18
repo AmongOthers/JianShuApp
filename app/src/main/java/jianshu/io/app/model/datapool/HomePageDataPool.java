@@ -12,7 +12,7 @@ import jianshu.io.app.model.ArticleItem;
  */
 public class HomePageDataPool extends ArticleDataPool {
 
-  public final static String HOME_PAGE_URL = "http://jianshu.io";
+  public final static String HOME_PAGE_URL = "http://www.jianshu.com";
 
   protected final static String ARTICLE_SELECTOR = "div.article";
   protected final static String TITLE_SELECTOR = "a.title";

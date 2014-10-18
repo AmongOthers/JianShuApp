@@ -9,4 +9,5 @@
   <dimen name="action_bar_title_left_margin">72dp</dimen>
   <dimen name="action_bar_icon_left_margin">16dp</dimen>
   <dimen name="drawer_menu_shadow">19dp</dimen>
+  <dimen name="action_bar_thresold">10dp</dimen>
 </resources>

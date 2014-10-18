@@ -70,7 +70,7 @@ public class JianshuSession {
   }
 
   private void initHttp(FinalHttp http) {
-    http.addHeader("User-Agent", "Mozilla/5.0 (Linux; U; Android 4.0.3; zh-cn; HTC T328d) AndroidWebKit/534.30 (KHTML, Like Gecko) Version/4.0 Mobile Safari/534.30");
+    http.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36");
     http.addHeader("Accept-Language", "zh-CN, en-US");
     http.addHeader("Accept-Charset", "utf-8, iso-8859-1, utf-16, *;q=0.7");
     http.getHttpClient().getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);

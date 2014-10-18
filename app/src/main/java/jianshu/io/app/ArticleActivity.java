@@ -99,12 +99,15 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   private Menu menu;
   private ActionBarDecor mActionBarDecor;
 
+  private boolean isAboveKitKat;
+
   protected static String Css;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_article);
+    this.isAboveKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     mActionBarDecor = new ActionBarDecor(this, this.getActionBar(), true);
     mActionBarDecor.setIconClickListener(new View.OnClickListener() {
       @Override
@@ -290,23 +293,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
           }
           parseArticleInfo(doc);
           //mImageUrl = doc.select("div.meta-bottom").get(0).attr("data-image");
-          Element likeBtnEl = doc.select(".like > .btn").get(0);
-          String likeUrlAttr = likeBtnEl.attr("href");
-          //判断登录状态
-          if (!likeUrlAttr.equals("#login-model")) {
-            that.likeUrl = "http://jianshu.io" + likeBtnEl.attr("href");
-            that.isLiking = likeBtnEl.hasClass("note-liked");
-            Elements functionEls = doc.select("div.comment li a");
-            Element likeCountEl = null;
-            for (Element el : functionEls) {
-              if (el.attr("href").equals("#like")) {
-                likeCountEl = el;
-                break;
-              }
-            }
-            String countStr = likeCountEl.text().replace("个喜欢", "").trim();
-            that.likingCount = Integer.parseInt(countStr);
-          }
+//          parseLikingInfo(doc);
           Element article = doc.select("div.preview").get(0);
           Element title = article.select("h1.title").get(0);
           Element authorInfo = article.select("div.meta-top").get(0);
@@ -358,9 +345,35 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
     }).execute();
   }
 
+  private void parseLikingInfo(Document doc) {
+    Element likeBtnEl = doc.select(".like > .btn").get(0);
+    String likeUrlAttr = likeBtnEl.attr("href");
+    //判断登录状态
+    if (!likeUrlAttr.equals("#login-model")) {
+      this.likeUrl = "http://jianshu.io" + likeBtnEl.attr("href");
+      this.isLiking = likeBtnEl.hasClass("note-liked");
+      Elements functionEls = doc.select("div.comment li a");
+      Element likeCountEl = null;
+      for (Element el : functionEls) {
+        if (el.attr("href").equals("#like")) {
+          likeCountEl = el;
+          break;
+        }
+      }
+      String countStr = likeCountEl.text().replace("个喜欢", "").trim();
+      this.likingCount = Integer.parseInt(countStr);
+    }
+  }
+
   private void parseArticleInfo(Document doc) {
     mTitle = doc.select("h1.title").get(0).text();
-    mAuthor = doc.select("div.meta-top span").get(0).text();
+    Elements els = doc.select("div.metao-top span");
+    if (els.size() == 0) {
+      els = doc.select("div.article-info a");
+    }
+    if (els.size() != 0) {
+      mAuthor = els.get(0).text();
+    }
   }
 
   protected String getCss() {
@@ -417,7 +430,7 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   }
 
   private String getJianshuBar() {
-    return "<div class='jianshu_bar'><h1>简书</h1><h3>最好的写作和阅读平台</h3><p><a href='http://jianshu.io'>http://jianshu.io</a></p></div> ";
+    return "<div class='jianshu_bar'><h1>简书</h1><h3>最好的写作和阅读平台</h3><p><a href='http://www.jianshu.com'>http://www.jianshu.com</a></p></div> ";
   }
 
   @Override
@@ -434,7 +447,11 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
         overridePendingTransition(0, R.anim.slide_out_right);
         return true;
       case R.id.menu_item_picture:
-        mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'block'");
+        if (this.isAboveKitKat) {
+          mWebView.evaluateJavascript("document.getElementsByClassName('jianshu_bar')[0].style.display = 'block'", null);
+        } else {
+          mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'block'");
+        }
         this.handler.postDelayed(new Runnable() {
           @Override
           public void run() {
@@ -449,16 +466,20 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
   }
 
   public void scanContent() {
-    int[] size = this.mWebView.getRealSize();
-    int width = size[0];
-    int height = size[1];
     try {
+      int[] size = this.mWebView.getRealSize();
+      int width = size[0];
+      int height = size[1];
       this.scanBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
       Canvas canvas = new Canvas(this.scanBitmap);
       this.mWebView.draw(canvas);
     } catch (OutOfMemoryError e) {
       this.scanBitmap = null;
-      mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
+      if (this.isAboveKitKat) {
+        mWebView.evaluateJavascript("document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'", null);
+      } else {
+        mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
+      }
       this.scanFinishedDialogFragment.onScanError("篇幅过长，不能扫描");
       return;
     }
@@ -491,7 +512,11 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
       @Override
       protected void onPostExecute(Boolean succeed) {
-        mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
+        if (ArticleActivity.this.isAboveKitKat) {
+          mWebView.evaluateJavascript("document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'", null);
+        } else {
+          mWebView.loadUrl("javascript:document.getElementsByClassName('jianshu_bar')[0].style.display = 'none'");
+        }
         if (succeed) {
           that.imageUri = Uri.fromFile(new File(that.imagePath));
           Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, that.imageUri);
@@ -537,11 +562,11 @@ public class ArticleActivity extends SwipeBackActivity implements ScanFinishedDi
 
   @Override
   public void onScrollChanged(final int l, final int t, final int oldl, final int oldt) {
-//    float gap = getResources().getDimension(R.dimen.action_bar_scroll_gap);
-//    if(t >= 2 * gap) {
-//      mActionBarDecor.hide();
-//    } else if(t <= gap) {
-//      mActionBarDecor.show();
-//    }
+    int thresold = (int) getResources().getDimension(R.dimen.action_bar_thresold);
+    if (t - oldt > thresold) {
+      mActionBarDecor.hide();
+    } else if (oldt - t > thresold) {
+      mActionBarDecor.show();
+    }
   }
 }
